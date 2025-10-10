@@ -81,8 +81,8 @@ class BybitClient:
         Returns:
             Response dictionary
         """
-        if params is None:
-            params = {}
+        # Avoid mutating the caller's dict
+        request_params = params.copy() if params else {}
         
         url = f"{self.base_url}{endpoint}"
         headers = {"Content-Type": "application/json"}
@@ -90,15 +90,15 @@ class BybitClient:
         # Add authentication if required
         if authenticated:
             timestamp = str(int(time.time() * 1000))
-            params['api_key'] = self.api_key
-            params['timestamp'] = timestamp
-            params['sign'] = self._generate_signature(params)
+            request_params['api_key'] = self.api_key
+            request_params['timestamp'] = timestamp
+            request_params['sign'] = self._generate_signature(request_params)
         
         try:
             if method == "GET":
-                response = requests.get(url, params=params, headers=headers, timeout=10)
+                response = requests.get(url, params=request_params, headers=headers, timeout=10)
             elif method == "POST":
-                response = requests.post(url, json=params, headers=headers, timeout=10)
+                response = requests.post(url, json=request_params, headers=headers, timeout=10)
             else:
                 raise ValueError(f"Unsupported HTTP method: {method}")
             

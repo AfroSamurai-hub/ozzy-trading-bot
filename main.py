@@ -580,6 +580,7 @@ def main():
     logger.info("OZZY SIMPLE - CRYPTO DAY TRADING BOT")
     logger.info("=" * 70)
 
+    bot = None
     while True:
         try:
             if config.PAPER_TRADING:
@@ -599,7 +600,8 @@ def main():
         except KeyboardInterrupt:
             logger.warning("Keyboard interrupt received - stopping supervisor")
             try:
-                bot.save_state()
+                if bot:
+                    bot.save_state()
             except Exception as e:
                 logger.error(f"Failed to save state on shutdown: {e}", exc_info=True)
             break

@@ -9,6 +9,7 @@ import hmac
 import hashlib
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
+from loguru import logger
 import config
 
 
@@ -35,11 +36,11 @@ class BybitClient:
         self.paper_balance = config.STARTING_CAPITAL if self.paper_trading else 0
         self.paper_positions = {}  # {symbol: {'size': float, 'entry_price': float}}
 
-        print("[BybitClient] Initialized")
-        print(f"  Mode: {'PAPER TRADING' if self.paper_trading else 'LIVE TRADING'}")
-        print(f"  Network: {'TESTNET' if self.testnet else 'MAINNET'}")
+        logger.info("BybitClient initialized", 
+                    mode='PAPER TRADING' if self.paper_trading else 'LIVE TRADING',
+                    network='TESTNET' if self.testnet else 'MAINNET')
         if self.paper_trading:
-            print(f"  Paper Balance: R{self.paper_balance:,.2f}")
+            logger.info(f"Paper Balance: R{self.paper_balance:,.2f}")
     
     
     def _generate_signature(self, params: Dict) -> str:
@@ -105,7 +106,7 @@ class BybitClient:
             return response.json()
             
         except requests.exceptions.RequestException as e:
-            print(f"[BybitClient] API request failed: {e}")
+            logger.error(f"API request failed: {method} {endpoint}", error=str(e), exc_info=True)
             return {"retCode": -1, "retMsg": str(e)}
     
     
@@ -129,10 +130,10 @@ class BybitClient:
                 tickers = response.get("result", {}).get("list", [])
                 if tickers:
                     price = float(tickers[0].get("lastPrice", 0))
-                    print(f"[BybitClient] {symbol} price: ${price:,.2f}")
+                    logger.debug(f"{symbol} price: ${price:,.2f}")
                     return price
             
-            print(f"[BybitClient] Failed to fetch price for {symbol}")
+            logger.warning(f"Failed to fetch price for {symbol}", response_code=response.get("retCode"))
             return None
         
         else:
@@ -190,10 +191,10 @@ class BybitClient:
             # Reverse to get chronological order (API returns newest first)
             candles.reverse()
             
-            print(f"[BybitClient] Fetched {len(candles)} candles for {symbol} ({interval}m interval)")
+            logger.debug(f"Fetched {len(candles)} candles for {symbol}", interval=f"{interval}m")
             return candles
         
-        print(f"[BybitClient] Failed to fetch candles for {symbol}: {response.get('retMsg')}")
+        logger.warning(f"Failed to fetch candles for {symbol}", error=response.get('retMsg'))
         return None
 
 
@@ -237,7 +238,7 @@ class BybitClient:
             Balance in USDT or None if failed
         """
         if self.paper_trading:
-            print(f"[BybitClient] Paper balance: R{self.paper_balance:,.2f}")
+            logger.debug(f"Paper balance: R{self.paper_balance:,.2f}")
             return self.paper_balance
         
         else:
@@ -253,10 +254,10 @@ class BybitClient:
                     for coin in coins:
                         if coin.get("coin") == "USDT":
                             balance = float(coin.get("walletBalance", 0))
-                            print(f"[BybitClient] Live balance: ${balance:,.2f} USDT")
+                            logger.info(f"Live balance: ${balance:,.2f} USDT")
                             return balance
             
-            print(f"[BybitClient] Failed to fetch balance: {response.get('retMsg')}")
+            logger.error(f"Failed to fetch balance", error=response.get('retMsg'))
             return None
     
     
@@ -317,7 +318,8 @@ class BybitClient:
                     else:
                         del self.paper_positions[symbol]
 
-                    print(f"[BybitClient] Paper SHORT closed: Buy {close_qty} {symbol} @ ${current_price:,.2f} | PnL: ${pnl:,.2f} | Margin returned: ${margin_return:,.2f}")
+                    logger.info(f"Paper SHORT closed: Buy {close_qty} {symbol} @ ${current_price:,.2f}",
+                               pnl=f"${pnl:,.2f}", margin_returned=f"${margin_return:,.2f}")
                     result = {
                         "success": True,
                         "order_id": f"PAPER_{int(time.time())}",
@@ -330,7 +332,7 @@ class BybitClient:
                         "order_type": "Market",
                         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     }
-                    print(f"[BybitClient] Paper order executed: {side} {close_qty} {symbol} @ ${current_price:,.2f}")
+                    logger.info(f"Paper order executed: {side} {close_qty} {symbol} @ ${current_price:,.2f}")
                     return result
 
                 # No short exists -> open a LONG position (spot buy)
@@ -347,7 +349,8 @@ class BybitClient:
                     "take_profit": take_profit
                 }
 
-                print(f"[BybitClient] Paper LONG opened: Buy {qty} {symbol} @ ${current_price:,.2f} | Notional: ${notional:,.2f}")
+                logger.info(f"Paper LONG opened: Buy {qty} {symbol} @ ${current_price:,.2f}",
+                           notional=f"${notional:,.2f}")
                 result = {
                     "success": True,
                     "order_id": f"PAPER_{int(time.time())}",
@@ -359,7 +362,7 @@ class BybitClient:
                     "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 }
 
-                print(f"[BybitClient] Paper order executed: {side} {qty} {symbol} @ ${current_price:,.2f}")
+                logger.info(f"Paper order executed: {side} {qty} {symbol} @ ${current_price:,.2f}")
                 return result
 
             # SELL side: either close LONG or open SHORT
@@ -384,7 +387,8 @@ class BybitClient:
                     else:
                         del self.paper_positions[symbol]
 
-                    print(f"[BybitClient] Paper LONG closed: Sell {close_qty} {symbol} @ ${current_price:,.2f} | PnL: ${pnl:,.2f}")
+                    logger.info(f"Paper LONG closed: Sell {close_qty} {symbol} @ ${current_price:,.2f}",
+                               pnl=f"${pnl:,.2f}")
                     result = {
                         "success": True,
                         "order_id": f"PAPER_{int(time.time())}",
@@ -396,7 +400,7 @@ class BybitClient:
                         "order_type": "Market",
                         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     }
-                    print(f"[BybitClient] Paper order executed: {side} {close_qty} {symbol} @ ${current_price:,.2f}")
+                    logger.info(f"Paper order executed: {side} {close_qty} {symbol} @ ${current_price:,.2f}")
                     return result
 
                 # No long exists -> open a SHORT (use margin)
@@ -416,7 +420,8 @@ class BybitClient:
                     'take_profit': take_profit
                 }
 
-                print(f"[BybitClient] Paper SHORT opened: Sell {qty} {symbol} @ ${current_price:,.2f} | Notional: ${notional:,.2f} | Margin: ${margin_required:,.2f}")
+                logger.info(f"Paper SHORT opened: Sell {qty} {symbol} @ ${current_price:,.2f}",
+                           notional=f"${notional:,.2f}", margin=f"${margin_required:,.2f}")
                 result = {
                     "success": True,
                     "order_id": f"PAPER_{int(time.time())}",
@@ -429,7 +434,7 @@ class BybitClient:
                     "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 }
 
-                print(f"[BybitClient] Paper order executed: {side} {qty} {symbol} @ ${current_price:,.2f}")
+                logger.info(f"Paper order executed: {side} {qty} {symbol} @ ${current_price:,.2f}")
                 return result
         
         else:
@@ -473,40 +478,40 @@ class BybitClient:
 
 def test_client():
     """Test the Bybit client with basic operations"""
-    print("\n" + "="*60)
-    print("TESTING BYBIT CLIENT")
-    print("="*60 + "\n")
+    logger.info("=" * 60)
+    logger.info("TESTING BYBIT CLIENT")
+    logger.info("=" * 60)
     
     client = BybitClient()
     
     # Test 1: Get BTC price
-    print("\n[TEST 1] Fetching BTC price...")
+    logger.info("[TEST 1] Fetching BTC price...")
     btc_price = client.get_current_price("BTCUSDT")
     if btc_price:
-        print(f"✅ TEST 1 PASSED: BTC price = ${btc_price:,.2f}")
+        logger.info(f"✅ TEST 1 PASSED: BTC price = ${btc_price:,.2f}")
     else:
-        print("❌ TEST 1 FAILED: Could not fetch BTC price")
+        logger.error("❌ TEST 1 FAILED: Could not fetch BTC price")
     
     # Test 2: Get candle data
-    print("\n[TEST 2] Fetching BTC candles (15m, last 10)...")
+    logger.info("[TEST 2] Fetching BTC candles (15m, last 10)...")
     candles = client.get_candles("BTCUSDT", interval="15", limit=10)
     if candles and len(candles) > 0:
-        print(f"✅ TEST 2 PASSED: Fetched {len(candles)} candles")
-        print(f"  Latest candle: {candles[-1]}")
+        logger.info(f"✅ TEST 2 PASSED: Fetched {len(candles)} candles")
+        logger.debug(f"  Latest candle: {candles[-1]}")
     else:
-        print("❌ TEST 2 FAILED: Could not fetch candles")
+        logger.error("❌ TEST 2 FAILED: Could not fetch candles")
     
     # Test 3: Get balance
-    print("\n[TEST 3] Getting account balance...")
+    logger.info("[TEST 3] Getting account balance...")
     balance = client.get_balance()
     if balance is not None:
-        print(f"✅ TEST 3 PASSED: Balance = R{balance:,.2f}")
+        logger.info(f"✅ TEST 3 PASSED: Balance = R{balance:,.2f}")
     else:
-        print("❌ TEST 3 FAILED: Could not fetch balance")
+        logger.error("❌ TEST 3 FAILED: Could not fetch balance")
     
-    print("\n" + "="*60)
-    print("TESTING COMPLETE")
-    print("="*60 + "\n")
+    logger.info("=" * 60)
+    logger.info("TESTING COMPLETE")
+    logger.info("=" * 60)
 
 
 if __name__ == "__main__":

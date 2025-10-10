@@ -5,16 +5,18 @@ Orchestrates all components and executes the trading strategy
 
 import time
 import csv
-import logging
 import json
+import sys
 import traceback
 from datetime import datetime, time as datetime_time
 from typing import Dict, List, Optional
+from loguru import logger
 import config
 from bybit_client import BybitClient
 from signal_generator import SignalGenerator
 from risk_manager import RiskManager
 from position_tracker import PositionTracker
+from logger_config import setup_logger
 
 
 class OzzyBot:
@@ -25,12 +27,12 @@ class OzzyBot:
     
     def __init__(self):
         """Initialize the trading bot"""
-        print("\n" + "="*70)
-        print("🤖 OZZY SIMPLE - AUTOMATED TRADING BOT")
-        print("="*70)
+        logger.info("=" * 70)
+        logger.info("🤖 OZZY SIMPLE - AUTOMATED TRADING BOT")
+        logger.info("=" * 70)
         
         # Initialize components
-        print("\n[Bot] Initializing components...")
+        logger.info("Initializing components...")
         self.client = BybitClient()
         self.signal_generator = SignalGenerator()
         self.risk_manager = RiskManager(config.STARTING_CAPITAL)
@@ -47,20 +49,13 @@ class OzzyBot:
         self.trades_log_file = "trades.csv"
         self._initialize_trades_log()
         
-        print("\n✅ Bot initialized successfully!")
-        print("="*70 + "\n")
+        logger.info("✅ Bot initialized successfully!")
+        logger.info("=" * 70)
 
         # Resilience and logging
         self.backoff_seconds = 1
         self.max_backoff = 300
         self.api_error_count = 0
-
-        # Setup logger
-        self.logger = logging.getLogger("ozzy")
-        if not self.logger.handlers:
-            logging.basicConfig(filename='bot.log', level=logging.INFO,
-                                format='%(asctime)s %(levelname)s %(message)s')
-        self.logger.info("OzzyBot initialized")
     
     
     def _initialize_trades_log(self):
@@ -75,7 +70,7 @@ class OzzyBot:
                     "entry_price", "exit_price", "position_size", "position_value",
                     "pnl", "duration_seconds", "quality", "confidence", "entry_reason", "exit_reason"
                 ])
-            print(f"[Bot] Created new trades log: {self.trades_log_file}")
+            logger.info(f"Created new trades log: {self.trades_log_file}")
 
             # signals.csv stores every generated signal (including HOLD) for ML
             self.signals_log_file = "signals.csv"
@@ -87,11 +82,11 @@ class OzzyBot:
                         "rsi", "ema_short", "ema_long", "volume_ratio", "momentum",
                         "hour", "day_of_week", "atr_pct", "stddev_returns_pct", "reason"
                     ])
-                print(f"[Bot] Created new signals log: {self.signals_log_file}")
+                logger.info(f"Created new signals log: {self.signals_log_file}")
             except FileExistsError:
-                print(f"[Bot] Using existing signals log: signals.csv")
+                logger.info(f"Using existing signals log: signals.csv")
         except FileExistsError:
-            print(f"[Bot] Using existing trades log: {self.trades_log_file}")
+            logger.info(f"Using existing trades log: {self.trades_log_file}")
             # ensure signals_log_file attribute exists when file already existed
             self.signals_log_file = getattr(self, 'signals_log_file', 'signals.csv')
     
@@ -133,9 +128,9 @@ class OzzyBot:
                     tech.get('stddev_returns_pct'),
                     signal.get('reason')
                 ])
-        except Exception:
+        except Exception as e:
             # best-effort logging; non-fatal
-            self.logger.exception("Failed to write signal to CSV")
+            logger.error(f"Failed to write signal to CSV: {e}", exc_info=True)
 
     def _log_completed_trade(self, entry_time: datetime, exit_time: datetime, symbol: str, side: str,
                              entry_price: float, exit_price: float, position_size: float,
@@ -162,8 +157,8 @@ class OzzyBot:
                     entry_reason,
                     exit_reason
                 ])
-        except Exception:
-            pass
+        except Exception as e:
+            logger.error(f"Failed to log completed trade: {e}", exc_info=True)
     
     
     def check_signal(self, symbol: str) -> Optional[Dict]:
@@ -176,34 +171,32 @@ class OzzyBot:
         Returns:
             Signal dictionary or None if no signal
         """
-        print(f"\n[Bot] Checking signal for {symbol}...")
+        logger.info(f"Checking signal for {symbol}...")
         
         # Get candle data
         candles = self.client.get_candles(symbol, interval="15", limit=50)
         if not candles:
-            msg = f"Failed to get candle data for {symbol}"
-            print(f"❌ {msg}")
-            self.logger.warning(msg)
+            logger.warning(f"Failed to get candle data for {symbol}")
             # backoff handling
             self.api_error_count += 1
             sleep_for = min(self.backoff_seconds * (2 ** (self.api_error_count - 1)), self.max_backoff)
-            self.logger.warning(f"API error count={self.api_error_count}; sleeping for {sleep_for}s")
+            logger.warning(f"API error count={self.api_error_count}; sleeping for {sleep_for}s")
             time.sleep(sleep_for)
             return None
         
         # Generate signal
         signal = self.signal_generator.generate_signal(candles)
         
-        # Print signal summary
+        # Log signal summary
         signal_emoji = "🟢" if signal["signal"] == "LONG" else "🔴" if signal["signal"] == "SHORT" else "⚪"
-        print(f"{signal_emoji} {signal['signal']} | {signal['quality']} | {signal['confidence']}% confidence")
-        print(f"   Reason: {signal['reason']}")
+        logger.info(f"{signal_emoji} {signal['signal']} | {signal['quality']} | {signal['confidence']}% confidence")
+        logger.info(f"Reason: {signal['reason']}")
         
         # Log every signal (including HOLDs) for ML
         try:
             self._log_signal(symbol, signal)
-        except Exception:
-            self.logger.exception("Failed to log signal")
+        except Exception as e:
+            logger.error(f"Failed to log signal: {e}", exc_info=True)
 
         # reset api error counter on success
         self.api_error_count = 0
@@ -222,7 +215,7 @@ class OzzyBot:
         Returns:
             True if trade executed successfully
         """
-        print(f"\n[Bot] 💼 Attempting to execute {signal['signal']} trade on {symbol}...")
+        logger.info(f"💼 Attempting to execute {signal['signal']} trade on {symbol}...")
         
         # Calculate position size
         position_size, position_value = self.risk_manager.calculate_position_size(
@@ -232,14 +225,14 @@ class OzzyBot:
         )
         
         if position_size == 0:
-            print("❌ Position size is zero - trade aborted")
+            logger.warning("Position size is zero - trade aborted")
             return False
         
         # Run pre-trade checks
         approved, reason = self.risk_manager.pre_trade_checks(signal, position_value)
         
         if not approved:
-            print(f"❌ Trade rejected by risk manager: {reason}")
+            logger.warning(f"Trade rejected by risk manager: {reason}")
             
             # Log rejected trade
             self._log_trade({
@@ -272,7 +265,7 @@ class OzzyBot:
         )
         
         if not order_result.get("success"):
-            print(f"❌ Order failed: {order_result.get('message')}")
+            logger.error(f"Order failed: {order_result.get('message')}")
             return False
         
         # Record trade
@@ -304,15 +297,15 @@ class OzzyBot:
             "pnl": ""
         })
         
-        print(f"✅ Trade executed successfully!")
-        print(f"   Order ID: {order_result['order_id']}")
-        print(f"   Position: {position_size} {symbol} @ ${signal['entry_price']:,.2f}")
+        logger.info(f"✅ Trade executed successfully!")
+        logger.info(f"Order ID: {order_result['order_id']}")
+        logger.info(f"Position: {position_size} {symbol} @ ${signal['entry_price']:,.2f}")
         
         # Save position snapshot after opening a trade
         try:
             self.position_tracker.save_positions()
-        except Exception:
-            pass
+        except Exception as e:
+            logger.error(f"Failed to save positions: {e}", exc_info=True)
 
         return True
     
@@ -322,7 +315,7 @@ class OzzyBot:
         if not self.open_positions:
             return
         
-        print(f"\n[Bot] 👁️  Monitoring {len(self.open_positions)} open position(s)...")
+        logger.info(f"👁️  Monitoring {len(self.open_positions)} open position(s)...")
         
         for symbol, position in list(self.open_positions.items()):
             # Get current price
@@ -343,24 +336,24 @@ class OzzyBot:
             
             pnl_amount = (current_price - entry_price) * position["position_size"]
             
-            print(f"   {symbol}: ${current_price:,.2f} | P&L: {pnl_pct:+.2f}% (R{pnl_amount:+,.2f})")
+            logger.info(f"{symbol}: ${current_price:,.2f} | P&L: {pnl_pct:+.2f}% (R{pnl_amount:+,.2f})")
             
             # Check stop loss
             if signal["signal"] == "LONG" and current_price <= stop_loss:
-                print(f"   🛑 Stop loss hit for {symbol}!")
+                logger.warning(f"🛑 Stop loss hit for {symbol}!")
                 self.close_position(symbol, current_price, "STOP_LOSS")
             
             elif signal["signal"] == "SHORT" and current_price >= stop_loss:
-                print(f"   🛑 Stop loss hit for {symbol}!")
+                logger.warning(f"🛑 Stop loss hit for {symbol}!")
                 self.close_position(symbol, current_price, "STOP_LOSS")
             
             # Check take profit
             elif signal["signal"] == "LONG" and current_price >= take_profit:
-                print(f"   🎯 Take profit hit for {symbol}!")
+                logger.info(f"🎯 Take profit hit for {symbol}!")
                 self.close_position(symbol, current_price, "TAKE_PROFIT")
             
             elif signal["signal"] == "SHORT" and current_price <= take_profit:
-                print(f"   🎯 Take profit hit for {symbol}!")
+                logger.info(f"🎯 Take profit hit for {symbol}!")
                 self.close_position(symbol, current_price, "TAKE_PROFIT")
     
     
@@ -418,7 +411,7 @@ class OzzyBot:
             # Remove position
             del self.open_positions[symbol]
             
-            print(f"✅ Position closed: {symbol} | P&L: R{pnl:+,.2f} | Reason: {reason}")
+            logger.info(f"✅ Position closed: {symbol} | P&L: R{pnl:+,.2f} | Reason: {reason}")
             # Log completed trade to trades.csv
             try:
                 entry_time = position.get('entry_time')
@@ -442,16 +435,16 @@ class OzzyBot:
                     entry_reason=signal.get('reason', ''),
                     exit_reason=reason
                 )
-            except Exception:
-                self.logger.exception("Failed to log completed trade")
+            except Exception as e:
+                logger.error(f"Failed to log completed trade: {e}", exc_info=True)
         else:
-            print(f"❌ Failed to close position: {order_result.get('message')}")
+            logger.error(f"Failed to close position: {order_result.get('message')}")
 
         # After any close attempt (whether successful or not), save position snapshot
         try:
             self.position_tracker.save_positions()
-        except Exception:
-            self.logger.exception("Failed to save positions snapshot after close")
+        except Exception as e:
+            logger.error(f"Failed to save positions snapshot after close: {e}", exc_info=True)
 
     def save_state(self):
         """Save in-memory state (open positions, risk stats) to state.json"""
@@ -463,9 +456,9 @@ class OzzyBot:
             }
             with open('state.json', 'w', encoding='utf-8') as f:
                 json.dump(state, f, default=str, indent=2)
-            self.logger.info("Saved state.json")
-        except Exception:
-            self.logger.exception("Failed to save state.json")
+            logger.info("Saved state.json")
+        except Exception as e:
+            logger.error(f"Failed to save state.json: {e}", exc_info=True)
     
     
     def close_all_positions(self, reason: str = "EOD_CLOSE"):
@@ -473,7 +466,7 @@ class OzzyBot:
         if not self.open_positions:
             return
         
-        print(f"\n[Bot] 🔒 Closing all positions ({reason})...")
+        logger.info(f"🔒 Closing all positions ({reason})...")
         
         for symbol in list(self.open_positions.keys()):
             current_price = self.client.get_current_price(symbol)
@@ -484,17 +477,17 @@ class OzzyBot:
         try:
             self.position_tracker.save_positions()
             self.position_tracker.stop()
-        except Exception:
-            pass
+        except Exception as e:
+            logger.error(f"Error stopping position tracker: {e}", exc_info=True)
     
     
     def trading_loop(self):
         """Main trading loop"""
-        print("\n[Bot] 🚀 Starting trading loop...")
-        print(f"[Bot] Trading symbols: {', '.join(config.TRADING_SYMBOLS)}")
-        print(f"[Bot] Check interval: {config.CHECK_INTERVAL_MINUTES} minutes")
-        print(f"[Bot] Trading hours: {config.TRADING_START_HOUR}:00 - {config.TRADING_END_HOUR}:00 SAST")
-        print("\n" + "="*70)
+        logger.info("🚀 Starting trading loop...")
+        logger.info(f"Trading symbols: {', '.join(config.TRADING_SYMBOLS)}")
+        logger.info(f"Check interval: {config.CHECK_INTERVAL_MINUTES} minutes")
+        logger.info(f"Trading hours: {config.TRADING_START_HOUR}:00 - {config.TRADING_END_HOUR}:00 SAST")
+        logger.info("=" * 70)
         
         self.is_running = True
         
@@ -506,7 +499,7 @@ class OzzyBot:
                 is_trading_hours, _ = self.risk_manager.check_trading_hours()
                 
                 if is_trading_hours:
-                    print(f"\n⏰ {current_time.strftime('%Y-%m-%d %H:%M:%S')}")
+                    logger.info(f"⏰ {current_time.strftime('%Y-%m-%d %H:%M:%S')}")
                     
                     # Monitor existing positions
                     self.monitor_positions()
@@ -531,44 +524,42 @@ class OzzyBot:
                 else:
                     # Outside trading hours
                     if config.CLOSE_POSITIONS_EOD and self.open_positions:
-                        print(f"\n[Bot] 🌙 Outside trading hours, closing all positions...")
+                        logger.info("🌙 Outside trading hours, closing all positions...")
                         self.close_all_positions("EOD_CLOSE")
                 
                 # Sleep until next check
-                print(f"[Bot] 💤 Sleeping for {config.CHECK_INTERVAL_MINUTES} minutes...")
+                logger.info(f"💤 Sleeping for {config.CHECK_INTERVAL_MINUTES} minutes...")
                 time.sleep(config.CHECK_INTERVAL_MINUTES * 60)
                 
             except KeyboardInterrupt:
-                print("\n\n[Bot] ⚠️  Keyboard interrupt received!")
+                logger.warning("⚠️  Keyboard interrupt received!")
                 break
             except Exception as e:
                 # Log and attempt to continue with exponential backoff
-                err = f"Error in trading loop: {e}"
-                print(f"\n[Bot] ❌ {err}")
-                self.logger.exception(err)
+                logger.error(f"Error in trading loop: {e}", exc_info=True)
                 # Save state and backoff
                 self.save_state()
                 backoff = min(self.backoff_seconds * (2 ** self.api_error_count), self.max_backoff)
                 self.api_error_count += 1
-                print(f"[Bot] Backing off for {backoff} seconds before retrying...")
+                logger.warning(f"Backing off for {backoff} seconds before retrying...")
                 time.sleep(backoff)
                 continue
         
         # Cleanup
-        print("\n[Bot] 🛑 Stopping trading bot...")
+        logger.info("🛑 Stopping trading bot...")
         if self.open_positions:
-            print("[Bot] Closing all open positions...")
+            logger.info("Closing all open positions...")
             self.close_all_positions("BOT_STOPPED")
 
         # Save state on shutdown
         try:
             self.save_state()
-        except Exception:
-            self.logger.exception("Failed during final state save")
+        except Exception as e:
+            logger.error(f"Failed during final state save: {e}", exc_info=True)
         
-        print("\n" + "="*70)
-        print("🏁 TRADING BOT STOPPED")
-        print("="*70 + "\n")
+        logger.info("=" * 70)
+        logger.info("🏁 TRADING BOT STOPPED")
+        logger.info("=" * 70)
     
     
     def start(self):
@@ -578,54 +569,60 @@ class OzzyBot:
 
 def main():
     """Main entry point"""
+    # Initialize logger first
+    setup_logger()
+    
     # Supervisor: restart bot if it crashes unexpectedly
     restart_delay = 5
     max_restarts = 10
     restarts = 0
-    print("\n" + "="*70)
-    print("OZZY SIMPLE - CRYPTO DAY TRADING BOT")
-    print("="*70)
+    logger.info("=" * 70)
+    logger.info("OZZY SIMPLE - CRYPTO DAY TRADING BOT")
+    logger.info("=" * 70)
 
     while True:
         try:
             if config.PAPER_TRADING:
-                print("\n⚠️  PAPER TRADING MODE - NO REAL MONEY AT RISK")
+                logger.warning("⚠️  PAPER TRADING MODE - NO REAL MONEY AT RISK")
             else:
-                print("\n🚨 LIVE TRADING MODE - REAL MONEY AT RISK!")
+                logger.critical("🚨 LIVE TRADING MODE - REAL MONEY AT RISK!")
                 response = input("Are you sure you want to continue? (yes/no): ")
                 if response.lower() != "yes":
-                    print("Exiting...")
+                    logger.info("Exiting...")
                     return
 
-            print("\n")
             bot = OzzyBot()
             bot.start()
             # If start() returns normally, exit supervisor loop
             break
 
         except KeyboardInterrupt:
-            print("Keyboard interrupt received - stopping supervisor")
+            logger.warning("Keyboard interrupt received - stopping supervisor")
             try:
                 bot.save_state()
-            except Exception:
-                pass
+            except Exception as e:
+                logger.error(f"Failed to save state on shutdown: {e}", exc_info=True)
             break
 
         except Exception as e:
             # Unexpected crash - log, save state, and attempt restart
-            print(f"Supervisor: Bot crashed with: {e}")
+            logger.critical(f"Supervisor: Bot crashed with: {e}", exc_info=True)
             try:
                 bot.save_state()
-            except Exception:
-                pass
+            except Exception as e2:
+                logger.error(f"Failed to save state after crash: {e2}", exc_info=True)
             restarts += 1
             if restarts > max_restarts:
-                print("Supervisor: too many restarts, exiting")
+                logger.critical("Supervisor: too many restarts, exiting")
                 break
             sleep_time = restart_delay * restarts
-            print(f"Supervisor: restarting bot in {sleep_time}s (attempt {restarts}/{max_restarts})")
+            logger.warning(f"Supervisor: restarting bot in {sleep_time}s (attempt {restarts}/{max_restarts})")
             time.sleep(sleep_time)
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        logger.critical("Bot crashed with unhandled exception", exc_info=True)
+        sys.exit(1)

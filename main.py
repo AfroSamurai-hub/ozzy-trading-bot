@@ -17,6 +17,7 @@ from signal_generator import SignalGenerator
 from risk_manager import RiskManager
 from position_tracker import PositionTracker
 from logger_config import setup_logger
+import db
 
 
 class OzzyBot:
@@ -131,6 +132,30 @@ class OzzyBot:
         except Exception as e:
             # best-effort logging; non-fatal
             logger.error(f"Failed to write signal to CSV: {e}", exc_info=True)
+        # Also write to SQLite (best-effort) using high-level API
+        try:
+            tech = signal.get('technical_data', {})
+            dt = datetime.now()
+            db.log_signal({
+                'timestamp': signal.get('timestamp') or dt.strftime("%Y-%m-%d %H:%M:%S"),
+                'symbol': symbol,
+                'signal': signal.get('signal'),
+                'confidence': signal.get('confidence'),
+                'quality': signal.get('quality'),
+                'rsi': tech.get('rsi'),
+                'ema_short': tech.get('ema_short'),
+                'ema_long': tech.get('ema_long'),
+                'volume_ratio': tech.get('volume_ratio'),
+                'momentum': tech.get('price_momentum'),
+                'hour': dt.hour,
+                'day_of_week': dt.weekday(),
+                'atr_pct': tech.get('atr_pct'),
+                'stddev_returns_pct': tech.get('stddev_returns_pct'),
+                'reason': signal.get('reason')
+            })
+        except Exception:
+            # non-fatal if DB write fails
+            logger.debug("DB write for signal failed", exc_info=True)
 
     def _log_completed_trade(self, entry_time: datetime, exit_time: datetime, symbol: str, side: str,
                              entry_price: float, exit_price: float, position_size: float,
@@ -159,6 +184,7 @@ class OzzyBot:
                 ])
         except Exception as e:
             logger.error(f"Failed to log completed trade: {e}", exc_info=True)
+        # DB write handled via log_trade_open/log_trade_close lifecycle elsewhere
     
     
     def check_signal(self, symbol: str) -> Optional[Dict]:
@@ -279,8 +305,24 @@ class OzzyBot:
             "position_value": position_value,
             "entry_time": datetime.now()
         }
-        
-        # Log successful trade
+        # Persist an 'open' trade record in DB and store its id for later updates
+        try:
+            db_id = db.log_trade_open({
+                'entry_timestamp': self.open_positions[symbol]['entry_time'].strftime("%Y-%m-%d %H:%M:%S"),
+                'symbol': symbol,
+                'side': signal["signal"],
+                'entry_price': signal["entry_price"],
+                'position_size': position_size,
+                'position_value': position_value,
+                'quality': signal.get('quality', ''),
+                'confidence': signal.get('confidence', 0.0),
+                'entry_reason': signal.get('reason', '')
+            })
+            self.open_positions[symbol]['db_trade_id'] = db_id
+        except Exception:
+            logger.debug("Failed to persist trade open to DB", exc_info=True)
+
+        # Log successful trade (CSV fallback)
         self._log_trade({
             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "symbol": symbol,
@@ -391,7 +433,16 @@ class OzzyBot:
             # Record trade closed
             self.risk_manager.record_trade_closed(position["position_value"], pnl)
             
-            # Log closed trade
+            # Update DB trade row if we have the id
+            try:
+                db_id = position.get('db_trade_id')
+                if db_id is not None:
+                    exit_ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    db.log_trade_close(db_id, exit_ts, exit_price, pnl, reason)
+            except Exception:
+                logger.debug("Failed to update DB trade close", exc_info=True)
+
+            # Log closed trade (CSV fallback)
             self._log_trade({
                 "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "symbol": symbol,
@@ -571,6 +622,11 @@ def main():
     """Main entry point"""
     # Initialize logger first
     setup_logger()
+    # Initialize DB schema
+    try:
+        db.create_tables()
+    except Exception as e:
+        logger.error(f"Failed to initialize DB schema: {e}")
     
     # Supervisor: restart bot if it crashes unexpectedly
     restart_delay = 5

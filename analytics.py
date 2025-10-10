@@ -22,6 +22,7 @@ import time
 from datetime import datetime
 from statistics import mean, stdev
 from typing import List, Dict, Any, Optional, Tuple
+from loguru import logger
 import config
 import os
 
@@ -48,9 +49,9 @@ def read_trades(csv_path: str = TRADES_CSV) -> List[Dict[str, Any]]:
                 r['pnl'] = float(r['pnl']) if r.get('pnl') not in (None, '', 'None') else 0.0
                 r['duration_seconds'] = int(r['duration_seconds']) if r.get('duration_seconds') not in (None, '', 'None') else None
                 r['confidence'] = float(r['confidence']) if r.get('confidence') not in (None, '', 'None') else 0.0
-            except Exception:
+            except Exception as e:
                 # best-effort parsing
-                pass
+                logger.debug(f"Failed to parse trade row: {e}")
 
             # parse timestamps to datetime when possible
             try:
@@ -58,7 +59,8 @@ def read_trades(csv_path: str = TRADES_CSV) -> List[Dict[str, Any]]:
                     r['_entry_dt'] = datetime.fromisoformat(r['entry_timestamp']) if 'T' in r['entry_timestamp'] else datetime.strptime(r['entry_timestamp'], '%Y-%m-%d %H:%M:%S')
                 else:
                     r['_entry_dt'] = None
-            except Exception:
+            except Exception as e:
+                logger.debug(f"Failed to parse entry timestamp: {e}")
                 r['_entry_dt'] = None
 
             try:
@@ -66,7 +68,8 @@ def read_trades(csv_path: str = TRADES_CSV) -> List[Dict[str, Any]]:
                     r['_exit_dt'] = datetime.fromisoformat(r['exit_timestamp']) if 'T' in r['exit_timestamp'] else datetime.strptime(r['exit_timestamp'], '%Y-%m-%d %H:%M:%S')
                 else:
                     r['_exit_dt'] = None
-            except Exception:
+            except Exception as e:
+                logger.debug(f"Failed to parse exit timestamp: {e}")
                 r['_exit_dt'] = None
 
             rows.append(r)
@@ -188,33 +191,33 @@ def risk_reward(trades: List[Dict[str, Any]]) -> Dict[str, Any]:
 
 def print_report(trades: List[Dict[str, Any]]):
     total = len(trades)
-    print(f"\nPerformance Report — {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("="*60)
-    print(f"Total completed trades: {total}")
+    logger.info(f"\nPerformance Report — {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    logger.info("=" * 60)
+    logger.info(f"Total completed trades: {total}")
 
     sr = sharpe_ratio(trades)
-    print(f"Sharpe Ratio (ann.): {sr:.4f}" if sr is not None else "Sharpe Ratio: N/A")
+    logger.info(f"Sharpe Ratio (ann.): {sr:.4f}" if sr is not None else "Sharpe Ratio: N/A")
 
     dd, dd_pct = max_drawdown(trades)
-    print(f"Max Drawdown: R{dd:.2f} ({dd_pct:.2f}%)")
+    logger.info(f"Max Drawdown: R{dd:.2f} ({dd_pct:.2f}%)")
 
     wr = win_rate_by_confidence(trades)
-    print("\nWin rate by confidence buckets:")
+    logger.info("\nWin rate by confidence buckets:")
     for k, v in wr.items():
-        print(f"  {k}: trades={v['trades']} wins={v['wins']} win_rate={v['win_rate_pct']}%")
+        logger.info(f"  {k}: trades={v['trades']} wins={v['wins']} win_rate={v['win_rate_pct']}%")
 
     best, worst = best_worst_hours(trades)
-    print("\nBest hours (hour, avg pnl):", best)
-    print("Worst hours (hour, avg pnl):", worst)
+    logger.info(f"\nBest hours (hour, avg pnl): {best}")
+    logger.info(f"Worst hours (hour, avg pnl): {worst}")
 
     avg_dur = average_trade_duration(trades)
     if avg_dur is not None:
-        print(f"\nAverage trade duration: {avg_dur/60:.2f} minutes")
+        logger.info(f"\nAverage trade duration: {avg_dur/60:.2f} minutes")
     else:
-        print("Average trade duration: N/A")
+        logger.info("Average trade duration: N/A")
 
     rr = risk_reward(trades)
-    print(f"\nRisk/Reward: avg_win={rr['avg_win']}, avg_loss={rr['avg_loss']}, R:R={rr['risk_reward']}")
+    logger.info(f"\nRisk/Reward: avg_win={rr['avg_win']}, avg_loss={rr['avg_loss']}, R:R={rr['risk_reward']}")
 
     # Equity curve basic summary
     starting = getattr(config, 'STARTING_CAPITAL', 10000.0)
@@ -225,8 +228,8 @@ def print_report(trades: List[Dict[str, Any]]):
         eq_curve.append(equity)
 
     if eq_curve:
-        print(f"\nFinal equity: R{eq_curve[-1]:,.2f} (start R{starting:,.2f})")
-    print("="*60 + "\n")
+        logger.info(f"\nFinal equity: R{eq_curve[-1]:,.2f} (start R{starting:,.2f})")
+    logger.info("=" * 60 + "\n")
 
 
 def main(watch: Optional[int] = None):
@@ -239,7 +242,7 @@ def main(watch: Optional[int] = None):
         try:
             time.sleep(watch)
         except KeyboardInterrupt:
-            print("Stopping watch")
+            logger.info("Stopping watch")
             break
 
 

@@ -6,6 +6,7 @@ The brain of the bot - analyzes market data and generates trading signals
 from statistics import mean, stdev
 from typing import Dict, List, Optional
 from datetime import datetime
+from loguru import logger
 import config
 from bybit_client import BybitClient
 
@@ -30,11 +31,13 @@ class SignalGenerator:
         # Aggressive: volume confirmation effectively disabled (1.0 = current >= avg)
         self.volume_multiplier = 1.0  # Volume must be 1.0x average to confirm signal
 
-        print("[SignalGenerator] Initialized")
-        print("  RSI Period:", self.rsi_period)
-        print(f"  RSI Oversold: {self.rsi_oversold} | Overbought: {self.rsi_overbought}")
-        print(f"  EMA Short: {self.ema_short} | Long: {self.ema_long}")
-        print("  Volume Multiplier:", f"{self.volume_multiplier}x")
+        logger.info("SignalGenerator initialized",
+                    rsi_period=self.rsi_period,
+                    rsi_oversold=self.rsi_oversold,
+                    rsi_overbought=self.rsi_overbought,
+                    ema_short=self.ema_short,
+                    ema_long=self.ema_long,
+                    volume_multiplier=f"{self.volume_multiplier}x")
     
     
     def calculate_rsi(self, prices: List[float], period: int = 14) -> float:
@@ -245,7 +248,8 @@ class SignalGenerator:
                     returns.append((closes[i] - closes[i-1]) / closes[i-1] * 100)
             if len(returns) >= 2:
                 stddev_returns = stdev(returns[-14:])
-        except Exception:
+        except Exception as e:
+            logger.debug(f"Failed to calculate volatility metrics: {e}")
             atr = None
             atr_pct = None
             stddev_returns = None
@@ -394,9 +398,9 @@ class SignalGenerator:
             result['technical_data']['ask'] = round(ask, 6) if ask is not None else None
             result['technical_data']['spread'] = round(spread, 6) if spread is not None else None
             result['technical_data']['spread_pct'] = round(spread_pct, 6) if spread_pct is not None else None
-        except Exception:
+        except Exception as e:
             # Non-fatal: skip bid/ask if fetch fails
-            pass
+            logger.debug(f"Failed to fetch bid/ask spread: {e}")
         
         return result
     
@@ -409,42 +413,42 @@ class SignalGenerator:
             signal: Signal dictionary
             symbol: Trading symbol
         """
-        print("\n" + "="*70)
-        print(f"SIGNAL GENERATED: {symbol}")
-        print("="*70)
+        logger.info("=" * 70)
+        logger.info(f"SIGNAL GENERATED: {symbol}")
+        logger.info("=" * 70)
         
         # Signal header
         signal_emoji = "🟢" if signal["signal"] == "LONG" else "🔴" if signal["signal"] == "SHORT" else "⚪"
-        print(f"\n{signal_emoji} {signal['signal']} | Quality: {signal['quality']} | Confidence: {signal['confidence']}%")
+        logger.info(f"{signal_emoji} {signal['signal']} | Quality: {signal['quality']} | Confidence: {signal['confidence']}%")
         
         # Reason
-        print(f"\nReason: {signal['reason']}")
+        logger.info(f"Reason: {signal['reason']}")
         
         # Price levels
-        print(f"\nEntry Price: ${signal['entry_price']:,.2f}")
+        logger.info(f"Entry Price: ${signal['entry_price']:,.2f}")
         if signal['stop_loss']:
-            print(f"Stop Loss:   ${signal['stop_loss']:,.2f} ({config.STOP_LOSS_PERCENT}%)")
+            logger.info(f"Stop Loss:   ${signal['stop_loss']:,.2f} ({config.STOP_LOSS_PERCENT}%)")
         if signal['take_profit']:
-            print(f"Take Profit: ${signal['take_profit']:,.2f} ({config.TAKE_PROFIT_PERCENT}%)")
+            logger.info(f"Take Profit: ${signal['take_profit']:,.2f} ({config.TAKE_PROFIT_PERCENT}%)")
         
         # Technical data
-        print("\nTechnical Indicators:")
+        logger.info("Technical Indicators:")
         tech = signal['technical_data']
-        print(f"  RSI: {tech['rsi']:.2f}")
-        print(f"  EMA Short (9): ${tech['ema_short']:,.2f}")
-        print(f"  EMA Long (21): ${tech['ema_long']:,.2f}")
-        print(f"  EMA Signal: {tech['ema_signal']}")
-        print(f"  Momentum: {tech['price_momentum']:.2f}%")
-        print(f"  Volume: {tech['volume_ratio']:.2f}x avg ({'HIGH' if tech['high_volume'] else 'Normal'})")
+        logger.info(f"  RSI: {tech['rsi']:.2f}")
+        logger.info(f"  EMA Short (9): ${tech['ema_short']:,.2f}")
+        logger.info(f"  EMA Long (21): ${tech['ema_long']:,.2f}")
+        logger.info(f"  EMA Signal: {tech['ema_signal']}")
+        logger.info(f"  Momentum: {tech['price_momentum']:.2f}%")
+        logger.info(f"  Volume: {tech['volume_ratio']:.2f}x avg ({'HIGH' if tech['high_volume'] else 'Normal'})")
         
-        print("\n" + "="*70 + "\n")
+        logger.info("=" * 70)
 
 
 def test_signal_generator():
     """Test the signal generator with mock data"""
-    print("\n" + "="*60)
-    print("TESTING SIGNAL GENERATOR")
-    print("="*60 + "\n")
+    logger.info("=" * 60)
+    logger.info("TESTING SIGNAL GENERATOR")
+    logger.info("=" * 60)
     
     # Import the Bybit client to get real candle data
     from bybit_client import BybitClient
@@ -452,7 +456,7 @@ def test_signal_generator():
     client = BybitClient()
     generator = SignalGenerator()
     
-    print("\n[TEST] Generating signal for BTC...")
+    logger.info("[TEST] Generating signal for BTC...")
     
     # Get real candle data
     candles = client.get_candles("BTCUSDT", interval="15", limit=50)
@@ -466,15 +470,15 @@ def test_signal_generator():
         
         # Validate signal
         if signal["signal"] in ["LONG", "SHORT", "HOLD"]:
-            print("✅ TEST PASSED: Signal generated successfully")
+            logger.info("✅ TEST PASSED: Signal generated successfully")
         else:
-            print("❌ TEST FAILED: Invalid signal type")
+            logger.error("❌ TEST FAILED: Invalid signal type")
     else:
-        print("❌ TEST FAILED: Could not fetch candle data")
+        logger.error("❌ TEST FAILED: Could not fetch candle data")
     
-    print("\n" + "="*60)
-    print("TESTING COMPLETE")
-    print("="*60 + "\n")
+    logger.info("=" * 60)
+    logger.info("TESTING COMPLETE")
+    logger.info("=" * 60)
 
 
 if __name__ == "__main__":

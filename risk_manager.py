@@ -5,6 +5,7 @@ Protects your capital with position sizing and risk controls
 
 from datetime import datetime, time
 from typing import Dict, Optional, Tuple
+from loguru import logger
 import config
 
 
@@ -35,35 +36,38 @@ class RiskManager:
         self.trading_start_hour = getattr(config, "TRADING_START_HOUR", 9)
         self.trading_end_hour = getattr(config, "TRADING_END_HOUR", 21)
         
-        print("[RiskManager] Initialized")
-        print(f"  Starting Capital: R{starting_capital:,.2f}")
         # RISK_PER_TRADE in config may be a fraction (0.02) or percent (2); normalize to fraction
         rpt = config.RISK_PER_TRADE
         rpt_display = rpt*100 if rpt <= 1 else rpt
-        print(f"  Risk Per Trade: {rpt_display}%")
-
+        
         # Daily loss limit: prefer absolute DAILY_LOSS_LIMIT if present, else MAX_DAILY_LOSS percent
+        mdl_display = None
         if hasattr(config, 'DAILY_LOSS_LIMIT'):
-            print(f"  Max Daily Loss: R{config.DAILY_LOSS_LIMIT}")
+            mdl_display = f"R{config.DAILY_LOSS_LIMIT}"
         else:
             mdl = getattr(config, 'MAX_DAILY_LOSS', None)
-            print(f"  Max Daily Loss: {mdl}%" if mdl is not None else "  Max Daily Loss: Not set")
+            mdl_display = f"{mdl}%" if mdl is not None else "Not set"
 
-        print(f"  Max Positions: {config.MAX_POSITIONS}")
         # Stop/TP percent names in config
         sl = getattr(config, 'STOP_LOSS_PERCENT', getattr(config, 'STOP_LOSS_PCT', None))
         tp = getattr(config, 'TAKE_PROFIT_PERCENT', getattr(config, 'TAKE_PROFIT_PCT', None))
-        print(f"  Stop Loss: {sl}%")
-        print(f"  Take Profit: {tp}%")
+        
+        logger.info("RiskManager initialized",
+                    starting_capital=f"R{starting_capital:,.2f}",
+                    risk_per_trade=f"{rpt_display}%",
+                    max_daily_loss=mdl_display,
+                    max_positions=config.MAX_POSITIONS,
+                    stop_loss=f"{sl}%",
+                    take_profit=f"{tp}%")
     
     
     def _check_daily_reset(self):
         """Reset daily statistics if new day"""
         current_date = datetime.now().date()
         if current_date > self.last_reset_date:
-            print(f"[RiskManager] New day detected, resetting daily stats")
-            print(f"  Previous day P&L: R{self.daily_pnl:,.2f}")
-            print(f"  Previous day trades: {self.daily_trades}")
+            logger.info("New day detected, resetting daily stats",
+                       previous_pnl=f"R{self.daily_pnl:,.2f}",
+                       previous_trades=self.daily_trades)
             
             self.daily_pnl = 0.0
             self.daily_trades = 0
@@ -124,11 +128,11 @@ class RiskManager:
             position_size = max_position_value / entry_price
             position_value = max_position_value
         
-        print(f"[RiskManager] Position sizing:")
-        print(f"  Risk Amount: R{adjusted_risk:,.2f} (confidence adjusted)")
-        print(f"  Price Risk: ${price_risk:,.2f}")
-        print(f"  Position Size: {position_size:.6f} units")
-        print(f"  Position Value: R{position_value:,.2f}")
+        logger.info("Position sizing calculated",
+                   risk_amount=f"R{adjusted_risk:,.2f}",
+                   price_risk=f"${price_risk:,.2f}",
+                   position_size=f"{position_size:.6f}",
+                   position_value=f"R{position_value:,.2f}")
         
         return position_size, position_value
     
@@ -218,7 +222,7 @@ class RiskManager:
         Returns:
             Tuple of (is_approved, reason)
         """
-        print(f"\n[RiskManager] Running pre-trade checks...")
+        logger.info("Running pre-trade checks...")
         
         checks = []
         
@@ -256,21 +260,24 @@ class RiskManager:
             signal_msg = f"Valid signal ({signal['signal']})"
         checks.append((signal_ok, "Signal Type", signal_msg))
         
-        # Print all checks
+        # Log all checks
         for passed, name, message in checks:
             status = "✔" if passed else "❌"
-            print(f"  {status} {name}: {message}")
+            if passed:
+                logger.debug(f"{status} {name}: {message}")
+            else:
+                logger.warning(f"{status} {name}: {message}")
         
         # Determine overall approval
         all_passed = all(check[0] for check in checks)
         
         if all_passed:
-            print(f"\n✅ All checks passed - TRADE APPROVED")
+            logger.info("✅ All checks passed - TRADE APPROVED")
             return True, "All safety checks passed"
         else:
             failed_checks = [check[1] for check in checks if not check[0]]
             reason = f"Failed checks: {', '.join(failed_checks)}"
-            print(f"\n❌ Trade rejected - {reason}")
+            logger.warning(f"❌ Trade rejected - {reason}")
             return False, reason
     
     
@@ -286,10 +293,10 @@ class RiskManager:
         self.total_trades += 1
         self.current_capital -= position_value
         
-        print(f"[RiskManager] Trade opened:")
-        print(f"  Position value: R{position_value:,.2f}")
-        print(f"  Open positions: {self.open_positions}")
-        print(f"  Remaining capital: R{self.current_capital:,.2f}")
+        logger.info("Trade opened",
+                   position_value=f"R{position_value:,.2f}",
+                   open_positions=self.open_positions,
+                   remaining_capital=f"R{self.current_capital:,.2f}")
     
     
     def record_trade_closed(self, position_value: float, pnl: float):
@@ -304,11 +311,11 @@ class RiskManager:
         self.current_capital += position_value + pnl
         self.daily_pnl += pnl
         
-        print(f"[RiskManager] Trade closed:")
-        print(f"  P&L: R{pnl:,.2f}")
-        print(f"  Daily P&L: R{self.daily_pnl:,.2f}")
-        print(f"  Open positions: {self.open_positions}")
-        print(f"  Current capital: R{self.current_capital:,.2f}")
+        logger.info("Trade closed",
+                   pnl=f"R{pnl:,.2f}",
+                   daily_pnl=f"R{self.daily_pnl:,.2f}",
+                   open_positions=self.open_positions,
+                   current_capital=f"R{self.current_capital:,.2f}")
     
     
     def get_risk_stats(self) -> Dict:
@@ -338,31 +345,31 @@ class RiskManager:
         """Print current risk statistics"""
         stats = self.get_risk_stats()
         
-        print("\n" + "="*60)
-        print("RISK MANAGER - CURRENT STATS")
-        print("="*60)
-        print(f"Starting Capital: R{stats['starting_capital']:,.2f}")
-        print(f"Current Capital:  R{stats['current_capital']:,.2f}")
-        print(f"Total P&L:        R{stats['total_pnl']:,.2f} ({stats['total_pnl_pct']:.2f}%)")
-        print(f"Daily P&L:        R{stats['daily_pnl']:,.2f} ({stats['daily_pnl_pct']:.2f}%)")
-        print(f"Open Positions:   {stats['open_positions']}/{config.MAX_POSITIONS}")
-        print(f"Daily Trades:     {stats['daily_trades']}")
-        print(f"Total Trades:     {stats['total_trades']}")
-        print(f"Daily Loss Room:  R{stats['max_daily_loss_remaining']:,.2f}")
-        print("="*60 + "\n")
+        logger.info("=" * 60)
+        logger.info("RISK MANAGER - CURRENT STATS")
+        logger.info("=" * 60)
+        logger.info(f"Starting Capital: R{stats['starting_capital']:,.2f}")
+        logger.info(f"Current Capital:  R{stats['current_capital']:,.2f}")
+        logger.info(f"Total P&L:        R{stats['total_pnl']:,.2f} ({stats['total_pnl_pct']:.2f}%)")
+        logger.info(f"Daily P&L:        R{stats['daily_pnl']:,.2f} ({stats['daily_pnl_pct']:.2f}%)")
+        logger.info(f"Open Positions:   {stats['open_positions']}/{config.MAX_POSITIONS}")
+        logger.info(f"Daily Trades:     {stats['daily_trades']}")
+        logger.info(f"Total Trades:     {stats['total_trades']}")
+        logger.info(f"Daily Loss Room:  R{stats['max_daily_loss_remaining']:,.2f}")
+        logger.info("=" * 60)
 
 
 def test_risk_manager():
     """Test the risk manager with mock scenarios"""
-    print("\n" + "="*60)
-    print("TESTING RISK MANAGER")
-    print("="*60 + "\n")
+    logger.info("=" * 60)
+    logger.info("TESTING RISK MANAGER")
+    logger.info("=" * 60)
     
     # Initialize risk manager
     rm = RiskManager(starting_capital=10000.0)
     
     # Test 1: Position sizing
-    print("\n[TEST 1] Calculating position size...")
+    logger.info("[TEST 1] Calculating position size...")
     entry_price = 120000.0
     stop_loss = 117600.0  # 2% stop loss
     confidence = 75.0
@@ -370,12 +377,12 @@ def test_risk_manager():
     position_size, position_value = rm.calculate_position_size(entry_price, stop_loss, confidence)
     
     if position_size > 0 and position_value > 0:
-        print(f"✅ TEST 1 PASSED: Position size calculated")
+        logger.info("✅ TEST 1 PASSED: Position size calculated")
     else:
-        print(f"❌ TEST 1 FAILED: Invalid position size")
+        logger.error("❌ TEST 1 FAILED: Invalid position size")
     
     # Test 2: Pre-trade checks
-    print("\n[TEST 2] Running pre-trade checks...")
+    logger.info("[TEST 2] Running pre-trade checks...")
     mock_signal = {
         "signal": "LONG",
         "confidence": 75.0,
@@ -386,18 +393,18 @@ def test_risk_manager():
     approved, reason = rm.pre_trade_checks(mock_signal, position_value)
     
     if approved:
-        print(f"✅ TEST 2 PASSED: Trade approved")
+        logger.info("✅ TEST 2 PASSED: Trade approved")
     else:
-        print(f"❌ TEST 2 FAILED: Trade rejected - {reason}")
+        logger.error(f"❌ TEST 2 FAILED: Trade rejected - {reason}")
     
     # Test 3: Risk stats
-    print("\n[TEST 3] Getting risk statistics...")
+    logger.info("[TEST 3] Getting risk statistics...")
     rm.print_risk_stats()
-    print(f"✅ TEST 3 PASSED: Risk stats displayed")
+    logger.info("✅ TEST 3 PASSED: Risk stats displayed")
     
-    print("\n" + "="*60)
-    print("TESTING COMPLETE")
-    print("="*60 + "\n")
+    logger.info("=" * 60)
+    logger.info("TESTING COMPLETE")
+    logger.info("=" * 60)
 
 
 if __name__ == "__main__":

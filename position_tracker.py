@@ -9,8 +9,10 @@ import threading
 import time
 from datetime import datetime
 from typing import Callable, Dict, Any
+from loguru import logger
 
 from bybit_client import BybitClient
+import config
 
 
 class PositionTracker:
@@ -46,7 +48,9 @@ class PositionTracker:
         else:  # SHORT or unknown treated as short when side == 'SHORT'
             unrealized = (entry_price - current_price) * qty
             current_value = - (current_price * qty)
-            margin = pos.get("order", {}).get("margin") or pos.get("margin") or pos.get("position_value") * 0.0
+            margin = (pos.get("order", {}).get("margin") or 
+                      pos.get("margin") or 
+                      (pos.get("position_value", 0) * config.SHORT_MARGIN))
 
         return {
             "qty": qty,
@@ -73,7 +77,8 @@ class PositionTracker:
         # Fetch cash balance once
         try:
             cash = self.client.get_balance() or 0.0
-        except Exception:
+        except Exception as e:
+            logger.error(f"Failed to fetch balance: {e}", exc_info=True)
             cash = None
 
         snapshot["cash_balance"] = cash
@@ -86,8 +91,14 @@ class PositionTracker:
             # Determine current price
             try:
                 current_price = self.client.get_current_price(symbol) or 0.0
-            except Exception:
+            except Exception as e:
+                logger.error(f"Failed to fetch current price for {symbol}: {e}", exc_info=True)
                 current_price = 0.0
+
+            # Validate current price - skip positions with invalid prices
+            if current_price is None or current_price <= 0:
+                logger.warning(f"Skipping position {symbol} due to invalid price: {current_price}")
+                continue
 
             # Compute unrealized
             computed = self._compute_unrealized(pos, current_price)
@@ -97,7 +108,8 @@ class PositionTracker:
             if isinstance(entry_time, str):
                 try:
                     entry_dt = datetime.fromisoformat(entry_time)
-                except Exception:
+                except Exception as e:
+                    logger.debug(f"Failed to parse entry_time '{entry_time}' for {symbol}: {e}")
                     entry_dt = None
             elif isinstance(entry_time, datetime):
                 entry_dt = entry_time
@@ -135,7 +147,8 @@ class PositionTracker:
         # Portfolio value = cash balance + equity parts
         try:
             portfolio_value = (cash or 0.0) + equity_parts
-        except Exception:
+        except Exception as e:
+            logger.error(f"Failed to calculate portfolio value: {e}", exc_info=True)
             portfolio_value = None
 
         snapshot["portfolio_value"] = round(portfolio_value, 6) if portfolio_value is not None else None
@@ -144,9 +157,8 @@ class PositionTracker:
         try:
             with open(self.file_path, "w") as f:
                 json.dump(snapshot, f, indent=2, default=str)
-        except Exception:
-            # Best-effort: ignore file write errors
-            pass
+        except Exception as e:
+            logger.error(f"Failed to write positions to {self.file_path}: {e}", exc_info=True)
 
         return snapshot
 
@@ -158,8 +170,8 @@ class PositionTracker:
         while not self._stop_event.is_set():
             try:
                 self.update_positions()
-            except Exception:
-                pass
+            except Exception as e:
+                logger.error(f"Error updating positions: {e}", exc_info=True)
             # Sleep in small increments to be responsive to stop events
             for _ in range(int(self.update_interval)):
                 if self._stop_event.is_set():

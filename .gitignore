@@ -1,0 +1,21 @@
+# Environment and secrets
+.env
+*.log
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Runtime data (don't commit these)
+state.json
+positions.json
+*.csv
+
+# Backups
+config.py.bak*
+
+# IDE
+.vscode/
+.idea/

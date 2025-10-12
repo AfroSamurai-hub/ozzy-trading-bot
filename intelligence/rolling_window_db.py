@@ -75,6 +75,11 @@ class RollingWindowPatternDB:
                 "label": row.get("label", "UNKNOWN"),
                 "rsi": float(row.get("rsi", 50)),
                 "ema_ratio": float(row.get("ema_ratio", 1.0)),
+                # Intrawindow risk tracking metadata
+                "max_profit_pct": float(row.get("max_profit_pct", 0.0)),
+                "max_drawdown_pct": float(row.get("max_drawdown_pct", 0.0)),
+                "future_high": float(row.get("future_high", 0.0)),
+                "future_low": float(row.get("future_low", 0.0)),
             }
             patterns.append(
                 PatternEmbedding(
@@ -101,11 +106,22 @@ class RollingWindowPatternDB:
         data = self.collection.get(limit=1000)
         metadatas = data.get("metadatas", []) or []
         wins = sum(1 for m in metadatas if m.get("label") == "WIN")
+        losses = sum(1 for m in metadatas if m.get("label") == "LOSS")
+        neutrals = sum(1 for m in metadatas if m.get("label") == "NEUTRAL")
         total = len(metadatas)
+        
+        # Calculate average intrawindow metrics
+        max_profits = [m.get("max_profit_pct", 0) for m in metadatas if "max_profit_pct" in m]
+        max_drawdowns = [m.get("max_drawdown_pct", 0) for m in metadatas if "max_drawdown_pct" in m]
+        
         return {
             "window_hours": self.window_hours,
             "max_age_seconds": self.max_age_seconds,
             "sample_size": total,
             "win_rate": (wins / total * 100) if total else None,
+            "loss_rate": (losses / total * 100) if total else None,
+            "neutral_rate": (neutrals / total * 100) if total else None,
+            "avg_max_profit_pct": (sum(max_profits) / len(max_profits) * 100) if max_profits else None,
+            "avg_max_drawdown_pct": (sum(max_drawdowns) / len(max_drawdowns) * 100) if max_drawdowns else None,
             "total_patterns": self.count(),
         }

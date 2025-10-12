@@ -17,7 +17,7 @@ class SignalGenerator:
     Uses RSI, EMA, and volume analysis to identify trading opportunities.
     """
     
-    def __init__(self):
+    def __init__(self, market_client: Optional[BybitClient] = None):
         """Initialize the signal generator with configuration"""
         self.rsi_period = 14
         # Read RSI thresholds from config if present (optimizer may update these)
@@ -30,6 +30,9 @@ class SignalGenerator:
 
         # Aggressive: volume confirmation effectively disabled (1.0 = current >= avg)
         self.volume_multiplier = 1.0  # Volume must be 1.0x average to confirm signal
+
+        self.market_client = market_client
+        self._market_client_error = False
 
         logger.info("SignalGenerator initialized",
                     rsi_period=self.rsi_period,
@@ -193,12 +196,13 @@ class SignalGenerator:
         return round(confidence, 2)
     
     
-    def generate_signal(self, candles: List[Dict]) -> Dict:
+    def generate_signal(self, candles: List[Dict], symbol: Optional[str] = None) -> Dict:
         """
         Generate trading signal from candle data
         
         Args:
             candles: List of candle dictionaries with OHLCV data
+            symbol: Optional trading symbol for context
             
         Returns:
             Signal dictionary with recommendation and details
@@ -323,15 +327,15 @@ class SignalGenerator:
         
         # Calculate entry, stop loss, and take profit
         if signal == "LONG":
-            entry_price = current_price
-            stop_loss = current_price * (1 - config.STOP_LOSS_PERCENT / 100)
-            take_profit = current_price * (1 + config.TAKE_PROFIT_PERCENT / 100)
+            entry_price = float(current_price)
+            stop_loss = float(current_price * (1 - config.STOP_LOSS_PERCENT / 100))
+            take_profit = float(current_price * (1 + config.TAKE_PROFIT_PERCENT / 100))
         elif signal == "SHORT":
-            entry_price = current_price
-            stop_loss = current_price * (1 + config.STOP_LOSS_PERCENT / 100)
-            take_profit = current_price * (1 - config.TAKE_PROFIT_PERCENT / 100)
+            entry_price = float(current_price)
+            stop_loss = float(current_price * (1 + config.STOP_LOSS_PERCENT / 100))
+            take_profit = float(current_price * (1 - config.TAKE_PROFIT_PERCENT / 100))
         else:
-            entry_price = current_price
+            entry_price = float(current_price)
             stop_loss = None
             take_profit = None
         
@@ -351,9 +355,9 @@ class SignalGenerator:
             "quality": quality,
             "confidence": confidence,
             "reason": " | ".join(reason_parts),
-            "entry_price": round(entry_price, 2),
-            "stop_loss": round(stop_loss, 2) if stop_loss else None,
-            "take_profit": round(take_profit, 2) if take_profit else None,
+            "entry_price": entry_price,
+            "stop_loss": stop_loss,
+            "take_profit": take_profit,
             "technical_data": {
                 "rsi": round(rsi, 2),
                 "ema_short": round(ema_short, 2),
@@ -370,22 +374,30 @@ class SignalGenerator:
             "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
 
-        # Attempt to fetch market microstructure (bid/ask) if available via BybitClient
+        # Attempt to fetch market microstructure (bid/ask) if available
         try:
-            client = BybitClient()
-            # If candles include symbol info, use it; otherwise main will pass symbol
-            symbol = candles[0].get('symbol') if 'symbol' in candles[0] else None
+            client = self.market_client
+            if client is None and not self._market_client_error:
+                try:
+                    client = BybitClient()
+                    self.market_client = client
+                except Exception as exc:
+                    self._market_client_error = True
+                    logger.debug(f"Market microstructure disabled: {exc}")
+                    client = None
+
             bid, ask = (None, None)
-            if symbol:
+            if client and symbol:
                 bid, ask = client.get_bid_ask(symbol)
 
             # Fallback: estimate from last candle high/low
-            if bid is None or ask is None:
+            if (bid is None or ask is None) and candles:
                 last_high = candles[-1].get('high')
                 last_low = candles[-1].get('low')
-                if last_high is not None and last_low is not None:
-                    ask = ask or last_high
-                    bid = bid or last_low
+                if last_high is not None and ask is None:
+                    ask = last_high
+                if last_low is not None and bid is None:
+                    bid = last_low
 
             spread = None
             spread_pct = None
@@ -398,9 +410,9 @@ class SignalGenerator:
             result['technical_data']['ask'] = round(ask, 6) if ask is not None else None
             result['technical_data']['spread'] = round(spread, 6) if spread is not None else None
             result['technical_data']['spread_pct'] = round(spread_pct, 6) if spread_pct is not None else None
-        except Exception as e:
+        except Exception:
             # Non-fatal: skip bid/ask if fetch fails
-            logger.debug(f"Failed to fetch bid/ask spread: {e}")
+            logger.debug("Failed to fetch bid/ask spread", exc_info=True)
         
         return result
     
@@ -454,7 +466,7 @@ def test_signal_generator():
     from bybit_client import BybitClient
     
     client = BybitClient()
-    generator = SignalGenerator()
+    generator = SignalGenerator(client)
     
     logger.info("[TEST] Generating signal for BTC...")
     

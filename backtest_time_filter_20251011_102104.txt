@@ -1,0 +1,7 @@
+Backtest Results: Time Filter 12:00-16:00
+Generated: 2025-10-11 10:21:04
+
+Control (24/7): 444 trades, 58.1% win rate, R13165.00 total
+Test (Filtered): 435 trades, 58.4% win rate, R13116.66 total
+Difference: +0.3% win rate, R-48.34 P&L
+Recommendation: Keep 24/7 trading

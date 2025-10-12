@@ -1,0 +1,320 @@
+#!/usr/bin/env python3
+"""
+OZZY DEMO CONTROL - Single command to manage everything
+"""
+
+import os
+import sys
+import time
+import subprocess
+import signal
+import sqlite3
+from datetime import datetime
+from rich.console import Console
+from rich.panel import Panel
+from rich.table import Table
+from rich.text import Text
+from rich.live import Live
+from rich.layout import Layout
+
+from demo_utils import (
+    DEFAULT_STARTING_BALANCE,
+    ensure_demo_database,
+    get_demo_db_path,
+    initialize_demo_database,
+)
+
+console = Console()
+
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+DEFAULT_VENV_PYTHON = os.path.join(PROJECT_ROOT, "venv", "bin", "python")
+VENV_PYTHON = os.getenv(
+    "OZZY_DEMO_PYTHON",
+    DEFAULT_VENV_PYTHON if os.path.exists(DEFAULT_VENV_PYTHON) else sys.executable,
+)
+
+class DemoController:
+    def __init__(self):
+        self.console = Console()
+        self.demo_bot_pid = None
+        
+    def check_demo_bot_status(self):
+        """Check if demo bot is running"""
+        try:
+            result = subprocess.run(['pgrep', '-f', 'demo_main.py'], 
+                                  capture_output=True, text=True)
+            if result.returncode == 0 and result.stdout.strip():
+                self.demo_bot_pid = int(result.stdout.strip().split('\n')[0])
+                return True
+            return False
+        except:
+            return False
+    
+    def get_quick_stats(self):
+        """Get quick demo statistics"""
+        path = get_demo_db_path()
+        if not os.path.exists(path):
+            return None
+            
+        try:
+            conn = sqlite3.connect(path)
+            cursor = conn.cursor()
+            
+            # Get config
+            cursor.execute('SELECT starting_capital, current_balance, start_date, total_trades FROM demo_config ORDER BY id DESC LIMIT 1')
+            config = cursor.fetchone()
+            
+            if not config:
+                conn.close()
+                return None
+            
+            starting_capital = config[0]
+            current_balance = config[1]
+            start_date = datetime.fromisoformat(config[2])
+            total_trades = config[3]
+            
+            # Get trade stats
+            cursor.execute('''
+                SELECT COUNT(*), 
+                       SUM(CASE WHEN pnl > 0 THEN 1 ELSE 0 END),
+                       MAX(entry_time) as last_trade
+                FROM demo_trades 
+                WHERE status = 'closed' AND pnl IS NOT NULL
+            ''')
+            trade_stats = cursor.fetchone()
+            
+            closed_trades = trade_stats[0] or 0
+            wins = trade_stats[1] or 0
+            last_trade = trade_stats[2]
+            
+            win_rate = (wins / closed_trades * 100) if closed_trades > 0 else 0
+            gain = current_balance - starting_capital
+            gain_pct = (gain / starting_capital) * 100 if starting_capital else 0
+            
+            # Days running
+            days_running = (datetime.now() - start_date.replace(tzinfo=None)).total_seconds() / 86400
+            
+            conn.close()
+            
+            return {
+                'balance': current_balance,
+                'starting_balance': starting_capital,
+                'gain': gain,
+                'gain_pct': gain_pct,
+                'closed_trades': closed_trades,
+                'win_rate': win_rate,
+                'days_running': days_running,
+                'last_trade': last_trade
+            }
+        except Exception as e:
+            return None
+    
+    def show_status(self):
+        """Show current status"""
+        is_running = self.check_demo_bot_status()
+        stats = self.get_quick_stats()
+        
+        # Create status display
+        if not stats:
+            self.console.print("❌ Demo not initialized. Run: [bold]demo init[/bold]", style="red")
+            return
+        
+        # Status header
+        status_color = "green" if is_running else "red"
+        status_text = "🟢 RUNNING" if is_running else "🔴 STOPPED"
+        
+        self.console.print()
+        self.console.print(f"[bold blue]💰 OZZY DEMO STATUS[/bold blue] | {status_text}", style=status_color)
+        self.console.print("=" * 50)
+        
+        # Quick stats
+        balance_color = "green" if stats['gain'] >= 0 else "red"
+        self.console.print(f"💰 Balance: [bold]R{stats['balance']:,.2f}[/bold] ({stats['gain']:+,.2f}, {stats['gain_pct']:+.1f}%)", style=balance_color)
+        self.console.print(f"📊 Trades: {stats['closed_trades']} | Win Rate: {stats['win_rate']:.1f}%")
+        self.console.print(f"📅 Running: {stats['days_running']:.1f} days")
+        
+        if stats['last_trade']:
+            try:
+                last_dt = datetime.strptime(stats['last_trade'], "%Y-%m-%d %H:%M:%S")
+                time_ago = datetime.now() - last_dt
+                if time_ago.total_seconds() < 3600:
+                    time_str = f"{int(time_ago.total_seconds() / 60)}m ago"
+                else:
+                    time_str = f"{int(time_ago.total_seconds() / 3600)}h ago"
+                self.console.print(f"🕒 Last Trade: {time_str}")
+            except:
+                pass
+        
+        if is_running:
+            self.console.print(f"🔧 Bot PID: {self.demo_bot_pid}")
+        
+        self.console.print()
+        
+        # Show available commands
+        self.console.print("[dim]Quick Commands:[/dim]")
+        if not is_running:
+            self.console.print("  [bold green]demo start[/bold green] - Start trading")
+        else:
+            self.console.print("  [bold red]demo stop[/bold red] - Stop trading")
+        self.console.print("  [bold cyan]demo watch[/bold cyan] - Live dashboard")
+        self.console.print("  [bold yellow]demo report[/bold yellow] - Full report")
+        self.console.print("  [bold blue]demo logs[/bold blue] - View logs")
+        self.console.print()
+    
+    def start_demo(self):
+        """Start demo bot"""
+        if self.check_demo_bot_status():
+            self.console.print("✅ Demo bot is already running!", style="yellow")
+            return
+        
+        db_path = ensure_demo_database()
+        
+        self.console.print("🚀 Starting demo bot...", style="blue")
+        project_root = PROJECT_ROOT
+        os.chdir(project_root)
+        
+        # Start in background
+        process = subprocess.Popen([
+            VENV_PYTHON, "demo_main.py"
+        ], stdout=open('demo_bot.log', 'a'), stderr=subprocess.STDOUT)
+        
+        time.sleep(2)  # Give it time to start
+        
+        if self.check_demo_bot_status():
+            self.console.print(f"✅ Demo bot started! PID: {self.demo_bot_pid}", style="green")
+            self.console.print(f"💰 Trading with R{DEFAULT_STARTING_BALANCE:,.0f} virtual capital")
+            self.console.print("📊 Run '[bold]demo watch[/bold]' to monitor live")
+        else:
+            self.console.print("❌ Failed to start demo bot. Check logs: demo logs", style="red")
+    
+    def stop_demo(self):
+        """Stop demo bot"""
+        if not self.check_demo_bot_status():
+            self.console.print("ℹ️  Demo bot is not running", style="yellow")
+            return
+        
+        self.console.print("🛑 Stopping demo bot...", style="yellow")
+        
+        try:
+            os.kill(self.demo_bot_pid, signal.SIGTERM)
+            time.sleep(2)
+            
+            if not self.check_demo_bot_status():
+                self.console.print("✅ Demo bot stopped", style="green")
+            else:
+                # Force kill if needed
+                os.kill(self.demo_bot_pid, signal.SIGKILL)
+                self.console.print("✅ Demo bot force stopped", style="yellow")
+        except:
+            subprocess.run(['pkill', '-f', 'demo_main.py'])
+            self.console.print("✅ Demo bot stopped", style="green")
+    
+    def init_demo(self):
+        """Initialize demo"""
+        self.console.print("🚀 Initializing fresh demo...", style="blue")
+        
+        try:
+            initialize_demo_database(overwrite=True)
+            self.console.print(f"✅ Demo initialized with R{DEFAULT_STARTING_BALANCE:,.0f}!", style="green")
+            self.console.print("Run '[bold]demo start[/bold]' to begin trading")
+        except Exception as exc:
+            self.console.print(f"❌ Failed to initialize demo: {exc}", style="red")
+    
+    def watch_demo(self):
+        """Launch live dashboard"""
+        ensure_demo_database()
+        
+        self.console.print("📊 Launching live dashboard... (Press Ctrl+C to exit)", style="blue")
+        
+        os.chdir(PROJECT_ROOT)
+        try:
+            subprocess.run([VENV_PYTHON, "scripts/demo_dashboard.py"])
+        except KeyboardInterrupt:
+            self.console.print("\n👋 Dashboard closed", style="yellow")
+    
+    def show_logs(self):
+        """Show recent logs"""
+        log_file = os.path.join(PROJECT_ROOT, "demo_bot.log")
+        
+        if not os.path.exists(log_file):
+            self.console.print("ℹ️  No log file found yet", style="yellow")
+            return
+        
+        self.console.print("📋 Recent demo bot logs:", style="blue")
+        self.console.print("-" * 50)
+        
+        try:
+            # Show last 20 lines
+            result = subprocess.run(['tail', '-20', log_file], capture_output=True, text=True)
+            if result.stdout:
+                self.console.print(result.stdout)
+            else:
+                self.console.print("No recent logs", style="dim")
+        except:
+            self.console.print("❌ Could not read log file", style="red")
+    
+    def show_report(self):
+        """Show comprehensive report"""
+        ensure_demo_database()
+        
+        os.chdir(PROJECT_ROOT)
+        subprocess.run([VENV_PYTHON, "scripts/demo_report.py", "--full"])
+    
+    def show_help(self):
+        """Show help"""
+        self.console.print()
+        self.console.print("[bold blue]🤖 OZZY DEMO CONTROLLER[/bold blue]")
+        self.console.print(f"Simple command to manage your R{DEFAULT_STARTING_BALANCE:,.0f} demo test")
+        self.console.print()
+        
+        table = Table(show_header=True, header_style="bold blue")
+        table.add_column("Command", style="bold")
+        table.add_column("Description")
+        
+        table.add_row("demo", "Show status")
+        table.add_row("demo init", f"Initialize fresh R{DEFAULT_STARTING_BALANCE:,.0f} demo")
+        table.add_row("demo start", "Start demo trading bot")
+        table.add_row("demo stop", "Stop demo bot")
+        table.add_row("demo watch", "Live dashboard")
+        table.add_row("demo logs", "View recent logs")
+        table.add_row("demo report", "Comprehensive report")
+        table.add_row("demo help", "Show this help")
+        
+        self.console.print(table)
+        self.console.print()
+        
+        self.console.print("[dim]Examples:[/dim]")
+        self.console.print("  demo init    # Fresh start")
+        self.console.print("  demo start   # Begin trading")
+        self.console.print("  demo         # Check status")
+        self.console.print("  demo watch   # Monitor live")
+        self.console.print()
+
+def main():
+    controller = DemoController()
+    
+    # Get command
+    command = sys.argv[1] if len(sys.argv) > 1 else ""
+    
+    if command == "init":
+        controller.init_demo()
+    elif command == "start":
+        controller.start_demo()
+    elif command == "stop":
+        controller.stop_demo()
+    elif command == "watch":
+        controller.watch_demo()
+    elif command == "logs":
+        controller.show_logs()
+    elif command == "report":
+        controller.show_report()
+    elif command == "help":
+        controller.show_help()
+    elif command == "":
+        controller.show_status()
+    else:
+        console.print(f"❌ Unknown command: {command}", style="red")
+        console.print("Run '[bold]demo help[/bold]' for available commands")
+
+if __name__ == "__main__":
+    main()

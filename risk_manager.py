@@ -7,6 +7,8 @@ from datetime import datetime, time
 from typing import Dict, Optional, Tuple
 from loguru import logger
 import config
+import sqlite3
+import os
 
 
 class RiskManager:
@@ -32,9 +34,11 @@ class RiskManager:
         # Reset daily stats at start of each day
         self.last_reset_date = datetime.now().date()
         
-        # Trading hours (defaults to 9:00 - 21:00 if not provided in config)
-        self.trading_start_hour = getattr(config, "TRADING_START_HOUR", 9)
-        self.trading_end_hour = getattr(config, "TRADING_END_HOUR", 21)
+        # Trading hours configuration
+        self.trading_hours_config = getattr(config, "TRADING_HOURS", {'enabled': True, 'start': 9, 'end': 21})
+        self.trading_hours_enabled = self.trading_hours_config.get('enabled', True)
+        self.trading_start_hour = self.trading_hours_config.get('start', 9)
+        self.trading_end_hour = self.trading_hours_config.get('end', 21)
         
         # RISK_PER_TRADE in config may be a fraction (0.02) or percent (2); normalize to fraction
         rpt = config.RISK_PER_TRADE
@@ -59,6 +63,54 @@ class RiskManager:
                     max_positions=config.MAX_POSITIONS,
                     stop_loss=f"{sl}%",
                     take_profit=f"{tp}%")
+
+
+    def get_total_trades_from_db(self) -> int:
+        """Return total number of trades in the database (all-time).
+
+        Returns 0 if DB not found or query fails.
+        """
+        db = 'ozzy_simple.db'
+        if not os.path.exists(db):
+            return 0
+        try:
+            conn = sqlite3.connect(db)
+            cur = conn.cursor()
+            cur.execute('SELECT COUNT(*) FROM trades')
+            result = cur.fetchone()[0] or 0
+            conn.close()
+            return int(result)
+        except Exception:
+            return 0
+
+
+    def get_deployed_capital_from_db(self) -> float:
+        """Compute deployed capital from positions table.
+
+        Attempts to use `current_price` when present, otherwise falls back to `entry_price`.
+        Returns 0.0 if DB or table not present.
+        """
+        db = 'ozzy_simple.db'
+        if not os.path.exists(db):
+            return 0.0
+        try:
+            conn = sqlite3.connect(db)
+            cur = conn.cursor()
+            # Inspect columns
+            cur.execute("PRAGMA table_info('positions')")
+            cols = [r[1] for r in cur.fetchall()]
+            use_current = 'current_price' in cols
+            if use_current:
+                q = 'SELECT SUM(qty * current_price) FROM positions'
+            else:
+                # fallback to entry_price
+                q = 'SELECT SUM(qty * entry_price) FROM positions'
+            cur.execute(q)
+            res = cur.fetchone()[0] or 0.0
+            conn.close()
+            return float(res)
+        except Exception:
+            return 0.0
     
     
     def _check_daily_reset(self):
@@ -144,15 +196,20 @@ class RiskManager:
         Returns:
             Tuple of (is_allowed, reason)
         """
+        # If trading hours restriction is disabled, always allow trading
+        if not self.trading_hours_enabled:
+            return True, "24/7 trading (unrestricted)"
+        
         current_time = datetime.now().time()
         
-        trading_start = time(self.trading_start_hour, 0)
-        trading_end = time(self.trading_end_hour, 0)
-        
+        # Treat end hour as inclusive through the hour (e.g., 23 -> 23:59:59)
+        trading_start = time(self.trading_start_hour, 0, 0)
+        trading_end = time(self.trading_end_hour, 59, 59)
+
         if trading_start <= current_time <= trading_end:
             return True, "Within trading hours"
         else:
-            return False, f"Outside trading hours ({self.trading_start_hour}:00-{self.trading_end_hour}:00)"
+            return False, f"Outside trading hours ({self.trading_start_hour}:00-{self.trading_end_hour}:59)"
     
     
     def check_daily_loss_limit(self) -> Tuple[bool, str]:
@@ -164,9 +221,16 @@ class RiskManager:
         """
         self._check_daily_reset()
         
-        # Use absolute daily loss limit if provided
-        if hasattr(config, 'DAILY_LOSS_LIMIT') and config.DAILY_LOSS_LIMIT is not None:
-            max_daily_loss = config.DAILY_LOSS_LIMIT
+        # Use absolute daily loss limit if provided (prefer stricter of configured limits)
+        abs_limit = getattr(config, 'DAILY_LOSS_LIMIT', None)
+        daps_abs_limit = getattr(config, 'ABSOLUTE_DAILY_LOSS_LIMIT', None)
+        max_daily_loss = None
+        if abs_limit is not None and daps_abs_limit is not None:
+            max_daily_loss = min(float(abs_limit), float(daps_abs_limit))
+        elif abs_limit is not None:
+            max_daily_loss = float(abs_limit)
+        elif daps_abs_limit is not None:
+            max_daily_loss = float(daps_abs_limit)
         else:
             # Fallback to percent 'MAX_DAILY_LOSS' if present
             mdl = getattr(config, 'MAX_DAILY_LOSS', None)
@@ -174,7 +238,7 @@ class RiskManager:
                 # No limit configured
                 return True, f"Daily P&L: R{self.daily_pnl:,.2f}"
             # Treat mdl as percent
-            max_daily_loss = self.starting_capital * (mdl / 100.0)
+            max_daily_loss = self.starting_capital * (float(mdl) / 100.0)
         
         if self.daily_pnl <= -max_daily_loss:
             return False, f"Daily loss limit reached (R{abs(self.daily_pnl):,.2f})"
@@ -250,6 +314,20 @@ class RiskManager:
             capital_ok = True
             capital_msg = f"Sufficient capital (R{self.current_capital:,.2f})"
         checks.append((capital_ok, "Capital Check", capital_msg))
+
+        # Check 5b: Max deployed capital percent (DAPS safety rail)
+        try:
+            max_deploy_pct = getattr(config, 'ABSOLUTE_MAX_DEPLOYED_PCT', None)
+            if max_deploy_pct is not None:
+                deployed_now = self.get_deployed_capital_from_db()
+                max_deploy_value = float(self.starting_capital) * float(max_deploy_pct)
+                if (deployed_now + position_value) > max_deploy_value:
+                    checks.append((False, "Max Deployed Capital", f"Exceeds {max_deploy_pct*100:.0f}% cap (now R{deployed_now:,.2f} + new R{position_value:,.2f} > R{max_deploy_value:,.2f})"))
+                else:
+                    checks.append((True, "Max Deployed Capital", f"Within {max_deploy_pct*100:.0f}% cap (R{deployed_now+position_value:,.2f}/R{max_deploy_value:,.2f})"))
+        except Exception:
+            # Non-fatal if DB not ready
+            checks.append((True, "Max Deployed Capital", "Check skipped"))
         
         # Check 6: Valid signal
         if signal["signal"] not in ["LONG", "SHORT"]:
@@ -344,19 +422,53 @@ class RiskManager:
     def print_risk_stats(self):
         """Print current risk statistics"""
         stats = self.get_risk_stats()
-        
-        logger.info("=" * 60)
+        # Pull all-time totals from DB when possible
+        all_time_trades = self.get_total_trades_from_db()
+        deployed = self.get_deployed_capital_from_db()
+        free_capital = stats['current_capital']
+        # If deployed was computed from DB we should subtract from current capital to get free
+        try:
+            free_capital = stats['current_capital'] - deployed
+        except Exception:
+            free_capital = stats['current_capital']
+
+        total_exposure = deployed  # for now
+
         logger.info("RISK MANAGER - CURRENT STATS")
-        logger.info("=" * 60)
-        logger.info(f"Starting Capital: R{stats['starting_capital']:,.2f}")
-        logger.info(f"Current Capital:  R{stats['current_capital']:,.2f}")
-        logger.info(f"Total P&L:        R{stats['total_pnl']:,.2f} ({stats['total_pnl_pct']:.2f}%)")
-        logger.info(f"Daily P&L:        R{stats['daily_pnl']:,.2f} ({stats['daily_pnl_pct']:.2f}%)")
-        logger.info(f"Open Positions:   {stats['open_positions']}/{config.MAX_POSITIONS}")
-        logger.info(f"Daily Trades:     {stats['daily_trades']}")
-        logger.info(f"Total Trades:     {stats['total_trades']}")
-        logger.info(f"Daily Loss Room:  R{stats['max_daily_loss_remaining']:,.2f}")
-        logger.info("=" * 60)
+        logger.info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        logger.info(f"Session Starting Capital: R{stats['starting_capital']:,.2f}")
+        logger.info(f"Deployed in Positions:    R{deployed:,.2f} ({(deployed / stats['starting_capital']*100) if stats['starting_capital'] else 0:.2f}%)")
+        logger.info(f"Free Capital:             R{free_capital:,.2f} ({(free_capital / stats['starting_capital']*100) if stats['starting_capital'] else 0:.2f}%)")
+        logger.info(f"Total Exposure:           R{total_exposure:,.2f} ({(total_exposure / stats['starting_capital']*100) if stats['starting_capital'] else 0:.2f}%)")
+        logger.info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        logger.info(f"Open Positions:           {stats['open_positions']}/{config.MAX_POSITIONS}")
+        logger.info(f"Session Trades:           {stats['daily_trades']} (this session)")
+        logger.info(f"All-Time Trades:          {all_time_trades} (total in database)")
+        logger.info(f"Daily Trades:             {stats['daily_trades']} (completed today)")
+        logger.info(f"Daily Loss Room:          R{stats['max_daily_loss_remaining']:,.2f}")
+        logger.info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        logger.info(f"All-Time P&L:             {('+' if stats['total_pnl']>=0 else '')}R{stats['total_pnl']:,.2f} ({stats['total_pnl_pct']:.1f}%)")
+        # Compute win/loss from DB if possible
+        all_wins = 0
+        all_losses = 0
+        try:
+            db = 'ozzy_simple.db'
+            if os.path.exists(db):
+                conn = sqlite3.connect(db)
+                cur = conn.cursor()
+                cur.execute('SELECT COUNT(*) FROM trades WHERE pnl>0')
+                all_wins = cur.fetchone()[0] or 0
+                cur.execute('SELECT COUNT(*) FROM trades WHERE pnl<0')
+                all_losses = cur.fetchone()[0] or 0
+                conn.close()
+        except Exception:
+            all_wins = 0
+            all_losses = 0
+
+        total_closed = all_wins + all_losses
+        win_rate = (all_wins / total_closed * 100) if total_closed > 0 else 0.0
+        logger.info(f"All-Time Win Rate:        {win_rate:.1f}% ({all_wins}W/{all_losses}L)")
+        logger.info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 
 
 def test_risk_manager():

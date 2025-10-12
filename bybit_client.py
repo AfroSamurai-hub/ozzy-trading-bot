@@ -19,12 +19,16 @@ class BybitClient:
     Supports both testnet (paper trading) and live trading.
     """
     
-    def __init__(self):
-        """Initialize the Bybit client with configuration"""
+    def __init__(self, *, paper_trading: Optional[bool] = None, testnet: Optional[bool] = None):
+        """Initialize the Bybit client with configuration
+
+        Optional keyword overrides allow Phase 0 live-data tests to force live endpoints
+        without changing global config.
+        """
         self.api_key = config.BYBIT_API_KEY
         self.api_secret = config.BYBIT_API_SECRET
-        self.testnet = config.BYBIT_TESTNET
-        self.paper_trading = config.PAPER_TRADING
+        self.testnet = config.BYBIT_TESTNET if testnet is None else testnet
+        self.paper_trading = config.PAPER_TRADING if paper_trading is None else paper_trading
         
         # Set base URL based on testnet/live
         if self.testnet:
@@ -41,6 +45,29 @@ class BybitClient:
                     network='TESTNET' if self.testnet else 'MAINNET')
         if self.paper_trading:
             logger.info(f"Paper Balance: R{self.paper_balance:,.2f}")
+        # track last seen prices to detect stale responses
+        self._last_prices = {}
+        self._stale_counts = {}
+        # Map user-facing symbols to Bybit instrument symbols when needed
+        self._symbol_aliases = {
+            # Gold typically quoted as XAUUSD on contracts; keep XAUUSDT alias for config
+            'XAUUSDT': 'XAUUSD',
+        }
+
+    def _resolve_symbol(self, symbol: str) -> str:
+        """Map user-config symbol to Bybit instrument symbol if needed."""
+        return self._symbol_aliases.get(symbol, symbol)
+
+    def _categories_for_symbol(self, symbol: str) -> List[str]:
+        """Return a preferred category probe order for the symbol.
+
+        Crypto spot pairs: try spot first. For FX/Gold, try linear/inverse then spot.
+        """
+        fx_gold = { 'EURUSD', 'GBPUSD', 'USDJPY', 'XAUUSD', 'XAUUSDT' }
+        if symbol in fx_gold:
+            return ['linear', 'inverse', 'spot']
+        # For generic symbols, prefer spot then contracts
+        return ['spot', 'linear', 'inverse']
     
     
     def _generate_signature(self, params: Dict) -> str:
@@ -110,44 +137,95 @@ class BybitClient:
             return {"retCode": -1, "retMsg": str(e)}
     
     
-    def get_current_price(self, symbol: str) -> Optional[float]:
+    def get_current_price(self, symbol):
+        """Get LIVE market price with multiple fallback methods
+
+        Tries (in order):
+        1) Orderbook mid-price
+        2) Latest 1-minute candle close
+        3) Ticker lastPrice
         """
-        Get current price for a symbol
-        
-        Args:
-            symbol: Trading pair (e.g., 'BTCUSDT')
-            
-        Returns:
-            Current price or None if failed
-        """
-        if self.paper_trading:
-            # In paper trading, fetch real price but don't use authenticated API
+        # If running against testnet, some public market endpoints can be stale.
+        # Force market data requests to mainnet public API for price-only queries.
+        original_base = self.base_url
+        if getattr(self, 'testnet', False):
+            self.base_url = "https://api.bybit.com"
+
+        try:
+            # Method 1: Orderbook (most accurate)
+            endpoint = "/v5/market/orderbook"
+            params = {"category": "spot", "symbol": symbol, "limit": 5}
+            resp = self._make_request("GET", endpoint, params, authenticated=False)
+            if resp.get('retCode') == 0:
+                result = resp.get('result') or {}
+                bids = result.get('b') or result.get('bids') or (result.get('data') or {}).get('b', [])
+                asks = result.get('a') or result.get('asks') or (result.get('data') or {}).get('a', [])
+                if bids and asks:
+                    try:
+                        best_bid = float(bids[0][0])
+                        best_ask = float(asks[0][0])
+                    except (ValueError, TypeError, IndexError, KeyError):
+                        try:
+                            best_bid = float(bids[0].get('price'))
+                            best_ask = float(asks[0].get('price'))
+                        except (ValueError, TypeError, AttributeError, KeyError, IndexError):
+                            best_bid = None
+                            best_ask = None
+
+                    if best_bid and best_ask:
+                        mid_price = (best_bid + best_ask) / 2.0
+                        logger.debug(f"{symbol} LIVE: bid=${best_bid:.2f}, ask=${best_ask:.2f}, mid=${mid_price:.2f}")
+                        self._last_prices[symbol] = mid_price
+                        return float(mid_price)
+        except (requests.exceptions.RequestException, ValueError, TypeError, KeyError, IndexError) as e:
+            logger.warning(f"Orderbook failed for {symbol}: {e}")
+
+            # continue to kline fallback
+
+        # Method 2: Latest 1-minute candle
+        try:
+            endpoint = "/v5/market/kline"
+            params = {"category": "spot", "symbol": symbol, "interval": "1", "limit": 1}
+            resp = self._make_request("GET", endpoint, params, authenticated=False)
+            if resp.get('retCode') == 0:
+                candles = resp.get('result', {}).get('list', [])
+                if candles:
+                    # API returns [ts, open, high, low, close, volume]
+                    close_price = float(candles[0][4])
+                    logger.debug(f"{symbol} 1m candle close: ${close_price:.2f}")
+                    self._last_prices[symbol] = close_price
+                    return float(close_price)
+        except (requests.exceptions.RequestException, ValueError, TypeError, KeyError, IndexError) as e:
+            logger.warning(f"Kline failed for {symbol}: {e}")
+
+        # Method 3: Ticker (fallback)
+        try:
             endpoint = "/v5/market/tickers"
             params = {"category": "spot", "symbol": symbol}
-            response = self._make_request("GET", endpoint, params, authenticated=False)
-            
-            if response.get("retCode") == 0:
-                tickers = response.get("result", {}).get("list", [])
-                if tickers:
-                    price = float(tickers[0].get("lastPrice", 0))
-                    logger.debug(f"{symbol} price: ${price:,.2f}")
-                    return price
-            
-            logger.warning(f"Failed to fetch price for {symbol}", response_code=response.get("retCode"))
-            return None
-        
-        else:
-            # Live trading - use same endpoint
-            endpoint = "/v5/market/tickers"
-            params = {"category": "spot", "symbol": symbol}
-            response = self._make_request("GET", endpoint, params, authenticated=False)
-            
-            if response.get("retCode") == 0:
-                tickers = response.get("result", {}).get("list", [])
-                if tickers:
-                    return float(tickers[0].get("lastPrice", 0))
-            
-            return None
+            resp = self._make_request("GET", endpoint, params, authenticated=False)
+            if resp.get('retCode') == 0:
+                ticker_list = resp.get('result', {}).get('list', [])
+                if ticker_list:
+                    last_price = ticker_list[0].get('lastPrice') or ticker_list[0].get('last')
+                    if last_price is not None:
+                        last_price = float(last_price)
+                        logger.debug(f"{symbol} ticker: ${last_price:.2f}")
+                        self._last_prices[symbol] = last_price
+                        return last_price
+        except (requests.exceptions.RequestException, ValueError, TypeError, KeyError, IndexError) as e:
+            logger.error(f"All price methods failed for {symbol}: {e}")
+
+        finally:
+            # restore original base url
+            try:
+                self.base_url = original_base
+            except Exception:
+                pass
+
+        return None
+
+
+
     
     
     def get_candles(self, symbol: str, interval: str = "15", limit: int = 100) -> Optional[List[Dict]]:
@@ -163,38 +241,46 @@ class BybitClient:
             List of candle dictionaries with OHLCV data, or None if failed
         """
         endpoint = "/v5/market/kline"
-        params = {
-            "category": "spot",
-            "symbol": symbol,
-            "interval": interval,
-            "limit": limit
-        }
-        
-        response = self._make_request("GET", endpoint, params, authenticated=False)
-        
-        if response.get("retCode") == 0:
-            candles_raw = response.get("result", {}).get("list", [])
-            
-            # Convert to more readable format
-            candles = []
-            for candle in candles_raw:
-                candles.append({
-                    "timestamp": int(candle[0]),
-                    "open": float(candle[1]),
-                    "high": float(candle[2]),
-                    "low": float(candle[3]),
-                    "close": float(candle[4]),
-                    "volume": float(candle[5]),
-                    "datetime": datetime.fromtimestamp(int(candle[0]) / 1000).strftime("%Y-%m-%d %H:%M:%S")
-                })
-            
-            # Reverse to get chronological order (API returns newest first)
-            candles.reverse()
-            
-            logger.debug(f"Fetched {len(candles)} candles for {symbol}", interval=f"{interval}m")
-            return candles
-        
-        logger.warning(f"Failed to fetch candles for {symbol}", error=response.get('retMsg'))
+        resolved_symbol = self._resolve_symbol(symbol)
+        categories = self._categories_for_symbol(resolved_symbol)
+
+        last_error = None
+        for cat in categories:
+            params = {
+                "category": cat,
+                "symbol": resolved_symbol,
+                "interval": interval,
+                "limit": limit
+            }
+            response = self._make_request("GET", endpoint, params, authenticated=False)
+            try:
+                if response.get("retCode") == 0:
+                    candles_raw = response.get("result", {}).get("list", [])
+                    if not candles_raw:
+                        # Try next category
+                        last_error = response.get('retMsg') or 'empty list'
+                        continue
+                    candles = []
+                    for candle in candles_raw:
+                        candles.append({
+                            "timestamp": int(candle[0]),
+                            "open": float(candle[1]),
+                            "high": float(candle[2]),
+                            "low": float(candle[3]),
+                            "close": float(candle[4]),
+                            "volume": float(candle[5]),
+                            "datetime": datetime.fromtimestamp(int(candle[0]) / 1000).strftime("%Y-%m-%d %H:%M:%S")
+                        })
+                    candles.reverse()
+                    logger.debug(f"Fetched {len(candles)} candles for {symbol}", category=cat, interval=f"{interval}m")
+                    return candles
+                else:
+                    last_error = response.get('retMsg') or response
+            except Exception as e:
+                last_error = str(e)
+                continue
+
+        logger.warning(f"Failed to fetch candles for {symbol}", tried=",".join(categories), error=last_error)
         return None
 
 
@@ -257,7 +343,7 @@ class BybitClient:
                             logger.info(f"Live balance: ${balance:,.2f} USDT")
                             return balance
             
-            logger.error(f"Failed to fetch balance", error=response.get('retMsg'))
+            logger.error("Failed to fetch balance: %s", response.get('retMsg'))
             return None
     
     
@@ -288,6 +374,14 @@ class BybitClient:
             # Notional (full position value at market price)
             notional = qty * current_price
 
+            # Apply realistic slippage to execution price
+            try:
+                slip = float(getattr(config, 'PAPER_SLIPPAGE', 0.0))
+            except Exception:
+                slip = 0.0
+            exec_price_buy = current_price * (1 + slip)
+            exec_price_sell = current_price * (1 - slip)
+
             # BUY side: either close SHORT (buy-to-cover) or open LONG
             if side == "Buy":
                 # If there's a short, close (or partially close) it
@@ -298,7 +392,7 @@ class BybitClient:
 
                     # PnL for short (profit when price falls): (entry_price - exit_price) * closed_qty
                     entry_price = position.get('entry_price', 0)
-                    exit_value = close_qty * current_price
+                    exit_value = close_qty * exec_price_buy
                     entry_value = close_qty * entry_price
                     pnl = entry_value - exit_value
 
@@ -332,37 +426,37 @@ class BybitClient:
                         "order_type": "Market",
                         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     }
-                    logger.info(f"Paper order executed: {side} {close_qty} {symbol} @ ${current_price:,.2f}")
+                    logger.info(f"Paper order executed: {side} {close_qty} {symbol} @ ${exec_price_buy:,.2f}")
                     return result
 
                 # No short exists -> open a LONG position (spot buy)
                 if notional > self.paper_balance:
                     return {"success": False, "message": "Insufficient balance to open LONG"}
 
-                self.paper_balance -= notional
+                self.paper_balance -= (qty * exec_price_buy)
                 self.paper_positions[symbol] = {
                     "qty": qty,
-                    "entry_price": current_price,
+                    "entry_price": exec_price_buy,
                     "side": 'long',
-                    "value": notional,
+                    "value": qty * exec_price_buy,
                     "stop_loss": stop_loss,
                     "take_profit": take_profit
                 }
 
-                logger.info(f"Paper LONG opened: Buy {qty} {symbol} @ ${current_price:,.2f}",
-                           notional=f"${notional:,.2f}")
+                logger.info(f"Paper LONG opened: Buy {qty} {symbol} @ ${exec_price_buy:,.2f}",
+                           notional=f"${qty * exec_price_buy:,.2f}")
                 result = {
                     "success": True,
                     "order_id": f"PAPER_{int(time.time())}",
                     "symbol": symbol,
                     "side": side,
                     "qty": qty,
-                    "price": current_price,
+                    "price": exec_price_buy,
                     "order_type": "Market",
                     "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 }
 
-                logger.info(f"Paper order executed: {side} {qty} {symbol} @ ${current_price:,.2f}")
+                logger.info(f"Paper order executed: {side} {qty} {symbol} @ ${exec_price_buy:,.2f}")
                 return result
 
             # SELL side: either close LONG or open SHORT
@@ -373,8 +467,8 @@ class BybitClient:
                     pos_qty = position.get('qty', 0)
                     close_qty = min(qty, pos_qty)
 
-                    exit_value = close_qty * current_price
-                    pnl = (current_price - position.get('entry_price')) * close_qty
+                    exit_value = close_qty * exec_price_sell
+                    pnl = (exec_price_sell - position.get('entry_price')) * close_qty
 
                     # Release proceeds back to balance (spot sell)
                     self.paper_balance += exit_value
@@ -400,7 +494,7 @@ class BybitClient:
                         "order_type": "Market",
                         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                     }
-                    logger.info(f"Paper order executed: {side} {close_qty} {symbol} @ ${current_price:,.2f}")
+                    logger.info(f"Paper order executed: {side} {close_qty} {symbol} @ ${exec_price_sell:,.2f}")
                     return result
 
                 # No long exists -> open a SHORT (use margin)
@@ -412,7 +506,7 @@ class BybitClient:
                 self.paper_balance -= margin_required
                 self.paper_positions[symbol] = {
                     'qty': qty,
-                    'entry_price': current_price,
+                    'entry_price': exec_price_sell,
                     'side': 'short',
                     'notional': notional,
                     'margin': margin_required,
@@ -420,7 +514,7 @@ class BybitClient:
                     'take_profit': take_profit
                 }
 
-                logger.info(f"Paper SHORT opened: Sell {qty} {symbol} @ ${current_price:,.2f}",
+                logger.info(f"Paper SHORT opened: Sell {qty} {symbol} @ ${exec_price_sell:,.2f}",
                            notional=f"${notional:,.2f}", margin=f"${margin_required:,.2f}")
                 result = {
                     "success": True,
@@ -428,13 +522,13 @@ class BybitClient:
                     "symbol": symbol,
                     "side": side,
                     "qty": qty,
-                    "price": current_price,
+                    "price": exec_price_sell,
                     "margin": margin_required,
                     "order_type": "Market",
                     "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 }
 
-                logger.info(f"Paper order executed: {side} {qty} {symbol} @ ${current_price:,.2f}")
+                logger.info(f"Paper order executed: {side} {qty} {symbol} @ ${exec_price_sell:,.2f}")
                 return result
         
         else:

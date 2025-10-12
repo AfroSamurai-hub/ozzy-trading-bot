@@ -13,32 +13,11 @@ from typing import Dict, List, Optional
 from loguru import logger
 import config
 from bybit_client import BybitClient
-try:
-    from bybit_client_optimized import CachedBybitClient  # type: ignore
-except Exception:
-    CachedBybitClient = None
 from signal_generator import SignalGenerator
 from risk_manager import RiskManager
 from position_tracker import PositionTracker
 from logger_config import setup_logger
 import db
-from time_filter_wrapper import TimeFilterWrapper
-from ai_signal_validator import AISignalValidator
-from external_market_data import ExternalMarketData
-try:
-    from phase2_executor import Phase2Executor  # type: ignore
-except Exception:
-    Phase2Executor = None
-try:
-    # Adaptive position sizing (feature-flagged)
-    from adaptive_position_manager import DynamicAdaptivePositionManager  # type: ignore
-except Exception:
-    DynamicAdaptivePositionManager = None
-try:
-    # Optional ambitious AI agent; enabled via config.AMBITIOUS_AI
-    from ozzy_ai_agent import OzzyAIAgent  # type: ignore
-except Exception:
-    OzzyAIAgent = None  # fallback if agent not present
 
 
 class OzzyBot:
@@ -55,29 +34,13 @@ class OzzyBot:
         
         # Initialize components
         logger.info("Initializing components...")
-        # Use optimized client if enabled and available; else default client
-        if getattr(config, 'OPTIMIZED_BYBIT_CLIENT', False) and CachedBybitClient is not None:
-            logger.info("🧠 Using optimized Bybit client (caching + rate limiting)")
-            self.client = CachedBybitClient()
-        else:
-            self.client = BybitClient()
-        self.signal_generator = SignalGenerator()
+        self.client = BybitClient()
+        self.signal_generator = SignalGenerator(self.client)
         self.risk_manager = RiskManager(config.STARTING_CAPITAL)
-        self.external_md = ExternalMarketData()
-        # Adaptive sizing manager (optional)
-        self.adaptive_manager = None
-        if getattr(config, 'ADAPTIVE_SIZING_ENABLED', False) and DynamicAdaptivePositionManager is not None:
-            try:
-                self.adaptive_manager = DynamicAdaptivePositionManager(getattr(config, 'STARTING_CAPITAL', 5000))
-                logger.info("🧮 Adaptive Position Manager enabled")
-            except Exception as e:
-                logger.warning(f"Adaptive manager init failed: {e}")
         
         # Trading state
         self.is_running = False
         self.open_positions = {}  # {symbol: {position data}}
-        # Cache to track if a symbol is supported by current market data source
-        self._symbol_supported = {}  # type: Dict[str, bool]
 
         # Position tracker (keeps a separate JSON snapshot updated every minute)
         self.position_tracker = PositionTracker(self.client, lambda: self.open_positions)
@@ -94,74 +57,6 @@ class OzzyBot:
         self.backoff_seconds = 1
         self.max_backoff = 300
         self.api_error_count = 0
-        
-        # Time filter A/B test (disabled by default; enable via config.TIME_FILTER_ENABLED)
-        self.time_filter = TimeFilterWrapper(
-            test_name="time_filter_night",
-            avoid_hours=getattr(config, 'TIME_FILTER_AVOID_WINDOWS', [(22, 2)]),
-            enabled=bool(getattr(config, 'TIME_FILTER_ENABLED', False))
-        )
-        logger.info("🧪 A/B Test initialized: time_filter_night")
-        logger.info(f"   Avoid hours (Test group): {self.time_filter.avoid_hours}")
-        logger.info(f"   Enabled: {self.time_filter.enabled}")
-
-        # Safety overrides (circuit breakers for Phase 3+)
-        self.safety = SafetyOverride(self.client)
-        
-        # AI Signal Validator (Phase 1.5 - AI Integration)
-        try:
-            self.ai_validator = AISignalValidator()
-            self.ai_enabled = True
-            logger.info("🤖 AI Signal Validator initialized - Phase 1.5 active!")
-        except Exception as e:
-            logger.warning(f"AI validator failed to initialize: {e}")
-            self.ai_enabled = False
-
-        # Ambitious AI Agent (optional Phase 1.5+ - goal-driven partner)
-        self.ai_agent_enabled = False
-        if OzzyAIAgent is not None and getattr(config, 'AMBITIOUS_AI', False):
-            try:
-                self.ai_agent = OzzyAIAgent()
-                self.ai_agent_enabled = True
-                logger.info("🔥 Ambitious AI Agent initialized - Goal-driven mode ON")
-            except Exception as e:
-                logger.warning(f"Ambitious AI init failed: {e}")
-
-        # Phase 2 paper trading executor (enabled when not in monitor-only)
-        self.phase2_executor = None
-        if not getattr(config, 'MONITOR_ONLY_MODE', True) and Phase2Executor is not None:
-            try:
-                self.phase2_executor = Phase2Executor()
-                logger.info("✅ Phase 2 Executor initialized")
-                # One-time warmup/repair and memory load
-                try:
-                    self.phase2_executor.warmup(self.client.get_current_price)
-                except Exception:
-                    logger.debug("Phase 2 warmup failed", exc_info=True)
-            except Exception as e:
-                logger.warning(f"Phase 2 executor init failed: {e}")
-
-    def _is_symbol_supported(self, symbol: str) -> bool:
-        """Test once whether a symbol provides candles on current market data source.
-
-        Caches the result to avoid repeated failing calls for unsupported symbols
-        (e.g., some FX pairs on current venue)."""
-        if symbol in self._symbol_supported:
-            return self._symbol_supported[symbol]
-        try:
-            candles = self.client.get_candles(symbol, interval="15", limit=5)
-            ok = bool(candles)
-            if ok:
-                # Cache only positive support to avoid perma-blacklisting on transient API errors
-                self._symbol_supported[symbol] = True
-                logger.info(f"✅ Symbol supported: {symbol}")
-                return True
-            else:
-                logger.info(f"⏭️  Skipping unsupported symbol on data source: {symbol}")
-                return False
-        except Exception:
-            logger.info(f"⏭️  Skipping unsupported symbol on data source: {symbol}")
-            return False
     
     
     def _initialize_trades_log(self):
@@ -304,11 +199,8 @@ class OzzyBot:
         """
         logger.info(f"Checking signal for {symbol}...")
         
-        # Get candle data (Bybit first; fallback to external for FX/Gold in monitor-only)
+        # Get candle data
         candles = self.client.get_candles(symbol, interval="15", limit=50)
-        if not candles and getattr(config, 'MONITOR_ONLY_MODE', False):
-            # External adapter supports XAU/FX; safe for monitoring
-            candles = self.external_md.get_candles(symbol, interval='15', limit=50)
         if not candles:
             logger.warning(f"Failed to get candle data for {symbol}")
             # backoff handling
@@ -319,13 +211,7 @@ class OzzyBot:
             return None
         
         # Generate signal
-        signal = self.signal_generator.generate_signal(candles)
-        
-        # Apply time filter for A/B test
-        signal, test_group = self.time_filter.apply_filter(signal, symbol)
-        
-        # Store test group for later use in trade execution
-        signal['test_group'] = test_group
+        signal = self.signal_generator.generate_signal(candles, symbol=symbol)
         
         # Log signal summary
         signal_emoji = "🟢" if signal["signal"] == "LONG" else "🔴" if signal["signal"] == "SHORT" else "⚪"
@@ -358,47 +244,11 @@ class OzzyBot:
         logger.info(f"💼 Attempting to execute {signal['signal']} trade on {symbol}...")
         
         # Calculate position size
-        position_size = None
-        position_value = None
-        use_adaptive = (
-            getattr(config, 'ADAPTIVE_SIZING_ENABLED', False)
-            and self.adaptive_manager is not None
-            and signal.get('signal') in ['LONG', 'SHORT']
+        position_size, position_value = self.risk_manager.calculate_position_size(
+            signal["entry_price"],
+            signal["stop_loss"],
+            signal["confidence"]
         )
-
-        if use_adaptive:
-            # Map confidence to tier buckets used by dashboard
-            conf = float(signal.get('confidence', 0.0) or 0.0)
-            if conf >= 45:
-                tier = 'T1'
-            elif conf >= 35:
-                tier = 'T2'
-            else:
-                tier = 'T3'
-
-            # Get capital from risk manager for session accuracy
-            current_capital = getattr(self.risk_manager, 'current_capital', getattr(config, 'STARTING_CAPITAL', 5000))
-            try:
-                pos_info = self.adaptive_manager.calculate_position_size(tier, current_capital=current_capital)
-                # Convert currency position (R) into exchange quantity based on entry price
-                entry_price = float(signal["entry_price"]) if signal.get("entry_price") else None
-                if not entry_price or entry_price <= 0:
-                    raise ValueError("Invalid entry price for adaptive sizing")
-                position_value = float(pos_info['position_size'])
-                position_size = position_value / entry_price
-                logger.info(
-                    "Adaptive sizing: tier=%s value=R%.2f qty=%.6f (cap R%.2f)",
-                    tier, position_value, position_size, current_capital
-                )
-            except Exception as e:
-                logger.warning(f"Adaptive sizing failed, falling back: {e}")
-
-        if position_size is None or position_value is None:
-            position_size, position_value = self.risk_manager.calculate_position_size(
-                signal["entry_price"],
-                signal["stop_loss"],
-                signal["confidence"]
-            )
         
         if position_size == 0:
             logger.warning("Position size is zero - trade aborted")
@@ -457,13 +307,6 @@ class OzzyBot:
         }
         # Persist an 'open' trade record in DB and store its id for later updates
         try:
-            # Get test group from signal and format entry reason with A/B test tag
-            test_group = signal.get('test_group', 'unknown')
-            entry_reason = self.time_filter.format_entry_reason(
-                signal.get('reason', ''),
-                test_group
-            )
-            
             db_id = db.log_trade_open({
                 'entry_timestamp': self.open_positions[symbol]['entry_time'].strftime("%Y-%m-%d %H:%M:%S"),
                 'symbol': symbol,
@@ -473,12 +316,9 @@ class OzzyBot:
                 'position_value': position_value,
                 'quality': signal.get('quality', ''),
                 'confidence': signal.get('confidence', 0.0),
-                'entry_reason': entry_reason  # Tagged with test group
+                'entry_reason': signal.get('reason', '')
             })
             self.open_positions[symbol]['db_trade_id'] = db_id
-            
-            # Log test group assignment
-            logger.info(f"📊 A/B Test: Assigned to {test_group.upper()} group")
         except Exception:
             logger.debug("Failed to persist trade open to DB", exc_info=True)
 
@@ -522,12 +362,6 @@ class OzzyBot:
         for symbol, position in list(self.open_positions.items()):
             # Get current price
             current_price = self.client.get_current_price(symbol)
-            if current_price is None and getattr(config, 'MONITOR_ONLY_MODE', False):
-                # Best-effort external price for FX/Gold
-                try:
-                    current_price = self.external_md.get_current_price(symbol)
-                except Exception:
-                    current_price = None
             if current_price is None:
                 logger.warning(f"Could not fetch current price for {symbol}; skipping")
                 continue
@@ -673,11 +507,6 @@ class OzzyBot:
             del self.open_positions[symbol]
             
             logger.info(f"✅ Position closed: {symbol} | P&L: R{pnl:+,.2f} | Reason: {reason}")
-            # Record into safety override
-            try:
-                self.safety.record_trade(pnl)
-            except Exception:
-                logger.debug("Safety override record_trade failed", exc_info=True)
             # Log completed trade to trades.csv
             try:
                 entry_time = position.get('entry_time')
@@ -766,14 +595,6 @@ class OzzyBot:
         while self.is_running:
             try:
                 current_time = datetime.now()
-
-                # Safety check: halt trading if circuit-breakers triggered
-                try:
-                    if not self.safety.check_safety():
-                        logger.critical("🛑 TRADING HALTED - Safety override triggered")
-                        break
-                except Exception:
-                    logger.debug("Safety override check failed", exc_info=True)
                 
                 # Check if within trading hours
                 is_trading_hours, _ = self.risk_manager.check_trading_hours()
@@ -781,118 +602,19 @@ class OzzyBot:
                 if is_trading_hours:
                     logger.info(f"⏰ {current_time.strftime('%Y-%m-%d %H:%M:%S')}")
                     
-                    # Monitor existing positions only when actually trading
-                    if not getattr(config, 'MONITOR_ONLY_MODE', False):
-                        self.monitor_positions()
-                        # Also monitor Phase 2 paper trades (if enabled)
-                        if self.phase2_executor is not None:
-                            try:
-                                self.phase2_executor.monitor_open_positions(self.client.get_current_price)
-                            except Exception:
-                                logger.debug("Phase 2 monitor failed", exc_info=True)
+                    # Monitor existing positions
+                    self.monitor_positions()
                     
                     # Check for new signals (if not at max positions)
                     if self.risk_manager.open_positions < config.MAX_POSITIONS:
                         for symbol in config.TRADING_SYMBOLS:
-                            # Skip symbols not supported by current data source (only in live/trade mode).
-                            # In monitor-only, allow symbols that may be supplied by the external adapter (FX/Gold).
-                            if not getattr(config, 'MONITOR_ONLY_MODE', False):
-                                if not self._is_symbol_supported(symbol):
-                                    continue
                             # Skip if already have position in this symbol
-                            if symbol in self.open_positions and not getattr(config, 'MONITOR_ONLY_MODE', False):
+                            if symbol in self.open_positions:
                                 continue
-
+                            
                             # Check signal
                             signal = self.check_signal(symbol)
-
-                            # NEW: AI Signal Validation (Phase 1.5)
-                            if signal and signal.get('signal') in ['LONG', 'SHORT']:
-                                # Conservative validator (existing)
-                                if self.ai_enabled:
-                                    try:
-                                        logger.info(f"🤖 Requesting AI analysis for {symbol} {signal['signal']}...")
-                                        # Include symbol (and flatten key tech metrics) so DB rows don't show UNKNOWN
-                                        ai_payload = dict(signal)
-                                        ai_payload['symbol'] = symbol
-                                        rsi_val = signal.get('technical_data', {}).get('rsi') if isinstance(signal.get('technical_data'), dict) else None
-                                        if rsi_val is not None:
-                                            ai_payload['rsi'] = rsi_val
-                                        ai_analysis = self.ai_validator.validate_signal(ai_payload)
-                                        # Store on signal for logs/monitoring
-                                        signal['ai_recommendation'] = ai_analysis.get('recommendation')
-                                        signal['ai_confidence'] = ai_analysis.get('ai_confidence')
-                                        signal['ai_agrees'] = ai_analysis.get('agreement')
-                                    except Exception as e:
-                                        logger.warning(f"AI validation error: {e}")
-
-                                # Ambitious agent (optional, parallel analysis)
-                                if self.ai_agent_enabled:
-                                    try:
-                                        logger.info(f"🔥 OZZY AI AGENT analyzing {symbol} {signal['signal']} (ambitious mode)...")
-                                        _ = self.ai_agent.analyze_signal({
-                                            'symbol': symbol,
-                                            'action': signal.get('signal'),
-                                            'confidence': signal.get('confidence'),
-                                            'quality': signal.get('quality'),
-                                            'entry_price': signal.get('entry_price'),
-                                            'stop_loss': signal.get('stop_loss'),
-                                            'take_profit': signal.get('take_profit'),
-                                            'risk_reward_ratio': signal.get('risk_reward_ratio'),
-                                            # Optional technicals mapping if present
-                                            'rsi': signal.get('technical_data', {}).get('rsi'),
-                                            'ema_trend': f"{signal.get('technical_data', {}).get('ema_short')}/{signal.get('technical_data', {}).get('ema_long')}",
-                                            'volume_ratio': signal.get('technical_data', {}).get('volume_ratio'),
-                                            'momentum': signal.get('technical_data', {}).get('price_momentum'),
-                                        })
-                                    except Exception as e:
-                                        logger.warning(f"Ambitious AI analysis failed: {e}")
-
-                            # Phase 2: when not monitor-only, execute paper trades via Phase2Executor
-                            if not getattr(config, 'MONITOR_ONLY_MODE', False) and self.phase2_executor is not None:
-                                executed_by_phase2 = False
-                                if signal and signal.get('signal') in ['LONG', 'SHORT']:
-                                    # Build payload for Phase2Executor
-                                    payload = {
-                                        'symbol': symbol,
-                                        'action': signal.get('signal'),
-                                        'confidence': signal.get('confidence'),
-                                        'quality': signal.get('quality'),
-                                        'entry_price': signal.get('entry_price'),
-                                        'stop_loss': signal.get('stop_loss'),
-                                        'take_profit': signal.get('take_profit'),
-                                        'risk_reward_ratio': signal.get('risk_reward_ratio'),
-                                        'technical_data': signal.get('technical_data') or {},
-                                        # Include conservative AI validator outputs if present
-                                        'ai_recommendation': signal.get('ai_recommendation'),
-                                        'ai_confidence': signal.get('ai_confidence'),
-                                        'ai_agreement': signal.get('ai_agrees')
-                                    }
-                                    try:
-                                        phase2_trade = self.phase2_executor.process_signal(payload)
-                                        executed_by_phase2 = phase2_trade is not None
-                                        if executed_by_phase2:
-                                            try:
-                                                self.phase2_executor.enforce_max_positions(self.client.get_current_price)
-                                            except Exception:
-                                                logger.debug("Phase 2 enforce_max_positions failed", exc_info=True)
-                                    except Exception:
-                                        logger.warning("Phase 2 executor failed to process signal", exc_info=True)
-                                if executed_by_phase2:
-                                    # Phase 2 handled execution, skip legacy path to avoid duplicates
-                                    continue
-
-                            # Monitor-only fallback: just log
-                            if getattr(config, 'MONITOR_ONLY_MODE', False):
-                                if signal and signal.get('signal') in ['LONG', 'SHORT']:
-                                    ai_tag = ""
-                                    if self.ai_enabled and signal.get('ai_recommendation'):
-                                        ai_tag = f" AI:{signal['ai_recommendation']}"
-                                    if self.ai_agent_enabled:
-                                        ai_tag += " | AGENT:ON"
-                                    logger.info(f"📊 MONITOR: {symbol} {signal['signal']} conf={signal['confidence']}% entry=${signal['entry_price']}{ai_tag}")
-                                continue
-
+                            
                             if signal and signal["signal"] in ["LONG", "SHORT"]:
                                 # Attempt to execute trade
                                 self.execute_trade(symbol, signal)
@@ -944,79 +666,6 @@ class OzzyBot:
     def start(self):
         """Start the trading bot"""
         self.trading_loop()
-
-
-class SafetyOverride:
-    """Circuit breakers for live trading phases.
-
-    - Daily loss limit in currency
-    - Consecutive losses threshold
-    - Account drawdown threshold vs STARTING_CAPITAL
-    """
-
-    def __init__(self, client: BybitClient):
-        self.client = client
-        self.daily_pnl = 0.0
-        self.consecutive_losses = 0
-        self.last_reset = datetime.now().date()
-
-    def _maybe_reset(self):
-        today = datetime.now().date()
-        if today > self.last_reset:
-            self.daily_pnl = 0.0
-            self.consecutive_losses = 0
-            self.last_reset = today
-
-    def check_safety(self) -> bool:
-        self._maybe_reset()
-
-        # Daily loss limit
-        try:
-            daily_limit = getattr(config, 'DAILY_LOSS_LIMIT', None)
-            daps_limit = getattr(config, 'ABSOLUTE_DAILY_LOSS_LIMIT', None)
-            if daily_limit is not None and daps_limit is not None:
-                daily_limit = min(float(daily_limit), float(daps_limit))
-            if daily_limit is not None and self.daily_pnl <= -float(daily_limit):
-                logger.error("🚨 EMERGENCY STOP: Daily loss limit reached",
-                             daily_pnl=f"R{self.daily_pnl:,.2f}", limit=f"R{daily_limit:,.2f}")
-                return False
-        except Exception:
-            pass
-
-        # Consecutive losses
-        try:
-            max_losses = getattr(config, 'MAX_CONSECUTIVE_LOSSES', 3)
-            if self.consecutive_losses >= int(max_losses):
-                logger.error("🚨 EMERGENCY STOP: Too many consecutive losses",
-                             count=self.consecutive_losses)
-                return False
-        except Exception:
-            pass
-
-        # Account drawdown (only relevant for live trading with real API keys)
-        try:
-            if not getattr(config, 'PAPER_TRADING', True) and not getattr(config, 'MONITOR_ONLY_MODE', False):
-                balance = self.client.get_balance() or 0.0
-                baseline = float(getattr(config, 'STARTING_CAPITAL', 0.0))
-                if baseline and balance and balance < baseline * 0.80:
-                    logger.error("🚨 EMERGENCY STOP: Account down 20%",
-                                 balance=f"R{balance:,.2f}", baseline=f"R{baseline:,.2f}")
-                    return False
-        except Exception:
-            # In monitor-only mode or without valid API keys, skip balance check
-            if not getattr(config, 'MONITOR_ONLY_MODE', False):
-                logger.debug("Balance check failed, but continuing in monitor mode")
-            pass
-
-        return True
-
-    def record_trade(self, pnl: float) -> None:
-        self._maybe_reset()
-        self.daily_pnl += float(pnl or 0.0)
-        if pnl < 0:
-            self.consecutive_losses += 1
-        else:
-            self.consecutive_losses = 0
 
 
 def main():

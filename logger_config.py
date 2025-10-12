@@ -8,9 +8,12 @@ import sys
 import os
 
 
-def setup_logger():
+def setup_logger(log_file=None):
     """
     Configure loguru logger with console and file handlers.
+    
+    Args:
+        log_file: Optional custom log file name (default: logs/bot_{time}.log)
     
     - Console: INFO and above with colors
     - File: DEBUG and above with daily rotation
@@ -31,14 +34,26 @@ def setup_logger():
     os.makedirs("logs", exist_ok=True)
     
     # File handler (DEBUG and above, with rotation)
-    logger.add(
-        "logs/bot_{time:YYYY-MM-DD}.log",
-        format="{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {name}:{function}:{line} - {message}",
-        level="DEBUG",
-        rotation="00:00",  # New file at midnight
-        retention="30 days",  # Keep logs for 30 days
-        compression="zip"  # Compress old logs
-    )
+    if log_file:
+        # Use custom log file name
+        logger.add(
+            log_file,
+            format="{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {name}:{function}:{line} - {message}",
+            level="DEBUG",
+            rotation="100 MB",  # Rotate when file gets large
+            retention="30 days",
+            compression="zip"
+        )
+    else:
+        # Use default daily rotation
+        logger.add(
+            "logs/bot_{time:YYYY-MM-DD}.log",
+            format="{time:YYYY-MM-DD HH:mm:ss} | {level: <8} | {name}:{function}:{line} - {message}",
+            level="DEBUG",
+            rotation="00:00",  # New file at midnight
+            retention="30 days",  # Keep logs for 30 days
+            compression="zip"  # Compress old logs
+        )
     
     # Error file handler (ERROR and above)
     logger.add(

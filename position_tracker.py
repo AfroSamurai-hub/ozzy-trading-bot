@@ -120,29 +120,38 @@ class PositionTracker:
             if entry_dt is not None:
                 duration_seconds = int((datetime.now() - entry_dt).total_seconds())
 
-            snapshot["positions"][symbol] = {
-                "symbol": symbol,
-                "side": pos.get("signal", {}).get("signal") if isinstance(pos.get("signal"), dict) else pos.get("signal"),
-                "qty": computed["qty"],
-                "entry_price": computed["entry_price"],
-                "current_price": computed["current_price"],
-                "unrealized_pnl": round(computed["unrealized_pnl"], 6),
-                "current_value": round(computed["current_value"], 6),
-                "margin": pos.get("order", {}).get("margin") or pos.get("margin") or computed.get("margin"),
-                "entry_time": entry_dt.isoformat() if entry_dt is not None else None,
-                "duration_seconds": duration_seconds
-            }
+        signal = pos.get("signal") if isinstance(pos.get("signal"), dict) else {}
+        stop_loss = None
+        take_profit = None
+        if isinstance(signal, dict):
+            stop_loss = signal.get("stop_loss")
+            take_profit = signal.get("take_profit")
 
-            total_unrealized += computed["unrealized_pnl"]
-            # For equity parts: for longs use current_value, for shorts use margin + unrealized
-            side = snapshot["positions"][symbol]["side"]
-            if side == "LONG":
-                equity_parts += computed["current_value"]
-            elif side == "SHORT":
-                margin = snapshot["positions"][symbol]["margin"] or 0.0
-                equity_parts += margin + computed["unrealized_pnl"]
-            else:
-                equity_parts += computed["current_value"]
+        snapshot["positions"][symbol] = {
+            "symbol": symbol,
+            "side": pos.get("signal", {}).get("signal") if isinstance(pos.get("signal"), dict) else pos.get("signal"),
+            "qty": computed["qty"],
+            "entry_price": computed["entry_price"],
+            "current_price": computed["current_price"],
+            "unrealized_pnl": round(computed["unrealized_pnl"], 6),
+            "current_value": round(computed["current_value"], 6),
+            "margin": pos.get("order", {}).get("margin") or pos.get("margin") or computed.get("margin"),
+            "entry_time": entry_dt.isoformat() if entry_dt is not None else None,
+            "duration_seconds": duration_seconds,
+            "stop_loss": stop_loss,
+            "take_profit": take_profit
+        }
+
+        total_unrealized += computed["unrealized_pnl"]
+        # For equity parts: for longs use current_value, for shorts use margin + unrealized
+        side = snapshot["positions"][symbol]["side"]
+        if side == "LONG":
+            equity_parts += computed["current_value"]
+        elif side == "SHORT":
+            margin = snapshot["positions"][symbol]["margin"] or 0.0
+            equity_parts += margin + computed["unrealized_pnl"]
+        else:
+            equity_parts += computed["current_value"]
 
         # Portfolio value = cash balance + equity parts
         try:

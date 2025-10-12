@@ -9,11 +9,11 @@ from __future__ import annotations
 import asyncio
 import logging
 from dataclasses import dataclass, field
-from datetime import datetime
-from typing import Any, Dict, List
-
+from datetime import datetime, timezone
 from pathlib import Path
+import json
 import sys
+from typing import Any, Dict, List, Optional
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -38,65 +38,108 @@ class PortfolioState:
             "max_positions": self.max_positions,
             "open_positions": self.open_positions,
             "open_count": len(self.open_positions),
-            "timestamp": datetime.utcnow().isoformat(),
+              "timestamp": datetime.now(timezone.utc).isoformat(),
         }
 
 
 class TradingMCPServer:
     """Expose minimal MCP-style tools for the streaming agent."""
 
-    def __init__(self, pattern_db: RollingWindowPatternDB) -> None:
+    def __init__(
+        self,
+        pattern_db: RollingWindowPatternDB,
+        positions_path: Path | str = Path("positions.json"),
+        risk_state_path: Path | str = Path("state.json"),
+    ) -> None:
         self.pattern_db = pattern_db
         self.portfolio = PortfolioState()
+        self.positions_path = Path(positions_path)
+        self.risk_state_path = Path(risk_state_path)
         logger.info("🛠️ Trading MCP server initialised (patterns: %s)", pattern_db.count())
 
     async def get_market_state(self, symbol: str) -> Dict[str, Any]:
-        # Placeholder; real implementation will read from live feed/shared cache
-        mock = {
+        latest = self._latest_pattern_for_symbol(symbol)
+        if latest is None:
+            logger.debug("Market state request found no patterns for %s", symbol)
+            return {
+                "symbol": symbol,
+                "rsi": None,
+                "ema_ratio": None,
+                "price_change": None,
+                "volume_change": None,
+                "label": None,
+                "sample_age_seconds": None,
+                "source": "pattern_db",
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+            }
+
+        metadata = latest["metadata"]
+        ts = metadata.get("timestamp")
+        age = None
+        if ts is not None:
+            age = max(0.0, datetime.now(timezone.utc).timestamp() - float(ts))
+
+        response = {
             "symbol": symbol,
-            "price": 0.0,
-            "rsi": 50.0,
-            "ema_ratio": 1.0,
-            "volume_change": 0.0,
-            "price_change": 0.0,
-            "timestamp": datetime.utcnow().isoformat(),
+            "pattern_id": latest["id"],
+            "rsi": metadata.get("rsi"),
+            "ema_ratio": metadata.get("ema_ratio"),
+            "price_change": metadata.get("price_change"),
+            "volume_change": metadata.get("volume_change"),
+            "label": metadata.get("label"),
+            "hit_takeprofit": metadata.get("hit_takeprofit"),
+            "hit_stoploss": metadata.get("hit_stoploss"),
+            "sample_age_seconds": age,
+            "source": "pattern_db",
+              "timestamp": datetime.now(timezone.utc).isoformat(),
         }
-        logger.debug("Market state requested for %s", symbol)
-        return mock
+        logger.debug("Market state assembled for %s", symbol)
+        return response
 
     async def get_similar_patterns(self, current_state: Dict[str, float], top_k: int = 5) -> Dict[str, Any]:
-        embedding = [
-            float(current_state.get("rsi", 50.0)) / 100.0,
-            float(current_state.get("ema_ratio", 1.0)),
-            float(current_state.get("volume_change", 0.0)),
-            float(current_state.get("price_change", 0.0)),
-        ]
+        patterns = self.pattern_db.find_similar(current_state, k=top_k)
 
-        results = self.pattern_db.query(embedding, k=top_k)
-        patterns = []
-        for metadata, distance in zip(results.get("metadatas", [[]])[0], results.get("distances", [[]])[0]):
-            similarity = 1 - distance if distance is not None else None
-            patterns.append({"metadata": metadata, "similarity": similarity})
-
-        win_rate = None
+        win_rate: Optional[float] = None
         if patterns:
-            wins = sum(1 for p in patterns if p["metadata"].get("label") == "WIN")
-            win_rate = wins / len(patterns) * 100
+            labeled = [p for p in patterns if p["metadata"].get("label") in {"WIN", "LOSS"}]
+            if labeled:
+                wins = sum(1 for p in labeled if p["metadata"].get("label") == "WIN")
+                win_rate = wins / len(labeled) * 100
 
         response = {
             "count": len(patterns),
             "win_rate": win_rate,
             "patterns": patterns,
+              "timestamp": datetime.now(timezone.utc).isoformat(),
         }
         logger.debug("Pattern query returned %s matches", response["count"])
         return response
 
     async def get_portfolio_state(self) -> Dict[str, Any]:
-        return self.portfolio.as_dict()
+        positions_snapshot = self._load_json(self.positions_path) or {}
+        risk_snapshot = self._load_json(self.risk_state_path) or {}
+
+        portfolio = self.portfolio.as_dict()
+        if positions_snapshot:
+            portfolio.update(
+                {
+                    "positions_snapshot": positions_snapshot.get("positions", {}),
+                    "portfolio_value": positions_snapshot.get("portfolio_value"),
+                    "cash_balance": positions_snapshot.get("cash_balance"),
+                    "positions_timestamp": positions_snapshot.get("updated_at"),
+                }
+            )
+        if risk_snapshot:
+            portfolio.update({"risk": risk_snapshot.get("risk"), "risk_timestamp": risk_snapshot.get("timestamp")})
+
+        return portfolio
 
     async def check_risk_limits(self, proposed_trade: Dict[str, Any]) -> Dict[str, Any]:
         reasons: List[str] = []
         approved = True
+
+        risk_snapshot = self._load_json(self.risk_state_path) or {}
+        risk_info = (risk_snapshot.get("risk") or {}) if isinstance(risk_snapshot, dict) else {}
 
         if len(self.portfolio.open_positions) >= self.portfolio.max_positions:
             approved = False
@@ -107,14 +150,21 @@ class TradingMCPServer:
             approved = False
             reasons.append("Position size exceeds 5% cap")
 
-        if self.portfolio.daily_pnl <= -self.portfolio.capital * 0.10:
+        daily_pnl = risk_info.get("daily_pnl", self.portfolio.daily_pnl)
+        starting_capital = risk_info.get("starting_capital", self.portfolio.capital)
+        if daily_pnl <= -starting_capital * 0.10:
             approved = False
             reasons.append("Daily loss limit hit")
+
+        max_daily_loss_remaining = risk_info.get("max_daily_loss_remaining")
+        if max_daily_loss_remaining is not None and max_daily_loss_remaining <= 0:
+            approved = False
+            reasons.append("Max daily loss remaining exhausted")
 
         return {
             "approved": approved,
             "reasons": reasons if not approved else ["All checks passed"],
-            "timestamp": datetime.utcnow().isoformat(),
+              "timestamp": datetime.now(timezone.utc).isoformat(),
         }
 
     async def call_tool(self, name: str, args: Dict[str, Any]) -> Dict[str, Any]:
@@ -127,6 +177,38 @@ class TradingMCPServer:
         if name not in tools:
             raise ValueError(f"Unknown tool: {name}")
         return await tools[name](**args)
+
+    # ------------------------------------------------------------------
+    # Internal helpers
+    # ------------------------------------------------------------------
+    def _load_json(self, path: Path) -> Optional[Dict[str, Any]]:
+        try:
+            if not path.exists():
+                return None
+            with path.open("r", encoding="utf-8") as handle:
+                return json.load(handle)
+        except Exception as err:  # pragma: no cover - defensive logging
+            logger.warning("Failed to load JSON snapshot %s: %s", path, err)
+            return None
+
+    def _latest_pattern_for_symbol(self, symbol: str) -> Optional[Dict[str, Any]]:
+        try:
+            data = self.pattern_db.collection.get(where={"symbol": symbol}, limit=100)
+        except Exception as err:  # pragma: no cover - defensive logging
+            logger.warning("Pattern lookup failed for %s: %s", symbol, err)
+            return None
+
+        metadatas = data.get("metadatas") or []
+        ids = data.get("ids") or []
+        if not metadatas:
+            return None
+
+        best_idx = max(
+            range(len(metadatas)),
+            key=lambda idx: (metadatas[idx] or {}).get("timestamp", 0),
+        )
+
+        return {"id": ids[best_idx], "metadata": metadatas[best_idx]}
 
 
 async def _demo() -> None:

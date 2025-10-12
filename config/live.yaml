@@ -1,0 +1,7 @@
+data:
+  bootstrap_days: 7
+  rolling_window_hours: 48
+  max_patterns: 576
+  auto_prune: true
+  max_db_size_mb: 10
+  prune_interval_minutes: 60

@@ -9,6 +9,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
+import random
 import time
 from dataclasses import dataclass
 from typing import Any, AsyncIterator, Dict, Optional
@@ -143,18 +144,35 @@ class BybitMarketStream:
 class MockTickFeed:
     """Deterministic tick generator for tests and offline development."""
 
-    def __init__(self, symbol: str = "BTCUSDT", interval_ms: int = 1000) -> None:
+    def __init__(
+        self,
+        symbol: str = "BTCUSDT",
+        interval_ms: int = 1000,
+        base_price: float = 60_000.0,
+        drift: float = 0.0,
+        volatility: float = 0.003,
+        mean_reversion: float = 0.1,
+    ) -> None:
         self.symbol = symbol
         self.interval_ms = interval_ms
+        self.base_price = base_price
+        self.drift = drift
+        self.volatility = volatility
+        self.mean_reversion = mean_reversion
         self._running = False
 
     async def ticks(self) -> AsyncIterator[Tick]:
-        price = 60000.0
+        price = self.base_price
         self._running = True
+        target = self.base_price
         while self._running:
             ts = int(time.time() * 1000)
-            price += 5.0
-            yield Tick(symbol=self.symbol, price=price, volume=1.0, timestamp=ts)
+            # Ornstein-Uhlenbeck style process to avoid monotonic drift.
+            shock = random.gauss(self.drift, self.volatility)
+            reversion = self.mean_reversion * (target - price) / price
+            price = max(1.0, price * (1 + shock + reversion))
+            volume = max(0.01, abs(random.gauss(1.0, 0.2)))
+            yield Tick(symbol=self.symbol, price=price, volume=volume, timestamp=ts)
             await asyncio.sleep(self.interval_ms / 1000)
 
     def stop(self) -> None:

@@ -11,12 +11,13 @@ import asyncio
 import json
 import logging
 import os
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 from openai import OpenAI
 from openai import APIConnectionError, OpenAIError
 
 from agent.safety import SafetyRails
+from intelligence.pattern_library import PatternDefinition, describe_patterns, find_matching_patterns
 
 logger = logging.getLogger(__name__)
 
@@ -66,6 +67,15 @@ class TradingAgent:
             _fmt(market_state.get("price_change")),
         )
 
+        cheat_matches = find_matching_patterns(market_state)
+        if cheat_matches:
+            logger.info(
+                "   Pattern cheatsheet matches: %s",
+                ", ".join(pattern.name for pattern in cheat_matches),
+            )
+        else:
+            logger.info("   Pattern cheatsheet matches: none")
+
         patterns = await self.mcp.get_similar_patterns(market_state, top_k=10)
         win_rate = patterns.get("win_rate")
         logger.info(
@@ -82,7 +92,7 @@ class TradingAgent:
             _fmt(portfolio.get("capital")),
         )
 
-        ai_decision = await self._call_openai(market_state, patterns, portfolio)
+        ai_decision = await self._call_openai(market_state, patterns, portfolio, cheat_matches)
         logger.info("\n🤖 AI Decision: %s", ai_decision)
 
         action = (ai_decision.get("action") or "").upper()
@@ -115,6 +125,7 @@ class TradingAgent:
         market_state: Dict[str, Any],
         patterns: Dict[str, Any],
         portfolio: Dict[str, Any],
+        cheat_matches: List[PatternDefinition],
     ) -> Dict[str, Any]:
         """Invoke OpenAI with structured prompt and parse response."""
 
@@ -142,6 +153,8 @@ class TradingAgent:
         )
         max_new_position_size = min(self.max_position_size, (available_capital or self.capital) * 0.05)
 
+        cheat_sheet_summary = describe_patterns(cheat_matches)
+
         user_prompt = (
             f"CURRENT MARKET\n"
             f"- Symbol: {market_state.get('symbol', 'UNKNOWN')}\n"
@@ -149,6 +162,8 @@ class TradingAgent:
             f"- EMA Ratio: {market_state.get('ema_ratio', 'n/a')} (>1.0 = uptrend)\n"
             f"- Volume Change: {market_state.get('volume_change', 'n/a')}\n"
             f"- Price Change: {market_state.get('price_change', 'n/a')}\n\n"
+            f"PATTERN CHEATSHEET\n"
+            f"- Matches: {cheat_sheet_summary}\n\n"
             f"HISTORICAL PATTERNS\n"
             f"- Similar patterns: {patterns.get('count', 0)}\n"
             f"- Win rate: {win_rate if win_rate is not None else 'n/a'}\n"
@@ -167,17 +182,24 @@ class TradingAgent:
             "- If unsure, respond with SKIP."
         )
 
+        request_kwargs = {
+            "model": self.model,
+            "input": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            "temperature": 0.3,
+            "max_output_tokens": 200,
+        }
+
         try:
-            response = self.client.responses.create(
-                model=self.model,
-                input=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt},
-                ],
-                temperature=0.3,
-                max_output_tokens=200,
-                response_format={"type": "json_object"},
-            )
+            try:
+                response = self.client.responses.create(
+                    **request_kwargs,
+                    response_format={"type": "json_object"},
+                )
+            except TypeError:
+                response = self.client.responses.create(**request_kwargs)
         except (APIConnectionError, OpenAIError) as err:
             logger.error("❌ OpenAI API error: %s", err)
             return {
@@ -202,16 +224,40 @@ class TradingAgent:
                 self.estimated_cost_today,
             )
         text = getattr(response, "output_text", None) or _extract_response_text(response)
+        if text:
+            stripped = text.strip()
+            if stripped.startswith("```"):
+                stripped = stripped.strip("`").strip()
+                if stripped.lower().startswith("json"):
+                    stripped = stripped[4:].strip()
+            if stripped.endswith("```"):
+                stripped = stripped[:-3].strip()
+            text = stripped
         try:
             decision = json.loads(text)
         except json.JSONDecodeError as err:
             logger.error("Failed to parse OpenAI response: %s", err)
-            decision = {
-                "action": "SKIP",
-                "confidence": 0.0,
-                "position_size": 0.0,
-                "reasoning": f"Invalid JSON from model: {err}",
-            }
+            logger.warning("Raw OpenAI output: %s", text)
+            recovered = _extract_json_blob(text)
+            if recovered:
+                try:
+                    decision = json.loads(recovered)
+                except json.JSONDecodeError:
+                    decision = {
+                        "action": "SKIP",
+                        "confidence": 0.0,
+                        "position_size": 0.0,
+                        "reasoning": f"Invalid JSON from model: {err}",
+                    }
+                else:
+                    logger.info("Recovered JSON fragment from OpenAI response")
+            else:
+                decision = {
+                    "action": "SKIP",
+                    "confidence": 0.0,
+                    "position_size": 0.0,
+                    "reasoning": f"Invalid JSON from model: {err}",
+                }
 
         decision.setdefault("action", "SKIP")
         decision.setdefault("confidence", 0.0)
@@ -248,6 +294,16 @@ def _extract_response_text(response) -> str:
         if text:
             return text
     return "{}"
+
+
+def _extract_json_blob(payload: str | None) -> str | None:
+    if not payload:
+        return None
+    start = payload.find("{")
+    end = payload.rfind("}")
+    if start == -1 or end == -1 or end <= start:
+        return None
+    return payload[start : end + 1]
 
 
 def _safe_float(value, default: float | None = None) -> float | None:

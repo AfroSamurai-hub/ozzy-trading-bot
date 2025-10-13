@@ -73,7 +73,14 @@ class RealtimePatternBuilder:
         df["price_change"] = df["close"].pct_change().fillna(0.0)
         df["volume_change"] = df["volume"].pct_change().fillna(0.0)
 
-        df["rsi"] = RSIIndicator(close=df["close"], window=14).rsi().bfill().fillna(50.0)
+        rsi_series = RSIIndicator(close=df["close"], window=14).rsi()
+        df["rsi"] = rsi_series
+        latest_rsi = rsi_series.iloc[-1]
+        if pd.isna(latest_rsi):
+            logger.debug("RSI warm-up in progress for %s; skipping pattern close", symbol)
+            return
+        latest_rsi = float(max(0.0, min(latest_rsi, 100.0)))
+
         df["ema_short"] = EMAIndicator(close=df["close"], window=13).ema_indicator().bfill()
         df["ema_long"] = EMAIndicator(close=df["close"], window=23).ema_indicator().bfill()
         latest = df.iloc[-1]
@@ -82,7 +89,7 @@ class RealtimePatternBuilder:
         ema_ratio = float(latest["ema_short"]) / ema_long if ema_long else 1.0
 
         embedding = [
-            float(latest.get("rsi", 50.0)) / 100.0,
+            latest_rsi / 100.0,
             ema_ratio,
             float(latest.get("volume_change", 0.0)),
             float(latest.get("price_change", 0.0)),
@@ -91,7 +98,7 @@ class RealtimePatternBuilder:
         metadata = {
             "timestamp": candle["end_ts"] / 1000,
             "label": candle.get("label", "UNKNOWN"),
-            "rsi": float(latest.get("rsi", 50.0)),
+            "rsi": latest_rsi,
             "ema_ratio": ema_ratio,
             "price_change": float(latest.get("price_change", 0.0)),
             "volume_change": float(latest.get("volume_change", 0.0)),

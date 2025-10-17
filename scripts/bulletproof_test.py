@@ -372,11 +372,24 @@ def run_test(
                 "pattern_type": "live_test"
             }
             
-            # Insert into pattern DB
-            pattern_db.add_pattern(
-                metadata=fresh_pattern,
-                embedding=np.array([rsi, ema_ratio, price_change, volume_change])
+            # Insert into pattern DB using correct API
+            from intelligence.rolling_window_db import PatternEmbedding
+            
+            pattern_id = f"{symbol}_{int(datetime.now(timezone.utc).timestamp())}"
+            embedding_vector = [
+                rsi / 100.0,  # Normalize to 0-1
+                min(max(ema_ratio - 1.0, -0.1), 0.1) * 10,  # Scale -1 to 1
+                min(max(price_change / 100.0, -0.1), 0.1) * 10,  # Scale -1 to 1
+                min(max(volume_change - 1.0, -1.0), 1.0)  # Scale -1 to 1
+            ]
+            
+            pattern_embedding = PatternEmbedding(
+                id=pattern_id,
+                embedding=embedding_vector,
+                metadata=fresh_pattern
             )
+            
+            pattern_db.add_pattern(pattern_embedding)
             
             print(f"✅ Fresh data injected:")
             print(f"   RSI: {rsi:.2f}")

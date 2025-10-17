@@ -32,3 +32,39 @@
 [2025-10-17 07:21:45.889156] Decision #7/24 starting
 [2025-10-17 07:21:47.261697] Decision #7 complete: SKIP (0.0%)
 [2025-10-17 07:21:47.273143] Sleeping 900s
+[2025-10-17 07:36:47.276907] Sleep complete
+[2025-10-17 07:36:47.287471] Decision #8/24 starting
+[2025-10-17 07:36:49.753042] Decision #8 complete: SKIP (50.0%)
+[2025-10-17 07:36:49.785212] Sleeping 900s
+[2025-10-17 07:51:49.807455] Sleep complete
+[2025-10-17 07:51:49.817986] Decision #9/24 starting
+[2025-10-17 07:51:52.803513] Decision #9 complete: SKIP (50.0%)
+[2025-10-17 07:51:52.814524] Sleeping 900s
+[2025-10-17 07:52:48.180524] Test starting: BTCUSDT, 24 decisions
+[2025-10-17 07:52:48.184681] Portfolio initialized: R10,000.00
+[2025-10-17 07:52:48.333983] MCP Server initialized
+[2025-10-17 07:52:48.371660] Trading Agent initialized
+[2025-10-17 07:52:48.378129] Mock feed initialized
+[2025-10-17 07:52:48.381405] Decision loop starting
+[2025-10-17 07:52:48.383412] Decision #1/24 starting
+[2025-10-17 07:52:51.184147] Decision #1 complete: SKIP (50.0%)
+[2025-10-17 07:52:51.195554] Sleeping 900s
+[2025-10-17 07:54:13.603233] Test starting: BTCUSDT, 24 decisions
+[2025-10-17 07:54:13.604208] Portfolio initialized: R10,000.00
+[2025-10-17 07:54:13.760836] MCP Server initialized
+[2025-10-17 07:54:13.801586] Trading Agent initialized
+[2025-10-17 07:54:13.806787] Mock feed initialized
+[2025-10-17 07:54:13.807561] Decision loop starting
+[2025-10-17 07:54:13.808375] Decision #1/24 starting
+[2025-10-17 07:54:16.898424] Decision #1 complete: SKIP (0.0%)
+[2025-10-17 07:54:16.907406] Sleeping 900s
+[2025-10-17 07:58:47.339417] Test starting: BTCUSDT, 24 decisions
+[2025-10-17 07:58:47.343169] Portfolio initialized: R10,000.00
+[2025-10-17 07:58:47.521116] MCP Server initialized
+[2025-10-17 07:58:47.559819] Trading Agent initialized
+[2025-10-17 07:58:47.568156] Mock feed initialized
+[2025-10-17 07:58:47.571525] Decision loop starting
+[2025-10-17 07:58:47.574988] Decision #1/24 starting
+[2025-10-17 07:58:49.802973] Decision #1 complete: BUY (70.0%)
+[2025-10-17 07:58:49.814309] Position #1 opened: BTCUSDT @ R66,676.94
+[2025-10-17 07:58:49.817981] Sleeping 900s

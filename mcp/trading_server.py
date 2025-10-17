@@ -131,7 +131,7 @@ class TradingMCPServer:
             portfolio = {
                 "capital": getattr(self.portfolio, 'capital', 0),
                 "open_count": len(getattr(self.portfolio, 'positions', [])),
-                "max_positions": getattr(self.portfolio, 'max_positions', 20),
+                "max_positions": getattr(self.portfolio, 'MAX_POSITIONS', 20),  # Fixed: uppercase attribute
                 "daily_pnl": sum(p.get('realized_pnl', 0) for p in getattr(self.portfolio, 'closed_trades', []) if p.get('exit_time', '').startswith(datetime.now().strftime('%Y-%m-%d'))),
                 "open_positions": getattr(self.portfolio, 'positions', []),
             }
@@ -164,7 +164,8 @@ class TradingMCPServer:
             # PaperTradingPortfolio - count OPEN positions manually
             open_count = len([p for p in getattr(self.portfolio, 'positions', []) if p.get('status') == 'OPEN'])
         
-        if open_count >= self.portfolio.max_positions:
+        max_pos = getattr(self.portfolio, 'MAX_POSITIONS', getattr(self.portfolio, 'max_positions', 20))  # Fixed: handle both cases
+        if open_count >= max_pos:
             approved = False
             reasons.append("Max positions reached")
 

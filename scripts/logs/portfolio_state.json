@@ -1,19 +1,19 @@
 {
   "starting_capital": 10000.0,
   "capital": 9025.0,
-  "total_equity": 10001.461875990684,
-  "total_pnl": 1.46187599068503,
+  "total_equity": 9998.49159963844,
+  "total_pnl": -1.5084003615593247,
   "positions": [
     {
       "id": 1,
       "symbol": "BTCUSDT",
       "side": "LONG",
       "entry_price": 66676.94091297557,
-      "current_price": 66690.78896107727,
+      "current_price": 66487.9238229349,
       "size": 500.0,
       "qty": 0.007498844325395532,
-      "pnl": 0.10384435692526495,
-      "pnl_pct": 0.020768871385052987,
+      "pnl": -1.4174097330542281,
+      "pnl_pct": -0.28348194661084564,
       "confidence": 0.7,
       "reason": "The market shows a whale accumulation pattern with a win rate of approximately 75%. The RSI is neutral at 50.0, and the EMA ratio indicates an uptrend. Given the favorable conditions and available capital, a position is warranted.",
       "entry_time": "2025-10-17T07:58:49.813851",
@@ -24,11 +24,11 @@
       "symbol": "BTCUSDT",
       "side": "LONG",
       "entry_price": 66500.66263786,
-      "current_price": 66690.78896107727,
+      "current_price": 66487.9238229349,
       "size": 475.0,
       "qty": 0.007142785968715658,
-      "pnl": 1.358031633759765,
-      "pnl_pct": 0.28590139658100316,
+      "pnl": -0.09099062850509654,
+      "pnl_pct": -0.01915592179054664,
       "confidence": 0.7,
       "reason": "The market shows a whale accumulation pattern with a win rate of approximately 75%. The RSI is neutral at 50.0, and the EMA ratio indicates an uptrend. Given the favorable conditions and the ability to enter a position within the risk limits, a buy action is warranted.",
       "entry_time": "2025-10-17T08:28:54.977122",
@@ -47,5 +47,5 @@
     "sharpe_ratio": 0.0,
     "max_drawdown": 0.0
   },
-  "last_update": "2025-10-17T08:43:57.189624"
+  "last_update": "2025-10-17T08:58:59.331431"
 }

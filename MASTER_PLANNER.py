@@ -65,8 +65,26 @@ MASTER_PLAN = {
                 ],
                 "sop_reference": "SOP-001-Data-Injection.md",
                 "blocking": True,  # Nothing else can proceed until this is done
-                "completed": False,
-                "completed_date": None
+                "completed": True,
+                "completed_date": "2025-10-17"
+            },
+            "1.1.5": {
+                "name": "Development Infrastructure",
+                "priority": "HIGH",
+                "estimated_time": "1 day",
+                "tasks": [
+                    "Create master control script (ozzy.py)",
+                    "Add planner personality system",
+                    "Build monitoring dashboard enhancements",
+                    "Create portfolio tracker (track_portfolio.py)",
+                    "Document all tools comprehensively"
+                ],
+                "sop_reference": "SOP-002-Testing-Protocol.md",
+                "blocking": False,
+                "completed": True,
+                "completed_date": "2025-10-17",
+                "depends_on": ["1.1"],
+                "notes": "BONUS infrastructure - significant productivity boost!"
             },
             "1.2": {
                 "name": "24-Hour Stability Test",
@@ -83,7 +101,7 @@ MASTER_PLAN = {
                 "blocking": False,
                 "completed": False,
                 "completed_date": None,
-                "depends_on": ["1.1"]
+                "depends_on": ["1.1", "1.1.5"]
             },
             "1.3": {
                 "name": "Paper Trading Week",

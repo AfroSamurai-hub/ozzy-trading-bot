@@ -214,7 +214,10 @@ def render_dashboard(data, process_status, planner_status):
     print(f"{Colors.BOLD}{Colors.HEADER}{'='*cols}{Colors.ENDC}")
     print(f"{Colors.BOLD}{Colors.HEADER}🔥 OZZY LIVE MONITORING DASHBOARD{Colors.ENDC}".center(cols + 20))
     print(f"{Colors.BOLD}{Colors.HEADER}{'='*cols}{Colors.ENDC}")
-    print(f"{Colors.OKCYAN}Last Update: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}{Colors.ENDC}\n")
+    
+    # Timeframe and update info
+    current_time = datetime.now().strftime('%H:%M:%S')
+    print(f"{Colors.OKCYAN}⏰ {current_time} | Timeframe: 15min | Refreshing every {REFRESH_INTERVAL}s{Colors.ENDC}\n")
     
     # Process Status
     print(f"{Colors.BOLD}🖥️  PROCESS STATUS:{Colors.ENDC}")
@@ -249,7 +252,17 @@ def render_dashboard(data, process_status, planner_status):
         
         if data['start_time']:
             elapsed = format_time_elapsed(data['start_time'])
-            print(f"  Elapsed: {elapsed}")
+            
+            # Calculate next decision time
+            if completed > 0 and completed < total:
+                seconds_since_last = (datetime.now() - data['start_time']).total_seconds() - (completed * 900)
+                next_in = max(0, 900 - int(seconds_since_last))
+                next_mins = next_in // 60
+                next_secs = next_in % 60
+                
+                print(f"  Elapsed: {elapsed} | Next Decision: {next_mins}m {next_secs}s")
+            else:
+                print(f"  Elapsed: {elapsed}")
             
             # Estimate remaining time
             if completed > 0:
@@ -257,21 +270,11 @@ def render_dashboard(data, process_status, planner_status):
                 remaining_seconds = avg_time_per_decision * (total - completed)
                 remaining_hours = int(remaining_seconds // 3600)
                 remaining_minutes = int((remaining_seconds % 3600) // 60)
-                print(f"  Estimated Remaining: {remaining_hours:02d}:{remaining_minutes:02d}:00")
+                print(f"  Remaining: ~{remaining_hours:02d}:{remaining_minutes:02d}:00")
         print()
     
     # Portfolio Status
     print(f"{Colors.BOLD}💼 PORTFOLIO:{Colors.ENDC}")
-    print(f"  Capital: {Colors.OKGREEN}R{data['capital']:,.2f}{Colors.ENDC}")
-    print(f"  Open Positions: {data['open_positions']}")
-    
-    if data['capital'] != 10000.0:
-        pnl = data['capital'] - 10000.0
-        pnl_color = Colors.OKGREEN if pnl >= 0 else Colors.FAIL
-        pnl_symbol = '+' if pnl >= 0 else ''
-        print(f"  P&L: {pnl_color}{pnl_symbol}R{pnl:,.2f} ({pnl_symbol}{pnl/10000*100:.2f}%){Colors.ENDC}")
-    print()
-    
     # Recent Decisions
     if data['decisions']:
         print(f"{Colors.BOLD}📈 RECENT DECISIONS:{Colors.ENDC}")
@@ -279,14 +282,23 @@ def render_dashboard(data, process_status, planner_status):
         # Show last 10 decisions
         recent = data['decisions'][-10:]
         
-        # Calculate signal distribution
+        # Calculate signal distribution and stats
         signal_counts = {'BUY': 0, 'SELL': 0, 'SKIP': 0, 'LONG': 0, 'SHORT': 0}
         confidence_sum = 0
+        high_conf_count = 0  # >70%
         
         for d in data['decisions']:
             signal_counts[d['action']] = signal_counts.get(d['action'], 0) + 1
             confidence_sum += d['confidence']
+            if d['confidence'] >= 70:
+                high_conf_count += 1
         
+        avg_confidence = confidence_sum / len(data['decisions']) if data['decisions'] else 0
+        trade_signals = signal_counts.get('BUY', 0) + signal_counts.get('SELL', 0) + signal_counts.get('LONG', 0) + signal_counts.get('SHORT', 0)
+        
+        # Quick stats line
+        print(f"  Signals: {trade_signals} trades, {signal_counts.get('SKIP', 0)} skips | Avg Confidence: {avg_confidence:.1f}% | High Conf (>70%): {high_conf_count}")
+        print()
         avg_confidence = confidence_sum / len(data['decisions']) if data['decisions'] else 0
         
         print(f"\n  Signal Distribution:")
@@ -329,10 +341,11 @@ def render_dashboard(data, process_status, planner_status):
         print()
     
     # Footer
+    # Footer
     print(f"{Colors.BOLD}{Colors.HEADER}{'='*cols}{Colors.ENDC}")
-    print(f"{Colors.OKCYAN}Refreshing every {REFRESH_INTERVAL}s | Press Ctrl+C to exit{Colors.ENDC}".center(cols + 20))
+    footer_text = f"Phase 1: Milestone 1.2 | Press Ctrl+C to exit"
+    print(f"{Colors.OKCYAN}{footer_text}{Colors.ENDC}".center(cols + 20))
     print(f"{Colors.BOLD}{Colors.HEADER}{'='*cols}{Colors.ENDC}")
-
 
 def main():
     """Main dashboard loop"""

@@ -15,6 +15,7 @@ import os
 import time
 import signal
 import json
+import numpy as np
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -25,6 +26,53 @@ sys.stderr = os.fdopen(sys.stderr.fileno(), 'w', buffering=1)
 # Add project root to path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT))
+
+
+# ============================================================================
+# HELPER FUNCTIONS FOR TECHNICAL INDICATORS
+# ============================================================================
+
+def calculate_rsi(prices, period=14):
+    """Calculate RSI indicator"""
+    if len(prices) < period + 1:
+        return 50.0
+    
+    prices_array = np.array(prices)
+    deltas = np.diff(prices_array)
+    
+    gains = np.where(deltas > 0, deltas, 0)
+    losses = np.where(deltas < 0, -deltas, 0)
+    
+    avg_gain = np.mean(gains[-period:])
+    avg_loss = np.mean(losses[-period:])
+    
+    if avg_loss == 0:
+        return 100.0
+    
+    rs = avg_gain / avg_loss
+    rsi = 100 - (100 / (1 + rs))
+    
+    return float(rsi)
+
+
+def calculate_ema(prices, period):
+    """Calculate EMA indicator"""
+    if len(prices) < period:
+        return np.mean(prices)
+    
+    prices_array = np.array(prices)
+    multiplier = 2 / (period + 1)
+    ema = prices_array[0]
+    
+    for price in prices_array[1:]:
+        ema = (price * multiplier) + (ema * (1 - multiplier))
+    
+    return float(ema)
+
+
+# ============================================================================
+# MAIN TEST CODE
+# ============================================================================
 
 print(f"\n{'='*60}")
 print(f"🔥 BULLETPROOF TEST STARTING")
@@ -290,6 +338,57 @@ def run_test(
             print(f"❌ Failed to get market data: {e}")
             sys.stdout.flush()
             continue
+        
+        # 🔥 FIX: Inject fresh market data into pattern DB before decision
+        print(f"\n[{datetime.now()}] Injecting fresh market data into pattern DB...")
+        sys.stdout.flush()
+        
+        try:
+            # Build price history (last 50 candles)
+            historical_prices = mock_feed.price_history[-50:] if len(mock_feed.price_history) >= 50 else mock_feed.price_history
+            
+            # Calculate indicators
+            rsi = calculate_rsi(historical_prices) if len(historical_prices) >= 14 else 50.0
+            ema_short = calculate_ema(historical_prices, 20) if len(historical_prices) >= 20 else price
+            ema_long = calculate_ema(historical_prices, 50) if len(historical_prices) >= 50 else price
+            ema_ratio = (ema_short / ema_long) if ema_long > 0 else 1.0
+            
+            # Calculate price/volume changes
+            price_change = ((price - historical_prices[-5]) / historical_prices[-5] * 100) if len(historical_prices) >= 5 else 0.0
+            avg_volume = np.mean(mock_feed.volume_history[-20:]) if len(mock_feed.volume_history) >= 20 else 1000000.0
+            current_volume = mock_feed.volume_history[-1] if mock_feed.volume_history else 1000000.0
+            volume_change = (current_volume / avg_volume) if avg_volume > 0 else 1.0
+            
+            # Create fresh market pattern
+            fresh_pattern = {
+                "symbol": symbol,
+                "price": price,
+                "rsi": rsi,
+                "ema_ratio": ema_ratio,
+                "price_change": price_change,
+                "volume_change": volume_change,
+                "timestamp": datetime.now(timezone.utc).timestamp(),
+                "label": "PENDING",  # Will be labeled later
+                "pattern_type": "live_test"
+            }
+            
+            # Insert into pattern DB
+            pattern_db.add_pattern(
+                metadata=fresh_pattern,
+                embedding=np.array([rsi, ema_ratio, price_change, volume_change])
+            )
+            
+            print(f"✅ Fresh data injected:")
+            print(f"   RSI: {rsi:.2f}")
+            print(f"   EMA Ratio: {ema_ratio:.4f}")
+            print(f"   Price Change: {price_change:+.2f}%")
+            print(f"   Volume Change: {volume_change:.2f}x")
+            sys.stdout.flush()
+        except Exception as e:
+            print(f"⚠️  Failed to inject fresh data: {e}")
+            import traceback
+            traceback.print_exc()
+            sys.stdout.flush()
         
         # Make decision (with timeout)
         print(f"\n[{datetime.now()}] Analyzing and making decision with AI...")

@@ -72,3 +72,12 @@
 [2025-10-17 08:13:49.833228] Decision #2/24 starting
 [2025-10-17 08:13:52.360824] Decision #2 complete: SKIP (0.0%)
 [2025-10-17 08:13:52.372307] Sleeping 900s
+[2025-10-17 08:28:52.375919] Sleep complete
+[2025-10-17 08:28:52.387897] Decision #3/24 starting
+[2025-10-17 08:28:54.966302] Decision #3 complete: BUY (70.0%)
+[2025-10-17 08:28:54.977852] Position #2 opened: BTCUSDT @ R66,500.66
+[2025-10-17 08:28:54.981909] Sleeping 900s
+[2025-10-17 08:43:54.985459] Sleep complete
+[2025-10-17 08:43:54.997046] Decision #4/24 starting
+[2025-10-17 08:43:57.178740] Decision #4 complete: SKIP (50.0%)
+[2025-10-17 08:43:57.190492] Sleeping 900s

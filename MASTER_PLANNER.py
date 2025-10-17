@@ -557,6 +557,413 @@ FORBIDDEN_UNTIL_PHASE_COMPLETE = {
 }
 
 # ============================================================================
+# DISCIPLINE & MOTIVATION SYSTEM
+# ============================================================================
+
+import random
+
+MOTIVATIONAL_QUOTES = [
+    "🔥 Focus wins. Distractions lose.",
+    "💪 Every billionaire started with discipline.",
+    "🎯 Your future self will thank you for staying on track.",
+    "⚡ Speed beats perfection. Ship it!",
+    "🚀 The plan works if you work the plan.",
+    "💰 Profitable traders follow systems, not feelings.",
+    "🧠 Complexity is the enemy of execution.",
+    "⏰ Time spent planning prevents wasted development.",
+    "🎖️ Discipline = Freedom. Stay on track.",
+    "🔨 Build what makes money, not what's cool."
+]
+
+SCOPE_CREEP_WARNINGS = {
+    "agent": {
+        "keywords": ["agent", "council", "jarvis", "recon", "sniper", "neural"],
+        "message": """
+🚫 HOLD UP! I see you're thinking about agents...
+
+**Current Phase:** Phase 1 (Foundation)
+**Agent Council:** Phase 3 (Month 3-6)
+
+**Why you can't build it yet:**
+❌ No profitable baseline to improve on
+❌ Need 200+ trades for training data
+❌ Will distract from getting profitable FAST
+
+**What you SHOULD do:**
+✅ Finish Phase 1 (get to R5k/week)
+✅ THEN we'll build your agent council properly
+
+**Remember:** Renaissance Technologies didn't start with 150 PhDs.
+They started profitable, THEN added complexity.
+
+Stay focused, future millionaire! 💪
+"""
+    },
+    "ml": {
+        "keywords": ["machine learning", "ml", "neural network", "deep learning", "tensorflow", "pytorch", "model training"],
+        "message": """
+🚫 WHOA THERE! Machine learning vibes detected...
+
+**Current Phase:** Phase 1 (Foundation)
+**ML Implementation:** Phase 5+ (Month 4+)
+
+**Why not now:**
+❌ You don't have training data yet
+❌ Simple strategies often outperform ML (see docs)
+❌ ML without profitability = over-engineering
+
+**What you SHOULD do:**
+✅ Get profitable with simple RSI + EMA first
+✅ Collect 200+ trades
+✅ THEN train ML models on proven strategies
+
+**Real talk:** Even pro quants prefer simple models.
+Complexity comes AFTER profit. Period.
+
+Trust the process! 🎯
+"""
+    },
+    "optimization": {
+        "keywords": ["optimize", "parameter tuning", "backtest", "optimization", "hyperparameter"],
+        "message": """
+🚫 STOP RIGHT THERE! Optimization alert...
+
+**Current Phase:** Phase 1 (Foundation)
+**Optimization:** AFTER proving profitability
+
+**Why this is premature:**
+❌ Optimizing before proving = overfitting
+❌ You haven't validated the strategy works yet
+❌ Optimization without data = guessing
+
+**What you SHOULD do:**
+✅ Run with default parameters first
+✅ Collect real trading data
+✅ Optimize based on actual performance
+
+**Harsh truth:** 99% of optimized backtests fail live trading.
+Prove it works first, optimize later.
+
+Keep it simple, keep it real! 💪
+"""
+    },
+    "infrastructure": {
+        "keywords": ["docker", "kubernetes", "microservices", "scalability", "distributed", "cloud"],
+        "message": """
+🚫 HEY! Infrastructure thinking detected...
+
+**Current Phase:** Phase 1 (Foundation)
+**Infrastructure:** Phase 4 (Month 5+)
+
+**Why not now:**
+❌ You're not handling enough volume yet
+❌ Premature scaling = wasted time
+❌ Can't scale what isn't profitable
+
+**What you SHOULD do:**
+✅ Run on your laptop first
+✅ Prove profitability
+✅ Scale when you're making R20k+/week
+
+**Real story:** Most successful traders start on a laptop.
+Infrastructure comes AFTER product-market fit (profit).
+
+Focus on money first, scaling second! 💰
+"""
+    },
+    "features": {
+        "keywords": ["add feature", "new feature", "implement", "also need", "what if we"],
+        "message": """
+🚫 FEATURE ALERT! Let's pause...
+
+**The Feature Trap:**
+Every feature delays profitability.
+Every delay costs money.
+Every distraction compounds.
+
+**Current Focus:** Fix 0% confidence → Get profitable
+
+**Ask yourself:**
+1. Is this in current milestone? → If NO, don't build
+2. Will this make money THIS WEEK? → If NO, don't build
+3. Is this critical to profitability? → If NO, don't build
+
+**What you SHOULD do:**
+✅ Finish current milestone
+✅ Mark it complete
+✅ Move to next milestone
+✅ Repeat until profitable
+
+**Remember:** Jeff Bezos started with ONLY books.
+Not books + music + electronics + everything.
+
+One thing at a time. Profitable first. 🎯
+"""
+    },
+    "research": {
+        "keywords": ["research", "investigate", "explore", "look into", "maybe we should"],
+        "message": """
+🚫 RESEARCH MODE DETECTED! Pause...
+
+**The Research Trap:**
+Research without action = procrastination
+Learning without building = stalling
+Planning without executing = fear
+
+**Current Phase:** EXECUTION, not research
+
+**You already have:**
+✅ A proven strategy (RSI + EMA)
+✅ Clear milestones
+✅ Step-by-step SOPs
+✅ Everything you need to be profitable
+
+**What you DON'T need:**
+❌ More research
+❌ More learning
+❌ More "investigating"
+
+**What you SHOULD do:**
+✅ Open the current SOP
+✅ Follow it step by step
+✅ Build → Test → Ship
+
+**Truth bomb:** No one ever researched their way to profit.
+They built their way there.
+
+Stop learning. Start building! 💪
+"""
+    }
+}
+
+ROAST_MESSAGES = [
+    """
+😤 ALRIGHT, REAL TALK TIME...
+
+You're here checking if you can add more features?
+Bro, your bot is giving 0% confidence signals!
+
+**Current situation:**
+- Bot: Broken (0% signals)
+- Your focus: Adding more features
+- Math: Does not compute
+
+**Fix your shit first:**
+1. Fix the 0% confidence bug
+2. Get to profitable
+3. THEN add cool stuff
+
+**Remember:** Every feature added before profit = 
+another day you're NOT making money.
+
+Now get back to SOP-001 and FIX THAT BUG! 💪
+""",
+    """
+😒 SOOOO... YOU'RE BACK WITH MORE IDEAS?
+
+**Your brain:** "What if we add this cool feature?"
+**Your wallet:** "What if we finish ONE thing first?"
+
+**Reality check:**
+- Days since starting: Multiple
+- Revenue generated: R0
+- Features built: Too many
+- Features finished: Not enough
+
+**The prescription:**
+✅ Close all other tabs
+✅ Open SOP-001
+✅ Follow it step by step
+✅ Don't come back until milestone complete
+
+**Side effects:** Making actual money 💰
+
+*May cause: Discipline, focus, and profit*
+
+See you when 1.1 is DONE! 🚀
+""",
+    """
+🤨 LET ME GUESS... ANOTHER "GREAT IDEA"?
+
+**The Pattern:**
+1. Get excited about new feature
+2. Start building it
+3. Never finish
+4. Repeat
+
+**The Result:**
+- 10 half-built features
+- 0 completed milestones
+- Still not profitable
+
+**The Solution:**
+1. Pick ONE milestone
+2. Finish it COMPLETELY
+3. Mark it DONE
+4. THEN move to next
+
+**Hard truth:** You don't have an execution problem.
+You have a focus problem.
+
+Fix it. 🎯
+"""
+]
+
+CELEBRATION_MESSAGES = [
+    """
+🎉🎉🎉 YOOOOO YOU DID IT! 🎉🎉🎉
+
+Milestone {milestone_id} COMPLETE!
+
+**You just:**
+✅ Followed the plan
+✅ Didn't get distracted
+✅ Made actual progress
+
+**You're officially:**
+🏆 More disciplined than 99% of traders
+💪 Actually finishing what you start
+🎯 On track to profitability
+
+**Keep this energy!**
+
+Next milestone loading... 🚀
+""",
+    """
+🔥🔥🔥 THAT'S WHAT I'M TALKING ABOUT! 🔥🔥🔥
+
+Milestone {milestone_id} = CRUSHED ✅
+
+**The stats:**
+- Distractions resisted: Many
+- Plans followed: 100%
+- Progress made: Real
+
+**You're becoming:**
+🧠 Disciplined
+⚡ Focused
+💰 Profitable (soon)
+
+**Fortune favors the focused.**
+
+Level up! Next mission awaits... 🎮
+""",
+    """
+💪 BOOM! ANOTHER ONE DONE! 💪
+
+{milestone_name} ✅
+
+**This is how winners operate:**
+1. Set clear goal
+2. Execute relentlessly
+3. Complete fully
+4. Move to next
+
+**You're doing it RIGHT.**
+
+Keep stacking wins. Millionaire status loading... 🚀
+"""
+]
+
+def check_scope_creep(user_input):
+    """Check if user is trying to build something outside scope"""
+    user_input_lower = user_input.lower()
+    
+    for category, data in SCOPE_CREEP_WARNINGS.items():
+        for keyword in data["keywords"]:
+            if keyword in user_input_lower:
+                return True, data["message"]
+    
+    return False, None
+
+def motivational_message():
+    """Return a random motivational quote"""
+    return random.choice(MOTIVATIONAL_QUOTES)
+
+def can_i_build(feature_description):
+    """Check if a feature can be built in current phase"""
+    print("\n" + "="*70)
+    print(f"🤔 CAN I BUILD: {feature_description}?")
+    print("="*70)
+    
+    # Check for scope creep
+    is_creep, message = check_scope_creep(feature_description)
+    
+    if is_creep:
+        print(message)
+        print("\n" + "="*70)
+        print(f"📊 TL;DR: NO, NOT YET")
+        print("="*70)
+        print("\n✅ What to do instead:")
+        print("   1. Run: python3 MASTER_PLANNER.py next")
+        print("   2. Work on THAT")
+        print("   3. Stay on track!")
+        print()
+        return False
+    
+    # Check if it's in current milestones
+    data = load_planner_data()
+    current_phase_id = data["current_phase"]
+    phase = get_phase_info(current_phase_id)
+    
+    # Check if feature matches any current milestone
+    feature_lower = feature_description.lower()
+    found = False
+    
+    for milestone_id, milestone in phase['milestones'].items():
+        full_id = f"{current_phase_id}.{milestone_id}"
+        if full_id not in data.get("milestones_completed", []):
+            milestone_text = f"{milestone['name']} {' '.join(milestone['tasks'])}".lower()
+            if any(word in milestone_text for word in feature_lower.split()):
+                found = True
+                print(f"\n✅ YES! This is in your current phase milestones.")
+                print(f"\n👉 Check where it fits:")
+                print(f"   python3 MASTER_PLANNER.py status")
+                print()
+                return True
+    
+    if not found:
+        print(f"\n🚫 NOT IN CURRENT PHASE")
+        print(f"\nThis might be a future phase feature, or scope creep.")
+        print(f"\n👉 Check current priorities:")
+        print(f"   python3 MASTER_PLANNER.py next")
+        print()
+        return False
+
+def ask_permission(action_description):
+    """Ask if an action should be taken"""
+    print("\n" + "="*70)
+    print(f"🤔 SHOULD I: {action_description}?")
+    print("="*70)
+    
+    # Check for scope creep
+    is_creep, message = check_scope_creep(action_description)
+    
+    if is_creep:
+        print(message)
+        print("\n" + "="*70)
+        print(f"🎯 NEXT ACTIONS")
+        print("="*70)
+        show_next_actions()
+        return False
+    
+    print(f"\n✅ Doesn't seem like scope creep...")
+    print(f"\n👉 But check if it's in your current milestone:")
+    print(f"   python3 MASTER_PLANNER.py next")
+    print()
+    return True
+
+def roast_me():
+    """Give tough love when needed"""
+    message = random.choice(ROAST_MESSAGES)
+    print(message)
+
+def celebrate(milestone_id, milestone_name):
+    """Celebrate milestone completion"""
+    message = random.choice(CELEBRATION_MESSAGES)
+    print(message.format(milestone_id=milestone_id, milestone_name=milestone_name))
+
+# ============================================================================
 # PLANNER FUNCTIONS
 # ============================================================================
 
@@ -810,8 +1217,14 @@ def complete_milestone(milestone_id):
     
     save_planner_data(data)
     
-    print(f"\n🎉 MILESTONE COMPLETED: {milestone['name']}")
+    # Celebrate!
+    print()
+    celebrate(milestone_id, milestone['name'])
+    
+    print(f"\n{'='*70}")
+    print(f"✅ MILESTONE COMPLETED: {milestone['name']}")
     print(f"   Completed at: {datetime.now().strftime('%Y-%m-%d %H:%M')}")
+    print(f"{'='*70}")
     
     # Check if phase is complete
     phase = get_phase_info(current_phase_id)
@@ -832,12 +1245,18 @@ def main():
     import sys
     
     if len(sys.argv) < 2:
-        print("\n🎯 OZZY MASTER PLANNER")
-        print("\nUsage:")
+        print("\n🎯 OZZY MASTER PLANNER - Your Discipline Enforcer")
+        print("\n📋 Core Commands:")
         print("  python3 MASTER_PLANNER.py status           # Show current status")
         print("  python3 MASTER_PLANNER.py next             # Show next actions")
         print("  python3 MASTER_PLANNER.py complete <ID>    # Mark milestone complete")
-        print("  python3 MASTER_PLANNER.py help             # Show this help")
+        print("\n🎭 Personality Commands:")
+        print("  python3 MASTER_PLANNER.py caniburn <idea>  # Check if you can build it")
+        print("  python3 MASTER_PLANNER.py ask <action>     # Ask permission for action")
+        print("  python3 MASTER_PLANNER.py roast            # Need tough love?")
+        print("  python3 MASTER_PLANNER.py motivate         # Need motivation?")
+        print("\n📚 Help:")
+        print("  python3 MASTER_PLANNER.py help             # Show detailed help")
         print()
         return
     
@@ -854,8 +1273,45 @@ def main():
             return
         milestone_id = sys.argv[2]
         complete_milestone(milestone_id)
+    elif command == "caniburn" or command == "canibuild":
+        if len(sys.argv) < 3:
+            print("❌ Error: Provide feature description")
+            print("   Example: python3 MASTER_PLANNER.py caniburn 'agent council'")
+            return
+        feature = " ".join(sys.argv[2:])
+        can_i_build(feature)
+    elif command == "ask":
+        if len(sys.argv) < 3:
+            print("❌ Error: Provide action description")
+            print("   Example: python3 MASTER_PLANNER.py ask 'optimize parameters'")
+            return
+        action = " ".join(sys.argv[2:])
+        ask_permission(action)
+    elif command == "roast":
+        roast_me()
+    elif command == "motivate":
+        print("\n" + "="*70)
+        print("💡 FRIENDLY REMINDER")
+        print("="*70)
+        print(f"\n{motivational_message()}")
+        print(f"\n🎯 Your ONLY goal right now: Simple bot making R5k/week")
+        print(f"\n📍 Current milestone: Check with 'python3 MASTER_PLANNER.py next'")
+        print(f"\n🔥 Focus wins. Distractions lose.")
+        print("\n" + "="*70 + "\n")
     elif command == "help":
         print(__doc__)
+        print("\n🎭 PERSONALITY FEATURES:")
+        print("\nThe planner now has personality! It will:")
+        print("  ✅ Motivate you when on track")
+        print("  🚫 Block you when deviating")
+        print("  😤 Roast you when procrastinating")
+        print("  🎉 Celebrate when achieving")
+        print("\nExamples:")
+        print("  python3 MASTER_PLANNER.py caniburn 'agent council'")
+        print("  python3 MASTER_PLANNER.py ask 'optimize parameters'")
+        print("  python3 MASTER_PLANNER.py roast")
+        print("  python3 MASTER_PLANNER.py motivate")
+        print()
     else:
         print(f"❌ Unknown command: {command}")
         print("   Run: python3 MASTER_PLANNER.py help")

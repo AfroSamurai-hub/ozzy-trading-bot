@@ -1954,6 +1954,29 @@
       "ema_ratio": 1.0,
       "volume_change": 1.93640004740009,
       "price_change": 0.031177827870203744
+    },
+    {
+      "timestamp": "2025-10-17T10:29:16.956979Z",
+      "action": "SKIP",
+      "symbol": "BTCUSDT",
+      "entry_price": 66787.57870059818,
+      "position_size": 0.0,
+      "confidence": 0.5,
+      "pattern": "General Pattern",
+      "reasoning": "RSI is neutral at 50.0 and EMA ratio indicates no clear trend. Volume change is positive but price change is negative, indicating uncertainty in market direction.",
+      "expected_profit_pct": null,
+      "status": "SKIPPED",
+      "current_price": 66787.57870059818,
+      "current_pnl": 0.0,
+      "current_pnl_pct": 0.0,
+      "exit_price": null,
+      "exit_time": null,
+      "outcome": null,
+      "actual_pnl": null,
+      "rsi": 50.0,
+      "ema_ratio": 1.0,
+      "volume_change": 1.8226797857658807,
+      "price_change": -0.38742666542958015
     }
   ],
   "portfolio": {

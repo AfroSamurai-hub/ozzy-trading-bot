@@ -28,8 +28,9 @@ from pathlib import Path
 
 PROJECT_NAME = "OZZY Trading Bot"
 PROJECT_GOAL = "R5,000-10,000/week profitable automated crypto trading"
+ULTIMATE_VISION = "Build professional trading operation → Scale to R100k+/week → Rival hedge funds"
 CURRENT_CAPITAL = 10000  # Update this as you scale
-TARGET_WEEKLY_PROFIT = 5000  # R5k/week minimum
+TARGET_WEEKLY_PROFIT = 5000  # R5k/week minimum (Phase 1 target)
 
 # File locations
 PLANNER_DATA_FILE = Path(__file__).parent / "planner_data.json"
@@ -209,6 +210,158 @@ MASTER_PLAN = {
         }
     },
     
+    "phase_1.5": {
+        "name": "SCALING - Multi-Asset & Infrastructure",
+        "goal": "Diversify income streams, scale infrastructure",
+        "duration": "45 days",
+        "budget": "R0-5,000 (reinvest profits for hardware)",
+        "success_criteria": [
+            "3+ crypto pairs trading simultaneously",
+            "Combined profit >R10k/week across all pairs",
+            "Infrastructure handles 5x load",
+            "Uptime >99.5%"
+        ],
+        "depends_on_phase": "phase_1",
+        "milestones": {
+            "1.5.1": {
+                "name": "Add ETH Trading",
+                "priority": "HIGH",
+                "estimated_time": "3 days",
+                "tasks": [
+                    "Test strategy on ETH historical data",
+                    "Validate confidence levels >40%",
+                    "Run parallel paper trading (BTC + ETH)",
+                    "Compare profitability vs BTC",
+                    "Deploy live if profitable"
+                ],
+                "sop_reference": "SOP-020-Multi-Asset-Deployment.md",
+                "blocking": False,
+                "completed": False,
+                "completed_date": None,
+                "depends_on": []
+            },
+            "1.5.2": {
+                "name": "Add SOL Trading",
+                "priority": "HIGH",
+                "estimated_time": "3 days",
+                "tasks": [
+                    "Test strategy on SOL historical data",
+                    "Validate confidence levels >40%",
+                    "Run paper trading (BTC + ETH + SOL)",
+                    "Monitor correlation between pairs",
+                    "Deploy live if profitable"
+                ],
+                "sop_reference": "SOP-020-Multi-Asset-Deployment.md",
+                "blocking": False,
+                "completed": False,
+                "completed_date": None,
+                "depends_on": ["1.5.1"]
+            },
+            "1.5.3": {
+                "name": "Multi-Asset Portfolio Management",
+                "priority": "CRITICAL",
+                "estimated_time": "1 week",
+                "tasks": [
+                    "Implement position allocation across assets",
+                    "Add correlation-based risk management",
+                    "Balance capital across 3+ pairs",
+                    "Test rebalancing logic",
+                    "Deploy unified portfolio tracker"
+                ],
+                "sop_reference": "SOP-021-Portfolio-Allocation.md",
+                "blocking": False,
+                "completed": False,
+                "completed_date": None,
+                "depends_on": ["1.5.2"]
+            },
+            "1.5.4": {
+                "name": "Infrastructure Upgrade - Phase 1",
+                "priority": "HIGH",
+                "estimated_time": "1 week",
+                "tasks": [
+                    "Assess current hardware limitations",
+                    "Plan small data center setup",
+                    "Budget R5k from profits for hardware",
+                    "Research: Mini PC cluster vs Cloud",
+                    "Document infrastructure roadmap"
+                ],
+                "sop_reference": "SOP-022-Infrastructure-Planning.md",
+                "blocking": False,
+                "completed": False,
+                "completed_date": None,
+                "depends_on": ["1.5.3"]
+            },
+            "1.5.5": {
+                "name": "Processing Power Scaling",
+                "priority": "MEDIUM",
+                "estimated_time": "2 weeks",
+                "tasks": [
+                    "Purchase first hardware upgrade (R5k budget)",
+                    "Set up parallel processing for multi-asset",
+                    "Migrate bot to new hardware",
+                    "Test 5x load capacity",
+                    "Monitor performance gains"
+                ],
+                "sop_reference": "SOP-023-Hardware-Deployment.md",
+                "blocking": False,
+                "completed": False,
+                "completed_date": None,
+                "depends_on": ["1.5.4"]
+            },
+            "1.5.6": {
+                "name": "Add 2 More Crypto Pairs",
+                "priority": "MEDIUM",
+                "estimated_time": "1 week",
+                "tasks": [
+                    "Select 2 high-volume pairs (e.g., ADA, MATIC)",
+                    "Test strategy on historical data",
+                    "Deploy paper trading",
+                    "Go live if profitable",
+                    "Now trading 5+ pairs simultaneously!"
+                ],
+                "sop_reference": "SOP-020-Multi-Asset-Deployment.md",
+                "blocking": False,
+                "completed": False,
+                "completed_date": None,
+                "depends_on": ["1.5.5"]
+            },
+            "1.5.7": {
+                "name": "Small Data Center Setup",
+                "priority": "MEDIUM",
+                "estimated_time": "2 weeks",
+                "tasks": [
+                    "Design mini data center layout",
+                    "Purchase additional hardware (R10k budget)",
+                    "Set up redundancy (2+ machines)",
+                    "Configure failover systems",
+                    "Embed monitoring dashboard in system"
+                ],
+                "sop_reference": "SOP-024-Data-Center-Build.md",
+                "blocking": False,
+                "completed": False,
+                "completed_date": None,
+                "depends_on": ["1.5.6"]
+            },
+            "1.5.8": {
+                "name": "R10k/Week Milestone",
+                "priority": "CRITICAL",
+                "estimated_time": "2 weeks validation",
+                "tasks": [
+                    "Run 5+ pairs for 2 weeks",
+                    "Track combined weekly profit",
+                    "Validate >R10k/week consistently",
+                    "Calculate infrastructure ROI",
+                    "Phase 1.5 COMPLETE! 🎉"
+                ],
+                "sop_reference": "SOP-025-Scaling-Validation.md",
+                "blocking": True,
+                "completed": False,
+                "completed_date": None,
+                "depends_on": ["1.5.7"]
+            }
+        }
+    },
+    
     "phase_2": {
         "name": "INTELLIGENCE - Add AI Insights",
         "goal": "10-15% performance boost with AI",
@@ -220,7 +373,7 @@ MASTER_PLAN = {
             "Strategy optimization suggestions",
             "Win rate improves 5-10%"
         ],
-        "depends_on_phase": "phase_1",
+        "depends_on_phase": "phase_1.5",
         "milestones": {
             "2.1": {
                 "name": "Kimi AI Integration",
@@ -550,22 +703,28 @@ FORBIDDEN_UNTIL_PHASE_COMPLETE = {
     "phase_1": [
         "❌ NO machine learning",
         "❌ NO agent council",
-        "❌ NO additional assets beyond BTC/ETH",
+        "❌ NO additional assets beyond BTC (prove it with ONE first!)",
         "❌ NO complex strategies",
-        "❌ NO infrastructure work",
+        "❌ NO infrastructure work (unless productivity boost)",
         "❌ NO optimization before profitability",
         "❌ NO 'nice to have' features"
+    ],
+    "phase_1.5": [
+        "❌ NO agent council (not yet!)",
+        "❌ NO AI integration (Phase 2)",
+        "❌ NO machine learning",
+        "❌ NO leverage trading",
+        "❌ NO more than 5 crypto pairs (focus!)"
     ],
     "phase_2": [
         "❌ NO agent council (not yet!)",
         "❌ NO multiple strategies",
-        "❌ NO infrastructure scaling",
-        "❌ NO capital scaling beyond R10k"
+        "❌ NO capital scaling beyond R50k"
     ],
     "phase_3": [
         "❌ NO multi-exchange trading",
         "❌ NO options/futures (stick to spot)",
-        "❌ NO capital >R50k until council proven"
+        "❌ NO capital >R100k until council proven"
     ],
     "phase_4": [
         "❌ NO exotic assets",

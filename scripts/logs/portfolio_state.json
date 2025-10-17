@@ -1,19 +1,19 @@
 {
   "starting_capital": 10000.0,
   "capital": 9500.0,
-  "total_equity": 10000.0,
-  "total_pnl": 0.0,
+  "total_equity": 9998.129089865928,
+  "total_pnl": -1.8709101340716643,
   "positions": [
     {
       "id": 1,
       "symbol": "BTCUSDT",
       "side": "LONG",
       "entry_price": 66676.94091297557,
-      "current_price": 66676.94091297557,
+      "current_price": 66427.4477840496,
       "size": 500.0,
       "qty": 0.007498844325395532,
-      "pnl": 0.0,
-      "pnl_pct": 0.0,
+      "pnl": -1.8709101340716643,
+      "pnl_pct": -0.3741820268143329,
       "confidence": 0.7,
       "reason": "The market shows a whale accumulation pattern with a win rate of approximately 75%. The RSI is neutral at 50.0, and the EMA ratio indicates an uptrend. Given the favorable conditions and available capital, a position is warranted.",
       "entry_time": "2025-10-17T07:58:49.813851",
@@ -32,5 +32,5 @@
     "sharpe_ratio": 0.0,
     "max_drawdown": 0.0
   },
-  "last_update": "2025-10-17T07:58:49.817597"
+  "last_update": "2025-10-17T08:13:52.371274"
 }

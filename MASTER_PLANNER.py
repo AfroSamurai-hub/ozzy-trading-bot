@@ -28,7 +28,7 @@ from pathlib import Path
 
 PROJECT_NAME = "OZZY Trading Bot"
 PROJECT_GOAL = "R5,000-10,000/week profitable automated crypto trading"
-ULTIMATE_VISION = "Build professional trading operation → Scale to R100k+/week → Rival hedge funds"
+ULTIMATE_VISION = "Phase 1 (60d): Prove profitability → Phase 1.5 (90d): Multi-asset scaling → Phase 2 (60d): AI boost → Phase 3 (150d): Agent council → Phase 4 (240d): R50-100k/week professional operation"
 CURRENT_CAPITAL = 10000  # Update this as you scale
 TARGET_WEEKLY_PROFIT = 5000  # R5k/week minimum (Phase 1 target)
 
@@ -44,7 +44,7 @@ MASTER_PLAN = {
     "phase_1": {
         "name": "FOUNDATION - Get Profitable FAST",
         "goal": "Simple bot making R5k/week",
-        "duration": "30 days",
+        "duration": "45-60 days (realistic: includes debugging & optimization)",
         "budget": "R0 (free tools only)",
         "success_criteria": [
             "System runs 24/7 without crashes",
@@ -90,7 +90,7 @@ MASTER_PLAN = {
             "1.2": {
                 "name": "24-Hour Stability Test",
                 "priority": "HIGH",
-                "estimated_time": "1 day",
+                "estimated_time": "1 day (currently 33% complete!)",
                 "tasks": [
                     "Run bulletproof_test.py for 24 decisions",
                     "Monitor for crashes/errors",
@@ -107,7 +107,7 @@ MASTER_PLAN = {
             "1.3": {
                 "name": "Paper Trading Week",
                 "priority": "HIGH",
-                "estimated_time": "7 days",
+                "estimated_time": "7 days (expect 7-10 with analysis)",
                 "tasks": [
                     "Run bot 24/7 for 7 days",
                     "Collect 50+ trading decisions",
@@ -124,7 +124,7 @@ MASTER_PLAN = {
             "1.4": {
                 "name": "Performance Analysis",
                 "priority": "MEDIUM",
-                "estimated_time": "4 hours",
+                "estimated_time": "4 hours (realistic: 1-2 days with iteration)",
                 "tasks": [
                     "Analyze 7-day results",
                     "Calculate metrics (Sharpe, win rate, etc)",
@@ -159,7 +159,7 @@ MASTER_PLAN = {
             "1.6": {
                 "name": "First Profitable Week",
                 "priority": "HIGH",
-                "estimated_time": "7 days",
+                "estimated_time": "7 days (may need 2-3 weeks if tuning required)",
                 "tasks": [
                     "Run live for full 7 days",
                     "Complete minimum 10 trades",
@@ -193,7 +193,7 @@ MASTER_PLAN = {
             "1.8": {
                 "name": "Hit R5k/Week Target",
                 "priority": "HIGH",
-                "estimated_time": "7-14 days",
+                "estimated_time": "7-14 days (may need longer for optimization)",
                 "tasks": [
                     "Run at R10k capital for 2 weeks",
                     "Achieve R5,000+ profit in one week",
@@ -213,7 +213,7 @@ MASTER_PLAN = {
     "phase_1.5": {
         "name": "SCALING - Multi-Asset & Infrastructure",
         "goal": "Diversify income streams, scale infrastructure",
-        "duration": "45 days",
+        "duration": "60-90 days (realistic: multi-asset testing + infrastructure setup)",
         "budget": "R0-5,000 (reinvest profits for hardware)",
         "success_criteria": [
             "3+ crypto pairs trading simultaneously",
@@ -226,7 +226,7 @@ MASTER_PLAN = {
             "1.5.1": {
                 "name": "Add ETH Trading",
                 "priority": "HIGH",
-                "estimated_time": "3 days",
+                "estimated_time": "3-5 days (testing + validation)",
                 "tasks": [
                     "Test strategy on ETH historical data",
                     "Validate confidence levels >40%",
@@ -243,7 +243,7 @@ MASTER_PLAN = {
             "1.5.2": {
                 "name": "Add SOL Trading",
                 "priority": "HIGH",
-                "estimated_time": "3 days",
+                "estimated_time": "3-5 days (testing + validation)",
                 "tasks": [
                     "Test strategy on SOL historical data",
                     "Validate confidence levels >40%",
@@ -365,7 +365,7 @@ MASTER_PLAN = {
     "phase_2": {
         "name": "INTELLIGENCE - Add AI Insights",
         "goal": "10-15% performance boost with AI",
-        "duration": "30 days",
+        "duration": "45-60 days (realistic: testing AI value takes time)",
         "budget": "R0 (Kimi AI free tier)",
         "success_criteria": [
             "Kimi integration working",
@@ -465,7 +465,7 @@ MASTER_PLAN = {
     "phase_3": {
         "name": "AGENT COUNCIL - Multi-Agent System",
         "goal": "20-30% performance with agent coordination",
-        "duration": "90 days",
+        "duration": "120-150 days (realistic: complex architecture + testing)",
         "budget": "R0-1000/month (optional premium AI)",
         "success_criteria": [
             "All 4 agents operational",
@@ -614,42 +614,61 @@ MASTER_PLAN = {
     },
     
     "phase_4": {
-        "name": "SCALING - Multi-Strategy, Multi-Asset",
-        "goal": "R20-50k/week with diversification",
-        "duration": "60 days",
-        "budget": "R5000/month (infrastructure)",
+        "name": "DOMINANCE - Professional Operation",
+        "goal": "R50-100k/week hedge fund grade system",
+        "duration": "180-240 days (realistic: scaling takes significant time)",
+        "budget": "R10,000-20,000/month (infrastructure + capital)",
         "success_criteria": [
-            "10+ assets traded",
-            "3+ strategies running",
-            "Weekly profit >R20,000",
-            "Sharpe ratio >2.0"
+            "10+ assets traded across multiple exchanges",
+            "Multiple proven strategies running",
+            "Weekly profit >R50,000 consistently",
+            "Sharpe ratio >2.0",
+            "Professional grade infrastructure",
+            "Battle-tested risk management"
         ],
         "depends_on_phase": "phase_3",
         "milestones": {
             "4.1": {
-                "name": "Add More Assets",
-                "priority": "MEDIUM",
-                "estimated_time": "2 weeks",
+                "name": "Multi-Exchange Integration",
+                "priority": "HIGH",
+                "estimated_time": "3-4 weeks (each exchange has quirks)",
                 "tasks": [
-                    "Add ETH, BNB, SOL, XRP",
-                    "Test each asset separately",
+                    "Add Binance support (already partially done)",
+                    "Add Bybit support",
+                    "Add Kraken/Coinbase Pro",
+                    "Unified order management",
+                    "Test arbitrage opportunities"
+                ],
+                "sop_reference": "SOP-026-Multi-Exchange.md",
+                "blocking": False,
+                "completed": False,
+                "completed_date": None
+            },
+            "4.2": {
+                "name": "Scale to 10+ Assets",
+                "priority": "HIGH",
+                "estimated_time": "4-6 weeks (testing per asset)",
+                "tasks": [
+                    "Add major altcoins (ETH, BNB, SOL, XRP, ADA, MATIC, etc)",
+                    "Test strategy performance per asset",
                     "Optimize parameters per asset",
-                    "Deploy all assets",
-                    "Monitor correlation"
+                    "Monitor correlation matrix",
+                    "Deploy portfolio of 10+ assets"
                 ],
                 "sop_reference": "SOP-022-Multi-Asset.md",
                 "blocking": False,
                 "completed": False,
                 "completed_date": None
             },
-            "4.2": {
+            "4.3": {
                 "name": "Multiple Strategies",
                 "priority": "HIGH",
-                "estimated_time": "3 weeks",
+                "estimated_time": "6-8 weeks (develop + test)",
                 "tasks": [
                     "Implement mean reversion strategy",
                     "Implement breakout strategy",
                     "Implement scalping strategy",
+                    "Implement swing trading strategy",
                     "Test each independently",
                     "Deploy portfolio of strategies"
                 ],
@@ -658,38 +677,56 @@ MASTER_PLAN = {
                 "completed": False,
                 "completed_date": None
             },
-            "4.3": {
-                "name": "Infrastructure Scaling",
-                "priority": "HIGH",
-                "estimated_time": "1 week",
+            "4.4": {
+                "name": "Professional Infrastructure",
+                "priority": "CRITICAL",
+                "estimated_time": "3-4 weeks (setup + testing)",
                 "tasks": [
-                    "Deploy to VPS (AWS/DigitalOcean)",
-                    "Set up monitoring (Grafana)",
-                    "Configure alerts",
-                    "Add redundancy",
-                    "Document deployment"
+                    "Deploy to VPS/Cloud (AWS/DigitalOcean)",
+                    "Set up monitoring (Grafana + Prometheus)",
+                    "Configure real-time alerts",
+                    "Add redundancy & failover",
+                    "Automated deployment pipeline",
+                    "Document production environment"
                 ],
                 "sop_reference": "SOP-024-Infrastructure.md",
                 "blocking": False,
                 "completed": False,
                 "completed_date": None
             },
-            "4.4": {
-                "name": "Capital Scaling",
-                "priority": "HIGH",
-                "estimated_time": "Ongoing",
+            "4.5": {
+                "name": "Advanced Risk Management",
+                "priority": "CRITICAL",
+                "estimated_time": "2-3 weeks (implement + validate)",
                 "tasks": [
-                    "Scale to R50k capital",
-                    "Scale to R100k capital",
-                    "Scale to R250k capital",
-                    "Each step: 2 weeks monitoring",
-                    "Phase 4 COMPLETE at R50k/week!"
+                    "Portfolio-level risk limits",
+                    "Dynamic position sizing based on volatility",
+                    "Correlation-based exposure limits",
+                    "Circuit breakers for extreme events",
+                    "Real-time risk dashboard"
+                ],
+                "sop_reference": "SOP-027-Advanced-Risk.md",
+                "blocking": False,
+                "completed": False,
+                "completed_date": None
+            },
+            "4.6": {
+                "name": "Scale to R100k Capital & R50k/Week",
+                "priority": "CRITICAL",
+                "estimated_time": "12+ weeks validation",
+                "tasks": [
+                    "Scale capital: R50k → R100k → R250k",
+                    "Run for 3 months at each level",
+                    "Validate >R50k/week consistently",
+                    "Maintain Sharpe >2.0",
+                    "Document scaling lessons",
+                    "Phase 4 COMPLETE - LEGENDARY STATUS! 🏆"
                 ],
                 "sop_reference": "SOP-025-Capital-Scaling.md",
                 "blocking": True,
                 "completed": False,
                 "completed_date": None,
-                "depends_on": ["4.1", "4.2", "4.3"]
+                "depends_on": ["4.1", "4.2", "4.3", "4.4", "4.5"]
             }
         }
     }

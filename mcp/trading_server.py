@@ -48,11 +48,13 @@ class TradingMCPServer:
     def __init__(
         self,
         pattern_db: RollingWindowPatternDB,
+        portfolio=None,  # Accept actual portfolio instance
         positions_path: Path | str = Path("positions.json"),
         risk_state_path: Path | str = Path("state.json"),
     ) -> None:
         self.pattern_db = pattern_db
-        self.portfolio = PortfolioState()
+        # Use provided portfolio or create default PortfolioState
+        self.portfolio = portfolio if portfolio is not None else PortfolioState()
         self.positions_path = Path(positions_path)
         self.risk_state_path = Path(risk_state_path)
         logger.info("🛠️ Trading MCP server initialised (patterns: %s)", pattern_db.count())
@@ -63,6 +65,7 @@ class TradingMCPServer:
             logger.debug("Market state request found no patterns for %s", symbol)
             return {
                 "symbol": symbol,
+                "price": None,
                 "rsi": None,
                 "ema_ratio": None,
                 "price_change": None,
@@ -82,6 +85,7 @@ class TradingMCPServer:
         response = {
             "symbol": symbol,
             "pattern_id": latest["id"],
+            "price": metadata.get("price"),  # Add current price from pattern
             "rsi": metadata.get("rsi"),
             "ema_ratio": metadata.get("ema_ratio"),
             "price_change": metadata.get("price_change"),
@@ -119,7 +123,19 @@ class TradingMCPServer:
         positions_snapshot = self._load_json(self.positions_path) or {}
         risk_snapshot = self._load_json(self.risk_state_path) or {}
 
-        portfolio = self.portfolio.as_dict()
+        # Handle both PortfolioState and PaperTradingPortfolio
+        if hasattr(self.portfolio, 'as_dict'):
+            portfolio = self.portfolio.as_dict()
+        else:
+            # PaperTradingPortfolio - build dict manually
+            portfolio = {
+                "capital": getattr(self.portfolio, 'capital', 0),
+                "open_count": len(getattr(self.portfolio, 'positions', [])),
+                "max_positions": getattr(self.portfolio, 'max_positions', 20),
+                "daily_pnl": sum(p.get('realized_pnl', 0) for p in getattr(self.portfolio, 'closed_trades', []) if p.get('exit_time', '').startswith(datetime.now().strftime('%Y-%m-%d'))),
+                "open_positions": getattr(self.portfolio, 'positions', []),
+            }
+        
         if positions_snapshot:
             portfolio.update(
                 {
@@ -141,7 +157,14 @@ class TradingMCPServer:
         risk_snapshot = self._load_json(self.risk_state_path) or {}
         risk_info = (risk_snapshot.get("risk") or {}) if isinstance(risk_snapshot, dict) else {}
 
-        if len(self.portfolio.open_positions) >= self.portfolio.max_positions:
+        # Handle both PortfolioState and PaperTradingPortfolio
+        if hasattr(self.portfolio, 'open_positions'):
+            open_count = len(self.portfolio.open_positions)
+        else:
+            # PaperTradingPortfolio - count OPEN positions manually
+            open_count = len([p for p in getattr(self.portfolio, 'positions', []) if p.get('status') == 'OPEN'])
+        
+        if open_count >= self.portfolio.max_positions:
             approved = False
             reasons.append("Max positions reached")
 
@@ -150,8 +173,24 @@ class TradingMCPServer:
             approved = False
             reasons.append("Position size exceeds 5% cap")
 
-        daily_pnl = risk_info.get("daily_pnl", self.portfolio.daily_pnl)
-        starting_capital = risk_info.get("starting_capital", self.portfolio.capital)
+        # Calculate daily P&L - handle both PortfolioState and PaperTradingPortfolio
+        if hasattr(self.portfolio, 'daily_pnl'):
+            daily_pnl = risk_info.get("daily_pnl", self.portfolio.daily_pnl)
+        else:
+            # PaperTradingPortfolio - calculate from closed_trades
+            today = datetime.now().strftime('%Y-%m-%d')
+            daily_pnl = sum(
+                p.get('realized_pnl', 0) 
+                for p in getattr(self.portfolio, 'closed_trades', []) 
+                if p.get('exit_time', '').startswith(today)
+            )
+            daily_pnl = risk_info.get("daily_pnl", daily_pnl)
+        
+        # Get starting capital
+        if hasattr(self.portfolio, 'starting_capital'):
+            starting_capital = risk_info.get("starting_capital", self.portfolio.starting_capital)
+        else:
+            starting_capital = risk_info.get("starting_capital", self.portfolio.capital)
         if daily_pnl <= -starting_capital * 0.10:
             approved = False
             reasons.append("Daily loss limit hit")

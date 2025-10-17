@@ -1,0 +1,89 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║         ✨ DASHBOARD HEADLINE TICKER ADDED! ✨                            ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+Enhancement: Live Portfolio Ticker in Header
+Status: ✅ IMPLEMENTED
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 🎯 WHAT WAS ADDED
+
+### Before:
+```
+🤖 OZZY TRADING BOT - LIVE MONITOR
+Time: 2025-10-15 20:21:43 | Status: ACTIVE | AI Decision Mode: AUTONOMOUS
+```
+
+### After (with live ticker):
+```
+🤖 OZZY TRADING BOT - LIVE MONITOR
+📊 LIVE: Capital: $54.05 | P&L: +$0.00 (+0.00%) | Positions: 0 open | Trades: 0 closed | Win Rate: N/A%
+Time: 2025-10-15 20:21:43 | Status: ACTIVE | AI Decision Mode: AUTONOMOUS
+```
+
+When trading is active:
+```
+🤖 OZZY TRADING BOT - LIVE MONITOR
+📊 LIVE: Capital: $48.50 | P&L: +$2.35 (+4.34%) | Positions: 3 open | Trades: 5 closed | Win Rate: 60.0%
+Time: 2025-10-15 20:21:43 | Status: ACTIVE | AI Decision Mode: AUTONOMOUS
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 📊 LIVE TICKER SHOWS
+
+- **Capital:** Current available capital (updates in real-time)
+- **P&L:** Total profit/loss in $ and % (green if positive, red if negative)
+- **Positions:** Number of open positions
+- **Trades:** Number of closed trades
+- **Win Rate:** Overall win percentage (only shows when trades exist)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 🚀 HOW TO SEE IT
+
+Restart your dashboard:
+
+```bash
+cd ~/ozzy-simple
+source venv/bin/activate
+export OZZY_CURRENCY=ZAR
+export OZZY_USD_TO_ZAR=18.50
+python dashboard/cli_monitor.py
+```
+
+The headline will:
+- ✅ Update every 5 seconds
+- ✅ Show live P&L changes
+- ✅ Track positions opening/closing
+- ✅ Display win rate as trades complete
+- ✅ Color-code profits (green) and losses (red)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## 💡 WHY THIS IS USEFUL
+
+At a glance you can see:
+- 📈 Are you making money? (P&L ticker)
+- 🎯 How many trades? (closed count)
+- ⚡ Bot active? (positions open)
+- 🏆 Success rate? (win rate %)
+
+No need to scroll down to portfolio section!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║              ✅ EVOLVED! HEADLINE TICKER ACTIVE! ✅                        ║
+║                                                                            ║
+║   Dashboard now shows live portfolio stats at the top! 📊                ║
+║                                                                            ║
+║   Perfect for monitoring overnight test! 🌙                              ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+Restart dashboard to see the new ticker! 🎉

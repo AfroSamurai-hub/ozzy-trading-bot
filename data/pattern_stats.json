@@ -1,0 +1,8003 @@
+{
+  "test_pattern_123": {
+    "pattern_id": "test_pattern_123",
+    "times_matched": 0,
+    "times_traded": 10,
+    "wins": 7,
+    "losses": 3,
+    "total_pnl": 16.5,
+    "avg_profit": 3.0,
+    "avg_loss": -1.5,
+    "win_rate": 0.7,
+    "expectancy": 1.6499999999999995,
+    "confidence_score": 0.583,
+    "last_updated": 1760627053.7013514,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760594620000": {
+    "pattern_id": "BTCUSDT_1760594620000",
+    "times_matched": 0,
+    "times_traded": 13,
+    "wins": 7,
+    "losses": 6,
+    "total_pnl": 13.415397601938619,
+    "avg_profit": 4.142341563275406,
+    "avg_loss": -1.8691616593376175,
+    "win_rate": 0.5384615384615384,
+    "expectancy": 1.367801614377087,
+    "confidence_score": 0.5265868015183109,
+    "last_updated": 1760628215.5211885,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760625660000": {
+    "pattern_id": "BTCUSDT_1760625660000",
+    "times_matched": 0,
+    "times_traded": 5,
+    "wins": 3,
+    "losses": 2,
+    "total_pnl": 6.0054870012312715,
+    "avg_profit": 3.4242837656694114,
+    "avg_loss": -1.9285682905239288,
+    "win_rate": 0.6,
+    "expectancy": 1.2831429431920753,
+    "confidence_score": 0.4756628588638415,
+    "last_updated": 1760628215.5221686,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760601360000": {
+    "pattern_id": "BTCUSDT_1760601360000",
+    "times_matched": 0,
+    "times_traded": 10,
+    "wins": 5,
+    "losses": 5,
+    "total_pnl": 11.633141994532629,
+    "avg_profit": 4.369686711956269,
+    "avg_loss": -1.7557881240114863,
+    "win_rate": 0.5,
+    "expectancy": 1.3069492939723912,
+    "confidence_score": 0.4761389858794478,
+    "last_updated": 1760628215.5276551,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760600645000": {
+    "pattern_id": "BTCUSDT_1760600645000",
+    "times_matched": 0,
+    "times_traded": 18,
+    "wins": 9,
+    "losses": 9,
+    "total_pnl": 20.97187786005371,
+    "avg_profit": 4.418880485934923,
+    "avg_loss": -1.8804741918985606,
+    "win_rate": 0.5,
+    "expectancy": 1.2692031470181813,
+    "confidence_score": 0.5553840629403637,
+    "last_updated": 1760628215.5318227,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760594380000": {
+    "pattern_id": "BTCUSDT_1760594380000",
+    "times_matched": 0,
+    "times_traded": 8,
+    "wins": 5,
+    "losses": 3,
+    "total_pnl": 13.0179593774461,
+    "avg_profit": 4.4329064845423645,
+    "avg_loss": -1.7823105890841906,
+    "win_rate": 0.625,
+    "expectancy": 2.1022000819324065,
+    "confidence_score": 0.5345440016386481,
+    "last_updated": 1760628215.5339105,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760596255000": {
+    "pattern_id": "BTCUSDT_1760596255000",
+    "times_matched": 0,
+    "times_traded": 6,
+    "wins": 3,
+    "losses": 3,
+    "total_pnl": 5.592932950631667,
+    "avg_profit": 4.058096595260648,
+    "avg_loss": -1.686836099686065,
+    "win_rate": 0.5,
+    "expectancy": 1.1856302477872913,
+    "confidence_score": 0.4337126049557458,
+    "last_updated": 1760628215.5355527,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760590790000": {
+    "pattern_id": "BTCUSDT_1760590790000",
+    "times_matched": 0,
+    "times_traded": 9,
+    "wins": 5,
+    "losses": 4,
+    "total_pnl": 13.465697253490722,
+    "avg_profit": 4.365547040187963,
+    "avg_loss": -1.434072131403382,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.7879385194806985,
+    "confidence_score": 0.5035365481673917,
+    "last_updated": 1760628215.5383878,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760594830000": {
+    "pattern_id": "BTCUSDT_1760594830000",
+    "times_matched": 0,
+    "times_traded": 5,
+    "wins": 3,
+    "losses": 2,
+    "total_pnl": 6.599711075303171,
+    "avg_profit": 3.842698753480877,
+    "avg_loss": -1.9919596483814348,
+    "win_rate": 0.6,
+    "expectancy": 1.5088353927359521,
+    "confidence_score": 0.480176707854719,
+    "last_updated": 1760628215.5401456,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760598690000": {
+    "pattern_id": "BTCUSDT_1760598690000",
+    "times_matched": 0,
+    "times_traded": 20,
+    "wins": 12,
+    "losses": 8,
+    "total_pnl": 28.045523027021442,
+    "avg_profit": 4.227921915056206,
+    "avg_loss": -1.9985661165495776,
+    "win_rate": 0.6,
+    "expectancy": 1.7373267024138925,
+    "confidence_score": 0.6347465340482779,
+    "last_updated": 1760628215.5469708,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760598985000": {
+    "pattern_id": "BTCUSDT_1760598985000",
+    "times_matched": 0,
+    "times_traded": 19,
+    "wins": 10,
+    "losses": 9,
+    "total_pnl": 21.282428971231383,
+    "avg_profit": 4.411131972422766,
+    "avg_loss": -1.8172061146845842,
+    "win_rate": 0.5263157894736842,
+    "expectancy": 1.4608665627403363,
+    "confidence_score": 0.5823752259916488,
+    "last_updated": 1760628215.5541255,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760595735000": {
+    "pattern_id": "BTCUSDT_1760595735000",
+    "times_matched": 0,
+    "times_traded": 17,
+    "wins": 9,
+    "losses": 8,
+    "total_pnl": 20.853615190218466,
+    "avg_profit": 4.3209608826463555,
+    "avg_loss": -1.9043879707320737,
+    "win_rate": 0.5294117647058824,
+    "expectancy": 1.3913849516447419,
+    "confidence_score": 0.562533581385836,
+    "last_updated": 1760628215.5682821,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760595695000": {
+    "pattern_id": "BTCUSDT_1760595695000",
+    "times_matched": 0,
+    "times_traded": 6,
+    "wins": 3,
+    "losses": 3,
+    "total_pnl": 6.118889535924625,
+    "avg_profit": 4.46737005018952,
+    "avg_loss": -1.9423286151779822,
+    "win_rate": 0.5,
+    "expectancy": 1.2625207175057689,
+    "confidence_score": 0.43525041435011536,
+    "last_updated": 1760628215.5704584,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760597425000": {
+    "pattern_id": "BTCUSDT_1760597425000",
+    "times_matched": 0,
+    "times_traded": 5,
+    "wins": 3,
+    "losses": 2,
+    "total_pnl": 8.84716747568767,
+    "avg_profit": 4.298455261841821,
+    "avg_loss": -1.8685946608238178,
+    "win_rate": 0.6,
+    "expectancy": 1.831635292775565,
+    "confidence_score": 0.4866327058555113,
+    "last_updated": 1760628215.5727146,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760627535000": {
+    "pattern_id": "BTCUSDT_1760627535000",
+    "times_matched": 0,
+    "times_traded": 19,
+    "wins": 11,
+    "losses": 8,
+    "total_pnl": 26.657249696004214,
+    "avg_profit": 4.493589399560425,
+    "avg_loss": -1.8768599581303447,
+    "win_rate": 0.5789473684210527,
+    "expectancy": 1.8112949331643113,
+    "confidence_score": 0.6156995828738125,
+    "last_updated": 1760628215.581623,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760594105000": {
+    "pattern_id": "BTCUSDT_1760594105000",
+    "times_matched": 0,
+    "times_traded": 13,
+    "wins": 7,
+    "losses": 6,
+    "total_pnl": 16.908787999716452,
+    "avg_profit": 4.412151237673585,
+    "avg_loss": -1.4943908781891837,
+    "win_rate": 0.5384615384615384,
+    "expectancy": 1.6860548765061532,
+    "confidence_score": 0.5329518667608923,
+    "last_updated": 1760628215.587546,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760597035000": {
+    "pattern_id": "BTCUSDT_1760597035000",
+    "times_matched": 0,
+    "times_traded": 12,
+    "wins": 7,
+    "losses": 5,
+    "total_pnl": 20.544916441973086,
+    "avg_profit": 4.466432948879819,
+    "avg_loss": -1.344298773696893,
+    "win_rate": 0.5833333333333334,
+    "expectancy": 2.0452947311395224,
+    "confidence_score": 0.5525725612894571,
+    "last_updated": 1760628215.5936031,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760594905000": {
+    "pattern_id": "BTCUSDT_1760594905000",
+    "times_matched": 0,
+    "times_traded": 14,
+    "wins": 8,
+    "losses": 6,
+    "total_pnl": 20.97820484380418,
+    "avg_profit": 4.481404694327116,
+    "avg_loss": -1.9424460933390455,
+    "win_rate": 0.5714285714285714,
+    "expectancy": 1.7283257853273324,
+    "confidence_score": 0.5602808014208324,
+    "last_updated": 1760628215.600294,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760625210000": {
+    "pattern_id": "BTCUSDT_1760625210000",
+    "times_matched": 0,
+    "times_traded": 9,
+    "wins": 5,
+    "losses": 4,
+    "total_pnl": 11.350417953252922,
+    "avg_profit": 4.396410073755819,
+    "avg_loss": -1.5470861481328626,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.7548561973608496,
+    "confidence_score": 0.5028749017249947,
+    "last_updated": 1760628215.6044526,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760597015000": {
+    "pattern_id": "BTCUSDT_1760597015000",
+    "times_matched": 0,
+    "times_traded": 17,
+    "wins": 10,
+    "losses": 7,
+    "total_pnl": 26.947471616898383,
+    "avg_profit": 4.360415378392603,
+    "avg_loss": -1.8664072363460402,
+    "win_rate": 0.5882352941176471,
+    "expectancy": 1.7964295958531618,
+    "confidence_score": 0.6000462389758867,
+    "last_updated": 1760628215.61353,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760600565000": {
+    "pattern_id": "BTCUSDT_1760600565000",
+    "times_matched": 0,
+    "times_traded": 20,
+    "wins": 10,
+    "losses": 10,
+    "total_pnl": 23.64132051962026,
+    "avg_profit": 4.467728617478819,
+    "avg_loss": -1.702509739845992,
+    "win_rate": 0.5,
+    "expectancy": 1.3826094388164136,
+    "confidence_score": 0.5776521887763282,
+    "last_updated": 1760628215.623915,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760599980000": {
+    "pattern_id": "BTCUSDT_1760599980000",
+    "times_matched": 0,
+    "times_traded": 16,
+    "wins": 9,
+    "losses": 7,
+    "total_pnl": 24.013342004318623,
+    "avg_profit": 4.436075604981679,
+    "avg_loss": -1.8017233203036311,
+    "win_rate": 0.5625,
+    "expectancy": 1.707038575169356,
+    "confidence_score": 0.5753907715033871,
+    "last_updated": 1760628215.6325645,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760597460000": {
+    "pattern_id": "BTCUSDT_1760597460000",
+    "times_matched": 0,
+    "times_traded": 19,
+    "wins": 11,
+    "losses": 8,
+    "total_pnl": 31.739462700707648,
+    "avg_profit": 4.497516320092789,
+    "avg_loss": -1.7771229340826022,
+    "win_rate": 0.5789473684210527,
+    "expectancy": 1.8555629499136765,
+    "confidence_score": 0.6165849432087998,
+    "last_updated": 1760628215.6437275,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760626065000": {
+    "pattern_id": "BTCUSDT_1760626065000",
+    "times_matched": 0,
+    "times_traded": 10,
+    "wins": 5,
+    "losses": 5,
+    "total_pnl": 11.3574226891621,
+    "avg_profit": 4.300424472382578,
+    "avg_loss": -1.8454897186688624,
+    "win_rate": 0.5,
+    "expectancy": 1.2274673768568578,
+    "confidence_score": 0.4745493475371371,
+    "last_updated": 1760628215.6492002,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760596210000": {
+    "pattern_id": "BTCUSDT_1760596210000",
+    "times_matched": 0,
+    "times_traded": 18,
+    "wins": 10,
+    "losses": 8,
+    "total_pnl": 18.292029313519727,
+    "avg_profit": 4.124013905962233,
+    "avg_loss": -1.89311490448423,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.4497344346526941,
+    "confidence_score": 0.5867724664708317,
+    "last_updated": 1760628215.6607962,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760626345000": {
+    "pattern_id": "BTCUSDT_1760626345000",
+    "times_matched": 0,
+    "times_traded": 9,
+    "wins": 5,
+    "losses": 4,
+    "total_pnl": 11.473533801196597,
+    "avg_profit": 4.338963732648204,
+    "avg_loss": -1.8509806636593584,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.5878773342892876,
+    "confidence_score": 0.4995353244635635,
+    "last_updated": 1760628215.6660688,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760596440000": {
+    "pattern_id": "BTCUSDT_1760596440000",
+    "times_matched": 0,
+    "times_traded": 15,
+    "wins": 9,
+    "losses": 6,
+    "total_pnl": 22.66047639997947,
+    "avg_profit": 4.438379308313708,
+    "avg_loss": -1.8639699967170498,
+    "win_rate": 0.6,
+    "expectancy": 1.917439586301405,
+    "confidence_score": 0.588348791726028,
+    "last_updated": 1760628215.6765435,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760593775000": {
+    "pattern_id": "BTCUSDT_1760593775000",
+    "times_matched": 0,
+    "times_traded": 17,
+    "wins": 9,
+    "losses": 8,
+    "total_pnl": 16.57649862833039,
+    "avg_profit": 3.8752920203759285,
+    "avg_loss": -1.9206976837317968,
+    "win_rate": 0.5294117647058824,
+    "expectancy": 1.1477674537369988,
+    "confidence_score": 0.5576612314276812,
+    "last_updated": 1760628215.6873255,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760596475000": {
+    "pattern_id": "BTCUSDT_1760596475000",
+    "times_matched": 0,
+    "times_traded": 20,
+    "wins": 11,
+    "losses": 9,
+    "total_pnl": 26.49667287994618,
+    "avg_profit": 4.339753726221246,
+    "avg_loss": -1.888309240314461,
+    "win_rate": 0.55,
+    "expectancy": 1.537125391280178,
+    "confidence_score": 0.6057425078256036,
+    "last_updated": 1760628215.7006946,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760601240000": {
+    "pattern_id": "BTCUSDT_1760601240000",
+    "times_matched": 0,
+    "times_traded": 9,
+    "wins": 5,
+    "losses": 4,
+    "total_pnl": 10.912583691895566,
+    "avg_profit": 4.35487389025174,
+    "avg_loss": -1.9713447054630682,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.5432211810451588,
+    "confidence_score": 0.49864220139868093,
+    "last_updated": 1760628215.7066636,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760594610000": {
+    "pattern_id": "BTCUSDT_1760594610000",
+    "times_matched": 0,
+    "times_traded": 12,
+    "wins": 7,
+    "losses": 5,
+    "total_pnl": 19.309414369696725,
+    "avg_profit": 4.398291462283399,
+    "avg_loss": -1.7779936102386547,
+    "win_rate": 0.5833333333333334,
+    "expectancy": 1.8248393487325432,
+    "confidence_score": 0.5481634536413176,
+    "last_updated": 1760628215.7152972,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760600765000": {
+    "pattern_id": "BTCUSDT_1760600765000",
+    "times_matched": 0,
+    "times_traded": 18,
+    "wins": 11,
+    "losses": 7,
+    "total_pnl": 26.692995531946465,
+    "avg_profit": 4.218141863299015,
+    "avg_loss": -1.6400989927852767,
+    "win_rate": 0.6111111111111112,
+    "expectancy": 1.9399370859329015,
+    "confidence_score": 0.6243542972742135,
+    "last_updated": 1760628215.7288353,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760593245000": {
+    "pattern_id": "BTCUSDT_1760593245000",
+    "times_matched": 0,
+    "times_traded": 14,
+    "wins": 7,
+    "losses": 7,
+    "total_pnl": 12.7985841944854,
+    "avg_profit": 4.275025497103442,
+    "avg_loss": -1.9013464569978233,
+    "win_rate": 0.5,
+    "expectancy": 1.1868395200528095,
+    "confidence_score": 0.5137367904010562,
+    "last_updated": 1760628215.7390296,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760600095000": {
+    "pattern_id": "BTCUSDT_1760600095000",
+    "times_matched": 0,
+    "times_traded": 8,
+    "wins": 4,
+    "losses": 4,
+    "total_pnl": 8.885626879131129,
+    "avg_profit": 4.332879153459315,
+    "avg_loss": -1.6576030383158273,
+    "win_rate": 0.5,
+    "expectancy": 1.3376380575717437,
+    "confidence_score": 0.4567527611514349,
+    "last_updated": 1760628215.7453072,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760596720000": {
+    "pattern_id": "BTCUSDT_1760596720000",
+    "times_matched": 0,
+    "times_traded": 10,
+    "wins": 6,
+    "losses": 4,
+    "total_pnl": 15.730038562315398,
+    "avg_profit": 4.41996255025226,
+    "avg_loss": -1.8763476238220427,
+    "win_rate": 0.6,
+    "expectancy": 1.9014384806225386,
+    "confidence_score": 0.5380287696124507,
+    "last_updated": 1760628215.752677,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760596405000": {
+    "pattern_id": "BTCUSDT_1760596405000",
+    "times_matched": 0,
+    "times_traded": 7,
+    "wins": 4,
+    "losses": 3,
+    "total_pnl": 7.8381334012359645,
+    "avg_profit": 3.6180891218267734,
+    "avg_loss": -1.7900345964562399,
+    "win_rate": 0.5714285714285714,
+    "expectancy": 1.300321813991196,
+    "confidence_score": 0.48172072199410965,
+    "last_updated": 1760628215.7580953,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760595710000": {
+    "pattern_id": "BTCUSDT_1760595710000",
+    "times_matched": 0,
+    "times_traded": 18,
+    "wins": 10,
+    "losses": 8,
+    "total_pnl": 22.643029061434998,
+    "avg_profit": 4.090033368750763,
+    "avg_loss": -1.8434894760135476,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.4529121044110695,
+    "confidence_score": 0.5868360198659992,
+    "last_updated": 1760628215.7726147,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760597335000": {
+    "pattern_id": "BTCUSDT_1760597335000",
+    "times_matched": 0,
+    "times_traded": 20,
+    "wins": 12,
+    "losses": 8,
+    "total_pnl": 25.516706819422375,
+    "avg_profit": 4.258377800802325,
+    "avg_loss": -1.9969215260442204,
+    "win_rate": 0.6,
+    "expectancy": 1.7562580700637067,
+    "confidence_score": 0.6351251614012742,
+    "last_updated": 1760628215.7896185,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760627250000": {
+    "pattern_id": "BTCUSDT_1760627250000",
+    "times_matched": 0,
+    "times_traded": 17,
+    "wins": 9,
+    "losses": 8,
+    "total_pnl": 17.840687312253465,
+    "avg_profit": 4.388999191324921,
+    "avg_loss": -1.8292962729204816,
+    "win_rate": 0.5294117647058824,
+    "expectancy": 1.4627425022682612,
+    "confidence_score": 0.5639607323983065,
+    "last_updated": 1760628215.803833,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760598470000": {
+    "pattern_id": "BTCUSDT_1760598470000",
+    "times_matched": 0,
+    "times_traded": 10,
+    "wins": 5,
+    "losses": 5,
+    "total_pnl": 7.506783058556978,
+    "avg_profit": 3.4787983767082484,
+    "avg_loss": -1.9765724494440118,
+    "win_rate": 0.5,
+    "expectancy": 0.7511129636321183,
+    "confidence_score": 0.46502225927264235,
+    "last_updated": 1760628215.8128192,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760598820000": {
+    "pattern_id": "BTCUSDT_1760598820000",
+    "times_matched": 0,
+    "times_traded": 5,
+    "wins": 3,
+    "losses": 2,
+    "total_pnl": 6.715291270205528,
+    "avg_profit": 3.8119266922597195,
+    "avg_loss": -1.8370295373555896,
+    "win_rate": 0.6,
+    "expectancy": 1.5523442004135957,
+    "confidence_score": 0.4810468840082719,
+    "last_updated": 1760628215.8171155,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760599425000": {
+    "pattern_id": "BTCUSDT_1760599425000",
+    "times_matched": 0,
+    "times_traded": 8,
+    "wins": 4,
+    "losses": 4,
+    "total_pnl": 9.162530703226562,
+    "avg_profit": 4.366503387101379,
+    "avg_loss": -1.7874479444857596,
+    "win_rate": 0.5,
+    "expectancy": 1.2895277213078098,
+    "confidence_score": 0.45579055442615624,
+    "last_updated": 1760628215.8243115,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760596850000": {
+    "pattern_id": "BTCUSDT_1760596850000",
+    "times_matched": 0,
+    "times_traded": 9,
+    "wins": 5,
+    "losses": 4,
+    "total_pnl": 10.19072526363945,
+    "avg_profit": 4.086092478699275,
+    "avg_loss": -1.9694000953239796,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.394762445800051,
+    "confidence_score": 0.4956730266937788,
+    "last_updated": 1760628215.8326294,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760595645000": {
+    "pattern_id": "BTCUSDT_1760595645000",
+    "times_matched": 0,
+    "times_traded": 10,
+    "wins": 5,
+    "losses": 5,
+    "total_pnl": 9.25222196389072,
+    "avg_profit": 4.343829806244288,
+    "avg_loss": -1.7657647628720903,
+    "win_rate": 0.5,
+    "expectancy": 1.2890325216860987,
+    "confidence_score": 0.475780650433722,
+    "last_updated": 1760628215.8422315,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760598710000": {
+    "pattern_id": "BTCUSDT_1760598710000",
+    "times_matched": 0,
+    "times_traded": 16,
+    "wins": 9,
+    "losses": 7,
+    "total_pnl": 21.065755916451426,
+    "avg_profit": 4.215851181997451,
+    "avg_loss": -1.723682076329223,
+    "win_rate": 0.5625,
+    "expectancy": 1.6173053814795308,
+    "confidence_score": 0.5735961076295907,
+    "last_updated": 1760628215.861262,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760594695000": {
+    "pattern_id": "BTCUSDT_1760594695000",
+    "times_matched": 0,
+    "times_traded": 15,
+    "wins": 8,
+    "losses": 7,
+    "total_pnl": 13.59962818527287,
+    "avg_profit": 3.683634679170187,
+    "avg_loss": -1.868082696139079,
+    "win_rate": 0.5333333333333333,
+    "expectancy": 1.092833237359196,
+    "confidence_score": 0.5385233314138506,
+    "last_updated": 1760628215.876928,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760599995000": {
+    "pattern_id": "BTCUSDT_1760599995000",
+    "times_matched": 0,
+    "times_traded": 11,
+    "wins": 6,
+    "losses": 5,
+    "total_pnl": 13.99159439863662,
+    "avg_profit": 4.096728780159923,
+    "avg_loss": -1.9855812943288689,
+    "win_rate": 0.5454545454545454,
+    "expectancy": 1.3320423826650174,
+    "confidence_score": 0.5093681203805731,
+    "last_updated": 1760628215.8879042,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760594050000": {
+    "pattern_id": "BTCUSDT_1760594050000",
+    "times_matched": 0,
+    "times_traded": 11,
+    "wins": 6,
+    "losses": 5,
+    "total_pnl": 12.938054212994903,
+    "avg_profit": 4.319109136110887,
+    "avg_loss": -1.9519029656606133,
+    "win_rate": 0.5454545454545454,
+    "expectancy": 1.4686490898511138,
+    "confidence_score": 0.512100254524295,
+    "last_updated": 1760628215.8997483,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760601305000": {
+    "pattern_id": "BTCUSDT_1760601305000",
+    "times_matched": 0,
+    "times_traded": 18,
+    "wins": 10,
+    "losses": 8,
+    "total_pnl": 21.14004218719059,
+    "avg_profit": 4.099312518265533,
+    "avg_loss": -1.952086555919736,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.4098018186276358,
+    "confidence_score": 0.5859738141503306,
+    "last_updated": 1760628215.9185069,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760594910000": {
+    "pattern_id": "BTCUSDT_1760594910000",
+    "times_matched": 0,
+    "times_traded": 14,
+    "wins": 7,
+    "losses": 7,
+    "total_pnl": 14.284601596217783,
+    "avg_profit": 3.6751632584856213,
+    "avg_loss": -1.7038494303106972,
+    "win_rate": 0.5,
+    "expectancy": 0.985656914087462,
+    "confidence_score": 0.5097131382817492,
+    "last_updated": 1760628215.9341278,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760593115000": {
+    "pattern_id": "BTCUSDT_1760593115000",
+    "times_matched": 0,
+    "times_traded": 12,
+    "wins": 7,
+    "losses": 5,
+    "total_pnl": 17.74745701345822,
+    "avg_profit": 4.494302786017233,
+    "avg_loss": -1.9583594175914096,
+    "win_rate": 0.5833333333333334,
+    "expectancy": 1.8056935345136318,
+    "confidence_score": 0.5477805373569393,
+    "last_updated": 1760628215.9469464,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760594815000": {
+    "pattern_id": "BTCUSDT_1760594815000",
+    "times_matched": 0,
+    "times_traded": 16,
+    "wins": 9,
+    "losses": 7,
+    "total_pnl": 21.322174529014067,
+    "avg_profit": 4.41128837360302,
+    "avg_loss": -1.7752955578685548,
+    "win_rate": 0.5625,
+    "expectancy": 1.7046579035842062,
+    "confidence_score": 0.5753431580716841,
+    "last_updated": 1760628215.9647646,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760596895000": {
+    "pattern_id": "BTCUSDT_1760596895000",
+    "times_matched": 0,
+    "times_traded": 5,
+    "wins": 3,
+    "losses": 2,
+    "total_pnl": 7.672372549206523,
+    "avg_profit": 4.274127575738385,
+    "avg_loss": -1.8391556998411025,
+    "win_rate": 0.6,
+    "expectancy": 1.8288142655065895,
+    "confidence_score": 0.48657628531013175,
+    "last_updated": 1760628215.9701304,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760593425000": {
+    "pattern_id": "BTCUSDT_1760593425000",
+    "times_matched": 0,
+    "times_traded": 19,
+    "wins": 10,
+    "losses": 9,
+    "total_pnl": 22.355313820917797,
+    "avg_profit": 4.460138155226108,
+    "avg_loss": -1.9913238709843712,
+    "win_rate": 0.5263157894736842,
+    "expectancy": 1.4041824586000913,
+    "confidence_score": 0.581241543908844,
+    "last_updated": 1760628215.9926171,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760626165000": {
+    "pattern_id": "BTCUSDT_1760626165000",
+    "times_matched": 0,
+    "times_traded": 20,
+    "wins": 11,
+    "losses": 9,
+    "total_pnl": 25.380099774964922,
+    "avg_profit": 4.3740391157584675,
+    "avg_loss": -1.942512052736111,
+    "win_rate": 0.55,
+    "expectancy": 1.5315910899359075,
+    "confidence_score": 0.6056318217987181,
+    "last_updated": 1760628216.018364,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760625580000": {
+    "pattern_id": "BTCUSDT_1760625580000",
+    "times_matched": 0,
+    "times_traded": 13,
+    "wins": 7,
+    "losses": 6,
+    "total_pnl": 14.136714709196546,
+    "avg_profit": 4.449652536911143,
+    "avg_loss": -1.9605991340243567,
+    "win_rate": 0.5384615384615384,
+    "expectancy": 1.4910748426332197,
+    "confidence_score": 0.5290522660834336,
+    "last_updated": 1760628216.034829,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760597365000": {
+    "pattern_id": "BTCUSDT_1760597365000",
+    "times_matched": 0,
+    "times_traded": 6,
+    "wins": 3,
+    "losses": 3,
+    "total_pnl": 5.1583846222501135,
+    "avg_profit": 4.358270862606165,
+    "avg_loss": -1.953851480690179,
+    "win_rate": 0.5,
+    "expectancy": 1.2022096909579931,
+    "confidence_score": 0.4340441938191599,
+    "last_updated": 1760628216.0421128,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760593020000": {
+    "pattern_id": "BTCUSDT_1760593020000",
+    "times_matched": 0,
+    "times_traded": 15,
+    "wins": 8,
+    "losses": 7,
+    "total_pnl": 16.503805996759375,
+    "avg_profit": 3.918976009330417,
+    "avg_loss": -1.9024136813386194,
+    "win_rate": 0.5333333333333333,
+    "expectancy": 1.2023274870182,
+    "confidence_score": 0.5407132164070306,
+    "last_updated": 1760628216.0628521,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760598135000": {
+    "pattern_id": "BTCUSDT_1760598135000",
+    "times_matched": 0,
+    "times_traded": 16,
+    "wins": 9,
+    "losses": 7,
+    "total_pnl": 18.352273552672905,
+    "avg_profit": 4.053750644703286,
+    "avg_loss": -1.900380334915428,
+    "win_rate": 0.5625,
+    "expectancy": 1.4488183411200988,
+    "confidence_score": 0.570226366822402,
+    "last_updated": 1760628216.0852706,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760590660000": {
+    "pattern_id": "BTCUSDT_1760590660000",
+    "times_matched": 0,
+    "times_traded": 10,
+    "wins": 5,
+    "losses": 5,
+    "total_pnl": 10.014365139199525,
+    "avg_profit": 4.48694925153731,
+    "avg_loss": -1.6764744526563262,
+    "win_rate": 0.5,
+    "expectancy": 1.4052373994404919,
+    "confidence_score": 0.47810474798880986,
+    "last_updated": 1760628216.0981328,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760593075000": {
+    "pattern_id": "BTCUSDT_1760593075000",
+    "times_matched": 0,
+    "times_traded": 11,
+    "wins": 6,
+    "losses": 5,
+    "total_pnl": 11.559408155850194,
+    "avg_profit": 4.06446210151058,
+    "avg_loss": -1.7452479264137648,
+    "win_rate": 0.5454545454545454,
+    "expectancy": 1.423684816090423,
+    "confidence_score": 0.5112009690490812,
+    "last_updated": 1760628216.112997,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760599725000": {
+    "pattern_id": "BTCUSDT_1760599725000",
+    "times_matched": 0,
+    "times_traded": 5,
+    "wins": 3,
+    "losses": 2,
+    "total_pnl": 5.541065277405616,
+    "avg_profit": 3.2929814849393617,
+    "avg_loss": -1.9892755169708196,
+    "win_rate": 0.6,
+    "expectancy": 1.180078684175289,
+    "confidence_score": 0.47360157368350575,
+    "last_updated": 1760628216.1197374,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760594560000": {
+    "pattern_id": "BTCUSDT_1760594560000",
+    "times_matched": 0,
+    "times_traded": 15,
+    "wins": 8,
+    "losses": 7,
+    "total_pnl": 14.773648405671983,
+    "avg_profit": 3.463063435365644,
+    "avg_loss": -1.7955435013470633,
+    "win_rate": 0.5333333333333333,
+    "expectancy": 1.009046864899714,
+    "confidence_score": 0.5368476039646609,
+    "last_updated": 1760628216.139749,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760599875000": {
+    "pattern_id": "BTCUSDT_1760599875000",
+    "times_matched": 0,
+    "times_traded": 7,
+    "wins": 4,
+    "losses": 3,
+    "total_pnl": 7.5508303042317415,
+    "avg_profit": 3.2263768078032697,
+    "avg_loss": -1.7952441764830356,
+    "win_rate": 0.5714285714285714,
+    "expectancy": 1.0742535288234245,
+    "confidence_score": 0.4771993562907542,
+    "last_updated": 1760628216.15021,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760590620000": {
+    "pattern_id": "BTCUSDT_1760590620000",
+    "times_matched": 0,
+    "times_traded": 20,
+    "wins": 12,
+    "losses": 8,
+    "total_pnl": 29.50645659817754,
+    "avg_profit": 4.465982220254784,
+    "avg_loss": -1.9762168480258435,
+    "win_rate": 0.6,
+    "expectancy": 1.8891025929425327,
+    "confidence_score": 0.6377820518588506,
+    "last_updated": 1760628216.1797254,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760627405000": {
+    "pattern_id": "BTCUSDT_1760627405000",
+    "times_matched": 0,
+    "times_traded": 16,
+    "wins": 8,
+    "losses": 8,
+    "total_pnl": 14.151193951568459,
+    "avg_profit": 4.381734316838578,
+    "avg_loss": -1.9756820337211725,
+    "win_rate": 0.5,
+    "expectancy": 1.203026141558703,
+    "confidence_score": 0.5340605228311741,
+    "last_updated": 1760628216.2020397,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760595425000": {
+    "pattern_id": "BTCUSDT_1760595425000",
+    "times_matched": 0,
+    "times_traded": 9,
+    "wins": 5,
+    "losses": 4,
+    "total_pnl": 11.588377977113412,
+    "avg_profit": 4.25888600916147,
+    "avg_loss": -1.946784369231382,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.5008102854313141,
+    "confidence_score": 0.497793983486404,
+    "last_updated": 1760628216.214898,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760601195000": {
+    "pattern_id": "BTCUSDT_1760601195000",
+    "times_matched": 0,
+    "times_traded": 16,
+    "wins": 9,
+    "losses": 7,
+    "total_pnl": 25.653516671755284,
+    "avg_profit": 4.486991835769053,
+    "avg_loss": -1.984399120087212,
+    "win_rate": 0.5625,
+    "expectancy": 1.655758292581937,
+    "confidence_score": 0.5743651658516388,
+    "last_updated": 1760628216.238441,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760597330000": {
+    "pattern_id": "BTCUSDT_1760597330000",
+    "times_matched": 0,
+    "times_traded": 12,
+    "wins": 7,
+    "losses": 5,
+    "total_pnl": 20.18549619733422,
+    "avg_profit": 4.381200931584883,
+    "avg_loss": -1.4327955608077383,
+    "win_rate": 0.5833333333333334,
+    "expectancy": 1.9587023930879575,
+    "confidence_score": 0.5508407145284259,
+    "last_updated": 1760628216.2568007,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760593225000": {
+    "pattern_id": "BTCUSDT_1760593225000",
+    "times_matched": 0,
+    "times_traded": 8,
+    "wins": 4,
+    "losses": 4,
+    "total_pnl": 6.978890932774734,
+    "avg_profit": 3.8258893261826223,
+    "avg_loss": -1.5601600204803505,
+    "win_rate": 0.5,
+    "expectancy": 1.132864652851136,
+    "confidence_score": 0.45265729305702274,
+    "last_updated": 1760628216.2687905,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760598490000": {
+    "pattern_id": "BTCUSDT_1760598490000",
+    "times_matched": 0,
+    "times_traded": 14,
+    "wins": 8,
+    "losses": 6,
+    "total_pnl": 17.217596660712175,
+    "avg_profit": 3.760899241919623,
+    "avg_loss": -1.9659975180012164,
+    "win_rate": 0.5714285714285714,
+    "expectancy": 1.306514916239263,
+    "confidence_score": 0.551844584039071,
+    "last_updated": 1760628216.289785,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760593995000": {
+    "pattern_id": "BTCUSDT_1760593995000",
+    "times_matched": 0,
+    "times_traded": 16,
+    "wins": 8,
+    "losses": 8,
+    "total_pnl": 15.12767678073862,
+    "avg_profit": 4.247465985165808,
+    "avg_loss": -1.983068634251813,
+    "win_rate": 0.5,
+    "expectancy": 1.1321986754569973,
+    "confidence_score": 0.53264397350914,
+    "last_updated": 1760628216.315392,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760593350000": {
+    "pattern_id": "BTCUSDT_1760593350000",
+    "times_matched": 0,
+    "times_traded": 9,
+    "wins": 5,
+    "losses": 4,
+    "total_pnl": 11.10989258088552,
+    "avg_profit": 4.428563514586213,
+    "avg_loss": -1.8137573271674472,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.6541986960290311,
+    "confidence_score": 0.5008617516983584,
+    "last_updated": 1760628216.328737,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760627730000": {
+    "pattern_id": "BTCUSDT_1760627730000",
+    "times_matched": 0,
+    "times_traded": 17,
+    "wins": 10,
+    "losses": 7,
+    "total_pnl": 23.207696542779725,
+    "avg_profit": 4.321608798438662,
+    "avg_loss": -1.6725582164296222,
+    "win_rate": 0.5882352941176471,
+    "expectancy": 1.8534223805517218,
+    "confidence_score": 0.601186094669858,
+    "last_updated": 1760628216.354369,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760626650000": {
+    "pattern_id": "BTCUSDT_1760626650000",
+    "times_matched": 0,
+    "times_traded": 8,
+    "wins": 4,
+    "losses": 4,
+    "total_pnl": 7.391219181374945,
+    "avg_profit": 3.6748858748258844,
+    "avg_loss": -1.7946331840984562,
+    "win_rate": 0.5,
+    "expectancy": 0.9401263453637141,
+    "confidence_score": 0.4488025269072743,
+    "last_updated": 1760628216.3666446,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760599310000": {
+    "pattern_id": "BTCUSDT_1760599310000",
+    "times_matched": 0,
+    "times_traded": 7,
+    "wins": 4,
+    "losses": 3,
+    "total_pnl": 11.326311050654896,
+    "avg_profit": 4.32072478425458,
+    "avg_loss": -1.571056051169006,
+    "win_rate": 0.5714285714285714,
+    "expectancy": 1.7956758547873286,
+    "confidence_score": 0.49162780281003227,
+    "last_updated": 1760628216.3777857,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760600130000": {
+    "pattern_id": "BTCUSDT_1760600130000",
+    "times_matched": 0,
+    "times_traded": 8,
+    "wins": 4,
+    "losses": 4,
+    "total_pnl": 7.30731850842377,
+    "avg_profit": 4.489964843146781,
+    "avg_loss": -1.8572700969683664,
+    "win_rate": 0.5,
+    "expectancy": 1.3163473730892075,
+    "confidence_score": 0.45632694746178415,
+    "last_updated": 1760628216.3899374,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760628055000": {
+    "pattern_id": "BTCUSDT_1760628055000",
+    "times_matched": 0,
+    "times_traded": 20,
+    "wins": 11,
+    "losses": 9,
+    "total_pnl": 24.554157245125506,
+    "avg_profit": 4.453274252953943,
+    "avg_loss": -1.9995974155860998,
+    "win_rate": 0.55,
+    "expectancy": 1.5494820021109237,
+    "confidence_score": 0.6059896400422184,
+    "last_updated": 1760628216.4233208,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760627785000": {
+    "pattern_id": "BTCUSDT_1760627785000",
+    "times_matched": 0,
+    "times_traded": 15,
+    "wins": 9,
+    "losses": 6,
+    "total_pnl": 18.047904417597902,
+    "avg_profit": 4.082378278198306,
+    "avg_loss": -1.7961523487955486,
+    "win_rate": 0.6,
+    "expectancy": 1.7309660274007639,
+    "confidence_score": 0.5846193205480152,
+    "last_updated": 1760628216.4480853,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760595345000": {
+    "pattern_id": "BTCUSDT_1760595345000",
+    "times_matched": 0,
+    "times_traded": 13,
+    "wins": 7,
+    "losses": 6,
+    "total_pnl": 13.299089084609001,
+    "avg_profit": 4.215143678166928,
+    "avg_loss": -1.9634084423434737,
+    "win_rate": 0.5384615384615384,
+    "expectancy": 1.363504237931358,
+    "confidence_score": 0.5265008539893964,
+    "last_updated": 1760628216.4698348,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760600325000": {
+    "pattern_id": "BTCUSDT_1760600325000",
+    "times_matched": 0,
+    "times_traded": 11,
+    "wins": 6,
+    "losses": 5,
+    "total_pnl": 15.12931360111787,
+    "avg_profit": 4.404464001985358,
+    "avg_loss": -1.7770195377049354,
+    "win_rate": 0.5454545454545454,
+    "expectancy": 1.594698756671588,
+    "confidence_score": 0.5146212478607044,
+    "last_updated": 1760628216.489096,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760600980000": {
+    "pattern_id": "BTCUSDT_1760600980000",
+    "times_matched": 0,
+    "times_traded": 17,
+    "wins": 9,
+    "losses": 8,
+    "total_pnl": 21.032603344036083,
+    "avg_profit": 4.472649963037532,
+    "avg_loss": -1.8960223032469259,
+    "win_rate": 0.5294117647058824,
+    "expectancy": 1.4756277200801402,
+    "confidence_score": 0.564218436754544,
+    "last_updated": 1760628216.5191722,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760599220000": {
+    "pattern_id": "BTCUSDT_1760599220000",
+    "times_matched": 0,
+    "times_traded": 7,
+    "wins": 4,
+    "losses": 3,
+    "total_pnl": 8.301676034076067,
+    "avg_profit": 3.5335595972248597,
+    "avg_loss": -1.8019400901556903,
+    "win_rate": 0.5714285714285714,
+    "expectancy": 1.2469168740617664,
+    "confidence_score": 0.48065262319552104,
+    "last_updated": 1760628216.531714,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760594970000": {
+    "pattern_id": "BTCUSDT_1760594970000",
+    "times_matched": 0,
+    "times_traded": 12,
+    "wins": 7,
+    "losses": 5,
+    "total_pnl": 20.740591749055596,
+    "avg_profit": 4.463954852043647,
+    "avg_loss": -1.6216483422502748,
+    "win_rate": 0.5833333333333334,
+    "expectancy": 1.92828685442118,
+    "confidence_score": 0.5502324037550903,
+    "last_updated": 1760628216.5521486,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760594770000": {
+    "pattern_id": "BTCUSDT_1760594770000",
+    "times_matched": 0,
+    "times_traded": 13,
+    "wins": 7,
+    "losses": 6,
+    "total_pnl": 14.62088722946579,
+    "avg_profit": 4.018858711530898,
+    "avg_loss": -1.958886829009829,
+    "win_rate": 0.5384615384615384,
+    "expectancy": 1.2598992312813317,
+    "confidence_score": 0.5244287538563959,
+    "last_updated": 1760628216.5761306,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760593165000": {
+    "pattern_id": "BTCUSDT_1760593165000",
+    "times_matched": 0,
+    "times_traded": 14,
+    "wins": 8,
+    "losses": 6,
+    "total_pnl": 18.33112005955248,
+    "avg_profit": 4.268032776967424,
+    "avg_loss": -1.9620084389661465,
+    "win_rate": 0.5714285714285714,
+    "expectancy": 1.5980151129958935,
+    "confidence_score": 0.5576745879742036,
+    "last_updated": 1760628216.6020823,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760598545000": {
+    "pattern_id": "BTCUSDT_1760598545000",
+    "times_matched": 0,
+    "times_traded": 15,
+    "wins": 9,
+    "losses": 6,
+    "total_pnl": 19.71704570635562,
+    "avg_profit": 3.7618684177657786,
+    "avg_loss": -1.6669649188642774,
+    "win_rate": 0.6,
+    "expectancy": 1.590335083113756,
+    "confidence_score": 0.5818067016622751,
+    "last_updated": 1760628216.631721,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760627935000": {
+    "pattern_id": "BTCUSDT_1760627935000",
+    "times_matched": 0,
+    "times_traded": 9,
+    "wins": 5,
+    "losses": 4,
+    "total_pnl": 11.929392039899708,
+    "avg_profit": 4.176591369743715,
+    "avg_loss": -1.8159032597726914,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.5132604232919786,
+    "confidence_score": 0.4980429862436173,
+    "last_updated": 1760628216.6475976,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760626405000": {
+    "pattern_id": "BTCUSDT_1760626405000",
+    "times_matched": 0,
+    "times_traded": 15,
+    "wins": 8,
+    "losses": 7,
+    "total_pnl": 18.0316205820493,
+    "avg_profit": 4.328380504161132,
+    "avg_loss": -1.7321511078686727,
+    "win_rate": 0.5333333333333333,
+    "expectancy": 1.500132418547223,
+    "confidence_score": 0.5466693150376111,
+    "last_updated": 1760628216.6745026,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760598300000": {
+    "pattern_id": "BTCUSDT_1760598300000",
+    "times_matched": 0,
+    "times_traded": 14,
+    "wins": 7,
+    "losses": 7,
+    "total_pnl": 16.02201999418288,
+    "avg_profit": 4.2395540631716795,
+    "avg_loss": -1.7517349134719575,
+    "win_rate": 0.5,
+    "expectancy": 1.243909574849861,
+    "confidence_score": 0.5148781914969972,
+    "last_updated": 1760628216.7017753,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760625355000": {
+    "pattern_id": "BTCUSDT_1760625355000",
+    "times_matched": 0,
+    "times_traded": 19,
+    "wins": 11,
+    "losses": 8,
+    "total_pnl": 28.26965606480398,
+    "avg_profit": 4.478802858574915,
+    "avg_loss": -1.9269001590165162,
+    "win_rate": 0.5789473684210527,
+    "expectancy": 1.781664745904839,
+    "confidence_score": 0.6151069791286231,
+    "last_updated": 1760628216.7375486,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760595810000": {
+    "pattern_id": "BTCUSDT_1760595810000",
+    "times_matched": 0,
+    "times_traded": 16,
+    "wins": 9,
+    "losses": 7,
+    "total_pnl": 21.613683532147622,
+    "avg_profit": 4.382155128575188,
+    "avg_loss": -1.9397523189509454,
+    "win_rate": 0.5625,
+    "expectancy": 1.6163206202825044,
+    "confidence_score": 0.5735764124056502,
+    "last_updated": 1760628216.768143,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760600835000": {
+    "pattern_id": "BTCUSDT_1760600835000",
+    "times_matched": 0,
+    "times_traded": 15,
+    "wins": 9,
+    "losses": 6,
+    "total_pnl": 21.1939028690787,
+    "avg_profit": 4.471268027650377,
+    "avg_loss": -1.918906443514767,
+    "win_rate": 0.6,
+    "expectancy": 1.9151982391843192,
+    "confidence_score": 0.5883039647836863,
+    "last_updated": 1760628216.7971017,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760595050000": {
+    "pattern_id": "BTCUSDT_1760595050000",
+    "times_matched": 0,
+    "times_traded": 10,
+    "wins": 6,
+    "losses": 4,
+    "total_pnl": 16.633949801606494,
+    "avg_profit": 4.334234319861704,
+    "avg_loss": -1.6755463449212598,
+    "win_rate": 0.6,
+    "expectancy": 1.9303220539485182,
+    "confidence_score": 0.5386064410789704,
+    "last_updated": 1760628216.8173072,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760597770000": {
+    "pattern_id": "BTCUSDT_1760597770000",
+    "times_matched": 0,
+    "times_traded": 13,
+    "wins": 7,
+    "losses": 6,
+    "total_pnl": 15.467082196654996,
+    "avg_profit": 4.39772768803316,
+    "avg_loss": -1.738840294739179,
+    "win_rate": 0.5384615384615384,
+    "expectancy": 1.565465542138234,
+    "confidence_score": 0.5305400800735339,
+    "last_updated": 1760628216.8433616,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760596280000": {
+    "pattern_id": "BTCUSDT_1760596280000",
+    "times_matched": 0,
+    "times_traded": 17,
+    "wins": 9,
+    "losses": 8,
+    "total_pnl": 19.85991205359906,
+    "avg_profit": 4.3021899433850095,
+    "avg_loss": -1.887517883396575,
+    "win_rate": 0.5294117647058824,
+    "expectancy": 1.389386260193676,
+    "confidence_score": 0.5624936075568148,
+    "last_updated": 1760628216.8789542,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760595685000": {
+    "pattern_id": "BTCUSDT_1760595685000",
+    "times_matched": 0,
+    "times_traded": 9,
+    "wins": 5,
+    "losses": 4,
+    "total_pnl": 11.39077727652081,
+    "avg_profit": 4.490825800010416,
+    "avg_loss": -1.536824351782386,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.8118701769913932,
+    "confidence_score": 0.5040151813176056,
+    "last_updated": 1760628216.896424,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760626930000": {
+    "pattern_id": "BTCUSDT_1760626930000",
+    "times_matched": 0,
+    "times_traded": 18,
+    "wins": 9,
+    "losses": 9,
+    "total_pnl": 16.773794042211133,
+    "avg_profit": 3.935892917740407,
+    "avg_loss": -1.9299784644411846,
+    "win_rate": 0.5,
+    "expectancy": 1.0029572266496114,
+    "confidence_score": 0.5500591445329922,
+    "last_updated": 1760628216.9316134,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760626680000": {
+    "pattern_id": "BTCUSDT_1760626680000",
+    "times_matched": 0,
+    "times_traded": 14,
+    "wins": 8,
+    "losses": 6,
+    "total_pnl": 18.30196912325549,
+    "avg_profit": 3.885133433626579,
+    "avg_loss": -1.771003957453209,
+    "win_rate": 0.5714285714285714,
+    "expectancy": 1.461074551735241,
+    "confidence_score": 0.5549357767489905,
+    "last_updated": 1760628216.9597144,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760627795000": {
+    "pattern_id": "BTCUSDT_1760627795000",
+    "times_matched": 0,
+    "times_traded": 6,
+    "wins": 3,
+    "losses": 3,
+    "total_pnl": 6.235716747063501,
+    "avg_profit": 4.476692491057972,
+    "avg_loss": -1.9367348578859556,
+    "win_rate": 0.5,
+    "expectancy": 1.2699788165860082,
+    "confidence_score": 0.43539957633172016,
+    "last_updated": 1760628216.9717577,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760597915000": {
+    "pattern_id": "BTCUSDT_1760597915000",
+    "times_matched": 0,
+    "times_traded": 8,
+    "wins": 5,
+    "losses": 3,
+    "total_pnl": 12.10581029633963,
+    "avg_profit": 4.2371902431417805,
+    "avg_loss": -1.804380476426875,
+    "win_rate": 0.625,
+    "expectancy": 1.971601223303535,
+    "confidence_score": 0.5319320244660707,
+    "last_updated": 1760628216.9884844,
+    "regime_performance": {},
+    "session_performance": {},
+    "volatility_performance": {}
+  },
+  "BTCUSDT_1760595480000": {
+    "pattern_id": "BTCUSDT_1760595480000",
+    "times_matched": 0,
+    "times_traded": 18,
+    "wins": 10,
+    "losses": 8,
+    "total_pnl": 23.053162419445954,
+    "avg_profit": 4.4757889352201525,
+    "avg_loss": -1.9808084557148513,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.6061900948045955,
+    "confidence_score": 0.5899015796738697,
+    "last_updated": 1760629369.0104022,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 2,
+        "losses": 3
+      },
+      "bull_market": {
+        "wins": 4,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 2
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 2
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 3,
+        "losses": 3
+      },
+      "us": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 4,
+        "losses": 3
+      },
+      "european": {
+        "wins": 1,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 2,
+        "losses": 6
+      },
+      "medium_vol": {
+        "wins": 5,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 3,
+        "losses": 0
+      }
+    }
+  },
+  "BTCUSDT_1760596900000": {
+    "pattern_id": "BTCUSDT_1760596900000",
+    "times_matched": 0,
+    "times_traded": 14,
+    "wins": 7,
+    "losses": 7,
+    "total_pnl": 12.828197118306203,
+    "avg_profit": 4.095289163987053,
+    "avg_loss": -1.98026200209382,
+    "win_rate": 0.5,
+    "expectancy": 1.0575135809466163,
+    "confidence_score": 0.5111502716189323,
+    "last_updated": 1760629369.046209,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 2,
+        "losses": 3
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 3
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 0
+      },
+      "bull_market": {
+        "wins": 2,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 1,
+        "losses": 3
+      },
+      "european": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 2,
+        "losses": 2
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 0
+      },
+      "us": {
+        "wins": 2,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 3,
+        "losses": 3
+      },
+      "high_vol": {
+        "wins": 2,
+        "losses": 4
+      },
+      "low_vol": {
+        "wins": 2,
+        "losses": 0
+      }
+    }
+  },
+  "BTCUSDT_1760626035000": {
+    "pattern_id": "BTCUSDT_1760626035000",
+    "times_matched": 0,
+    "times_traded": 15,
+    "wins": 8,
+    "losses": 7,
+    "total_pnl": 14.876710622398747,
+    "avg_profit": 4.3966348983246055,
+    "avg_loss": -1.7940954358832168,
+    "win_rate": 0.5333333333333333,
+    "expectancy": 1.5076274090276216,
+    "confidence_score": 0.5468192148472191,
+    "last_updated": 1760629369.0859425,
+    "regime_performance": {
+      "volatile": {
+        "wins": 4,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 3
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 2,
+        "losses": 2
+      }
+    },
+    "session_performance": {
+      "asian_late": {
+        "wins": 2,
+        "losses": 0
+      },
+      "overlap": {
+        "wins": 2,
+        "losses": 4
+      },
+      "us": {
+        "wins": 2,
+        "losses": 1
+      },
+      "european": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 4,
+        "losses": 1
+      },
+      "high_vol": {
+        "wins": 4,
+        "losses": 4
+      },
+      "medium_vol": {
+        "wins": 0,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760626170000": {
+    "pattern_id": "BTCUSDT_1760626170000",
+    "times_matched": 0,
+    "times_traded": 8,
+    "wins": 5,
+    "losses": 3,
+    "total_pnl": 12.024769516907252,
+    "avg_profit": 4.36718689691861,
+    "avg_loss": -1.8322151404585314,
+    "win_rate": 0.625,
+    "expectancy": 2.042411132902182,
+    "confidence_score": 0.5333482226580437,
+    "last_updated": 1760629369.111023,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "overlap": {
+        "wins": 1,
+        "losses": 1
+      },
+      "european": {
+        "wins": 2,
+        "losses": 0
+      },
+      "asian_early": {
+        "wins": 2,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 1,
+        "losses": 2
+      },
+      "low_vol": {
+        "wins": 2,
+        "losses": 0
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760590775000": {
+    "pattern_id": "BTCUSDT_1760590775000",
+    "times_matched": 0,
+    "times_traded": 19,
+    "wins": 10,
+    "losses": 9,
+    "total_pnl": 23.026275212840147,
+    "avg_profit": 4.4534733522421055,
+    "avg_loss": -1.96085522873853,
+    "win_rate": 0.5263157894736842,
+    "expectancy": 1.4151071823039096,
+    "confidence_score": 0.5814600383829203,
+    "last_updated": 1760629369.1652775,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 3,
+        "losses": 3
+      },
+      "volatile": {
+        "wins": 1,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 3,
+        "losses": 3
+      },
+      "sideways": {
+        "wins": 3,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 2,
+        "losses": 5
+      },
+      "us": {
+        "wins": 3,
+        "losses": 2
+      },
+      "european": {
+        "wins": 3,
+        "losses": 0
+      },
+      "asian_late": {
+        "wins": 0,
+        "losses": 2
+      },
+      "overlap": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 2,
+        "losses": 4
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 2
+      },
+      "low_vol": {
+        "wins": 6,
+        "losses": 3
+      }
+    }
+  },
+  "BTCUSDT_1760625710000": {
+    "pattern_id": "BTCUSDT_1760625710000",
+    "times_matched": 0,
+    "times_traded": 8,
+    "wins": 4,
+    "losses": 4,
+    "total_pnl": 8.354923627681208,
+    "avg_profit": 4.337301601543098,
+    "avg_loss": -1.9883694185786607,
+    "win_rate": 0.5,
+    "expectancy": 1.1744660914822187,
+    "confidence_score": 0.4534893218296444,
+    "last_updated": 1760629369.1887515,
+    "regime_performance": {
+      "sideways": {
+        "wins": 1,
+        "losses": 2
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 1,
+        "losses": 0
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "asian_late": {
+        "wins": 3,
+        "losses": 2
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 0
+      },
+      "us": {
+        "wins": 0,
+        "losses": 1
+      },
+      "european": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 1,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 2,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760595610000": {
+    "pattern_id": "BTCUSDT_1760595610000",
+    "times_matched": 0,
+    "times_traded": 12,
+    "wins": 7,
+    "losses": 5,
+    "total_pnl": 13.277274881839531,
+    "avg_profit": 3.105914628241856,
+    "avg_loss": -1.5648272077092755,
+    "win_rate": 0.5833333333333334,
+    "expectancy": 1.1597721965955516,
+    "confidence_score": 0.5348621105985777,
+    "last_updated": 1760629369.226125,
+    "regime_performance": {
+      "sideways": {
+        "wins": 2,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 3,
+        "losses": 2
+      },
+      "volatile": {
+        "wins": 1,
+        "losses": 2
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 0,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 2,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 2
+      },
+      "european": {
+        "wins": 3,
+        "losses": 1
+      },
+      "us": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 3,
+        "losses": 3
+      },
+      "high_vol": {
+        "wins": 2,
+        "losses": 1
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760594675000": {
+    "pattern_id": "BTCUSDT_1760594675000",
+    "times_matched": 0,
+    "times_traded": 20,
+    "wins": 12,
+    "losses": 8,
+    "total_pnl": 27.90001178780446,
+    "avg_profit": 4.437589359948171,
+    "avg_loss": -1.872920581927585,
+    "win_rate": 0.6,
+    "expectancy": 1.9133853831978684,
+    "confidence_score": 0.6382677076639574,
+    "last_updated": 1760629369.2952008,
+    "regime_performance": {
+      "bull_market": {
+        "wins": 3,
+        "losses": 2
+      },
+      "bear_market": {
+        "wins": 4,
+        "losses": 2
+      },
+      "sideways": {
+        "wins": 4,
+        "losses": 3
+      },
+      "volatile": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "us": {
+        "wins": 6,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 4,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 2
+      },
+      "european": {
+        "wins": 1,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 0,
+        "losses": 2
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 5,
+        "losses": 2
+      },
+      "low_vol": {
+        "wins": 4,
+        "losses": 4
+      },
+      "medium_vol": {
+        "wins": 3,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760590540000": {
+    "pattern_id": "BTCUSDT_1760590540000",
+    "times_matched": 0,
+    "times_traded": 10,
+    "wins": 6,
+    "losses": 4,
+    "total_pnl": 18.367576931634073,
+    "avg_profit": 4.482832182969316,
+    "avg_loss": -1.928157705185679,
+    "win_rate": 0.6,
+    "expectancy": 1.9184362277073181,
+    "confidence_score": 0.5383687245541463,
+    "last_updated": 1760629369.3274355,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 2,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 2,
+        "losses": 0
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 0
+      },
+      "sideways": {
+        "wins": 0,
+        "losses": 3
+      }
+    },
+    "session_performance": {
+      "us": {
+        "wins": 1,
+        "losses": 0
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 3,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 1
+      },
+      "european": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 4,
+        "losses": 3
+      },
+      "low_vol": {
+        "wins": 2,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760627965000": {
+    "pattern_id": "BTCUSDT_1760627965000",
+    "times_matched": 0,
+    "times_traded": 19,
+    "wins": 11,
+    "losses": 8,
+    "total_pnl": 27.894617935493493,
+    "avg_profit": 4.458837748877881,
+    "avg_loss": -1.966435258967607,
+    "win_rate": 0.5789473684210527,
+    "expectancy": 1.7534596403113603,
+    "confidence_score": 0.6145428770167535,
+    "last_updated": 1760629369.3894768,
+    "regime_performance": {
+      "volatile": {
+        "wins": 5,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 3,
+        "losses": 4
+      },
+      "bull_market": {
+        "wins": 2,
+        "losses": 2
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "overlap": {
+        "wins": 2,
+        "losses": 2
+      },
+      "european": {
+        "wins": 4,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 5,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 0,
+        "losses": 1
+      },
+      "us": {
+        "wins": 0,
+        "losses": 2
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 5,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 3,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 3,
+        "losses": 4
+      }
+    }
+  },
+  "BTCUSDT_1760628515000": {
+    "pattern_id": "BTCUSDT_1760628515000",
+    "times_matched": 0,
+    "times_traded": 19,
+    "wins": 11,
+    "losses": 8,
+    "total_pnl": 27.024368259993835,
+    "avg_profit": 4.475778874562422,
+    "avg_loss": -1.9887365380968682,
+    "win_rate": 0.5789473684210527,
+    "expectancy": 1.753877648179563,
+    "confidence_score": 0.6145512371741175,
+    "last_updated": 1760629369.4554846,
+    "regime_performance": {
+      "volatile": {
+        "wins": 2,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 4,
+        "losses": 3
+      },
+      "sideways": {
+        "wins": 4,
+        "losses": 2
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 4,
+        "losses": 1
+      },
+      "us": {
+        "wins": 1,
+        "losses": 2
+      },
+      "overlap": {
+        "wins": 4,
+        "losses": 0
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 3
+      },
+      "european": {
+        "wins": 1,
+        "losses": 2
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 6,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 3,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 2,
+        "losses": 5
+      }
+    }
+  },
+  "BTCUSDT_1760597005000": {
+    "pattern_id": "BTCUSDT_1760597005000",
+    "times_matched": 0,
+    "times_traded": 16,
+    "wins": 10,
+    "losses": 6,
+    "total_pnl": 22.620726556529863,
+    "avg_profit": 4.365761293483185,
+    "avg_loss": -1.9326524069600342,
+    "win_rate": 0.625,
+    "expectancy": 2.003856155816978,
+    "confidence_score": 0.6125771231163396,
+    "last_updated": 1760629369.511949,
+    "regime_performance": {
+      "sideways": {
+        "wins": 3,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 2,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 4,
+        "losses": 3
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "overlap": {
+        "wins": 3,
+        "losses": 0
+      },
+      "asian_late": {
+        "wins": 4,
+        "losses": 3
+      },
+      "us": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 2,
+        "losses": 0
+      },
+      "european": {
+        "wins": 0,
+        "losses": 2
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 4,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 4,
+        "losses": 2
+      },
+      "low_vol": {
+        "wins": 2,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760626600000": {
+    "pattern_id": "BTCUSDT_1760626600000",
+    "times_matched": 0,
+    "times_traded": 7,
+    "wins": 4,
+    "losses": 3,
+    "total_pnl": 9.439922810657762,
+    "avg_profit": 4.431655596782675,
+    "avg_loss": -1.9456993325846474,
+    "win_rate": 0.5714285714285714,
+    "expectancy": 1.6985034841966793,
+    "confidence_score": 0.4896843553982193,
+    "last_updated": 1760629369.537242,
+    "regime_performance": {
+      "volatile": {
+        "wins": 1,
+        "losses": 2
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 0
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "european": {
+        "wins": 1,
+        "losses": 3
+      },
+      "asian_late": {
+        "wins": 2,
+        "losses": 0
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 0,
+        "losses": 2
+      },
+      "low_vol": {
+        "wins": 4,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760600340000": {
+    "pattern_id": "BTCUSDT_1760600340000",
+    "times_matched": 0,
+    "times_traded": 7,
+    "wins": 4,
+    "losses": 3,
+    "total_pnl": 11.248377287070515,
+    "avg_profit": 4.429939622713196,
+    "avg_loss": -1.9633263570183397,
+    "win_rate": 0.5714285714285714,
+    "expectancy": 1.6899684885425375,
+    "confidence_score": 0.4895136554851365,
+    "last_updated": 1760629369.563699,
+    "regime_performance": {
+      "sideways": {
+        "wins": 2,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 2,
+        "losses": 0
+      },
+      "volatile": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 1,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 1
+      },
+      "european": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 1,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 1,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 0
+      }
+    }
+  },
+  "BTCUSDT_1760599870000": {
+    "pattern_id": "BTCUSDT_1760599870000",
+    "times_matched": 0,
+    "times_traded": 19,
+    "wins": 10,
+    "losses": 9,
+    "total_pnl": 20.730259660923394,
+    "avg_profit": 4.342602225173062,
+    "avg_loss": -1.9405205489126174,
+    "win_rate": 0.5263157894736842,
+    "expectancy": 1.3663861742903718,
+    "confidence_score": 0.5804856182226495,
+    "last_updated": 1760629369.6379504,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 3,
+        "losses": 4
+      },
+      "sideways": {
+        "wins": 3,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 2,
+        "losses": 2
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "overlap": {
+        "wins": 1,
+        "losses": 4
+      },
+      "asian_late": {
+        "wins": 4,
+        "losses": 3
+      },
+      "european": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 3,
+        "losses": 0
+      },
+      "us": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 4,
+        "losses": 3
+      },
+      "high_vol": {
+        "wins": 3,
+        "losses": 0
+      },
+      "low_vol": {
+        "wins": 3,
+        "losses": 6
+      }
+    }
+  },
+  "BTCUSDT_1760600760000": {
+    "pattern_id": "BTCUSDT_1760600760000",
+    "times_matched": 0,
+    "times_traded": 12,
+    "wins": 6,
+    "losses": 6,
+    "total_pnl": 12.093142413116988,
+    "avg_profit": 4.105448227841675,
+    "avg_loss": -1.8277757477991647,
+    "win_rate": 0.5,
+    "expectancy": 1.1388362400212553,
+    "confidence_score": 0.4927767248004251,
+    "last_updated": 1760629369.6859858,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 0,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 2,
+        "losses": 4
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 0
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "overlap": {
+        "wins": 1,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 3,
+        "losses": 2
+      },
+      "us": {
+        "wins": 1,
+        "losses": 0
+      },
+      "european": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 2,
+        "losses": 3
+      },
+      "high_vol": {
+        "wins": 3,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760629150000": {
+    "pattern_id": "BTCUSDT_1760629150000",
+    "times_matched": 0,
+    "times_traded": 5,
+    "wins": 3,
+    "losses": 2,
+    "total_pnl": 6.435104072772562,
+    "avg_profit": 3.6148327783435215,
+    "avg_loss": -1.920034720364967,
+    "win_rate": 0.6,
+    "expectancy": 1.4008857788601259,
+    "confidence_score": 0.4780177155772025,
+    "last_updated": 1760629369.7058566,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 1,
+        "losses": 0
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "european": {
+        "wins": 1,
+        "losses": 2
+      },
+      "us": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 1,
+        "losses": 1
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 0
+      },
+      "high_vol": {
+        "wins": 1,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760601340000": {
+    "pattern_id": "BTCUSDT_1760601340000",
+    "times_matched": 0,
+    "times_traded": 6,
+    "wins": 3,
+    "losses": 3,
+    "total_pnl": 5.4681345555864915,
+    "avg_profit": 3.288151798565309,
+    "avg_loss": -1.5006429161286512,
+    "win_rate": 0.5,
+    "expectancy": 0.8937544412183289,
+    "confidence_score": 0.4278750888243666,
+    "last_updated": 1760629369.7315373,
+    "regime_performance": {
+      "volatile": {
+        "wins": 1,
+        "losses": 0
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 2
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 2,
+        "losses": 0
+      },
+      "european": {
+        "wins": 1,
+        "losses": 3
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 2,
+        "losses": 1
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 0,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760599320000": {
+    "pattern_id": "BTCUSDT_1760599320000",
+    "times_matched": 0,
+    "times_traded": 5,
+    "wins": 3,
+    "losses": 2,
+    "total_pnl": 7.296206426741188,
+    "avg_profit": 3.7222984010751,
+    "avg_loss": -1.8768260841994888,
+    "win_rate": 0.6,
+    "expectancy": 1.4826486069652645,
+    "confidence_score": 0.47965297213930524,
+    "last_updated": 1760629369.7516055,
+    "regime_performance": {
+      "sideways": {
+        "wins": 1,
+        "losses": 2
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 2,
+        "losses": 2
+      },
+      "us": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 1,
+        "losses": 1
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760595060000": {
+    "pattern_id": "BTCUSDT_1760595060000",
+    "times_matched": 0,
+    "times_traded": 19,
+    "wins": 11,
+    "losses": 8,
+    "total_pnl": 25.029017185275997,
+    "avg_profit": 4.261874139812927,
+    "avg_loss": -1.948391550464207,
+    "win_rate": 0.5789473684210527,
+    "expectancy": 1.6470254281172916,
+    "confidence_score": 0.6124141927728721,
+    "last_updated": 1760629369.8287432,
+    "regime_performance": {
+      "volatile": {
+        "wins": 4,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 0,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 5,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 5
+      }
+    },
+    "session_performance": {
+      "asian_late": {
+        "wins": 3,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 0,
+        "losses": 3
+      },
+      "european": {
+        "wins": 4,
+        "losses": 0
+      },
+      "us": {
+        "wins": 3,
+        "losses": 2
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 2
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 5,
+        "losses": 3
+      },
+      "medium_vol": {
+        "wins": 3,
+        "losses": 2
+      },
+      "low_vol": {
+        "wins": 3,
+        "losses": 3
+      }
+    }
+  },
+  "BTCUSDT_1760626615000": {
+    "pattern_id": "BTCUSDT_1760626615000",
+    "times_matched": 0,
+    "times_traded": 8,
+    "wins": 5,
+    "losses": 3,
+    "total_pnl": 14.635356179791865,
+    "avg_profit": 4.332712095574623,
+    "avg_loss": -1.6652026996799116,
+    "win_rate": 0.625,
+    "expectancy": 2.083494047354172,
+    "confidence_score": 0.5341698809470834,
+    "last_updated": 1760629369.8619907,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 1,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 1,
+        "losses": 0
+      },
+      "overlap": {
+        "wins": 2,
+        "losses": 1
+      },
+      "us": {
+        "wins": 1,
+        "losses": 1
+      },
+      "european": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 1,
+        "losses": 1
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 3,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760598395000": {
+    "pattern_id": "BTCUSDT_1760598395000",
+    "times_matched": 0,
+    "times_traded": 5,
+    "wins": 3,
+    "losses": 2,
+    "total_pnl": 5.369148264335051,
+    "avg_profit": 2.6438883782551788,
+    "avg_loss": -1.3844289823897014,
+    "win_rate": 0.6,
+    "expectancy": 1.0325614339972269,
+    "confidence_score": 0.4706512286799445,
+    "last_updated": 1760629369.882727,
+    "regime_performance": {
+      "sideways": {
+        "wins": 0,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 2,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "us": {
+        "wins": 1,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 0
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 0
+      },
+      "european": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 0,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 2,
+        "losses": 0
+      },
+      "high_vol": {
+        "wins": 1,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760598560000": {
+    "pattern_id": "BTCUSDT_1760598560000",
+    "times_matched": 0,
+    "times_traded": 14,
+    "wins": 7,
+    "losses": 7,
+    "total_pnl": 16.296125429282895,
+    "avg_profit": 4.305663825664778,
+    "avg_loss": -1.670416826973654,
+    "win_rate": 0.5,
+    "expectancy": 1.3176234993455622,
+    "confidence_score": 0.5163524699869113,
+    "last_updated": 1760629369.9422905,
+    "regime_performance": {
+      "volatile": {
+        "wins": 0,
+        "losses": 2
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 3
+      },
+      "bull_market": {
+        "wins": 3,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 2,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 2,
+        "losses": 2
+      },
+      "european": {
+        "wins": 2,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 0,
+        "losses": 2
+      },
+      "us": {
+        "wins": 2,
+        "losses": 2
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 3,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 3,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 1,
+        "losses": 3
+      }
+    }
+  },
+  "BTCUSDT_1760589870000": {
+    "pattern_id": "BTCUSDT_1760589870000",
+    "times_matched": 0,
+    "times_traded": 6,
+    "wins": 3,
+    "losses": 3,
+    "total_pnl": 6.990739625414037,
+    "avg_profit": 3.942370005169998,
+    "avg_loss": -1.6969743042360972,
+    "win_rate": 0.5,
+    "expectancy": 1.1226978504669505,
+    "confidence_score": 0.43245395700933903,
+    "last_updated": 1760629369.9676917,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 1,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 0
+      },
+      "sideways": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "asian_late": {
+        "wins": 0,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 0,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 2,
+        "losses": 1
+      },
+      "us": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 1,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760590515000": {
+    "pattern_id": "BTCUSDT_1760590515000",
+    "times_matched": 0,
+    "times_traded": 8,
+    "wins": 4,
+    "losses": 4,
+    "total_pnl": 8.543202724934407,
+    "avg_profit": 4.158976436592509,
+    "avg_loss": -1.579582322626015,
+    "win_rate": 0.5,
+    "expectancy": 1.2896970569832469,
+    "confidence_score": 0.455793941139665,
+    "last_updated": 1760629370.0037808,
+    "regime_performance": {
+      "volatile": {
+        "wins": 2,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 0
+      },
+      "sideways": {
+        "wins": 0,
+        "losses": 2
+      }
+    },
+    "session_performance": {
+      "asian_late": {
+        "wins": 2,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 0
+      },
+      "european": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 0,
+        "losses": 2
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 1,
+        "losses": 3
+      },
+      "low_vol": {
+        "wins": 2,
+        "losses": 0
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760626575000": {
+    "pattern_id": "BTCUSDT_1760626575000",
+    "times_matched": 0,
+    "times_traded": 18,
+    "wins": 9,
+    "losses": 9,
+    "total_pnl": 21.1640307460219,
+    "avg_profit": 4.470434555775669,
+    "avg_loss": -1.9675297228297128,
+    "win_rate": 0.5,
+    "expectancy": 1.2514524164729781,
+    "confidence_score": 0.5550290483294595,
+    "last_updated": 1760629370.090813,
+    "regime_performance": {
+      "bull_market": {
+        "wins": 4,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 5
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 2
+      }
+    },
+    "session_performance": {
+      "us": {
+        "wins": 2,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 2,
+        "losses": 2
+      },
+      "asian_early": {
+        "wins": 2,
+        "losses": 2
+      },
+      "overlap": {
+        "wins": 2,
+        "losses": 0
+      },
+      "european": {
+        "wins": 1,
+        "losses": 3
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 5,
+        "losses": 6
+      },
+      "low_vol": {
+        "wins": 3,
+        "losses": 3
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 0
+      }
+    }
+  },
+  "BTCUSDT_1760599620000": {
+    "pattern_id": "BTCUSDT_1760599620000",
+    "times_matched": 0,
+    "times_traded": 9,
+    "wins": 5,
+    "losses": 4,
+    "total_pnl": 10.52300849875964,
+    "avg_profit": 4.404751230418615,
+    "avg_loss": -1.9946694637411133,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.5605642552365138,
+    "confidence_score": 0.49898906288250805,
+    "last_updated": 1760629370.1361125,
+    "regime_performance": {
+      "sideways": {
+        "wins": 2,
+        "losses": 3
+      },
+      "bull_market": {
+        "wins": 2,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "european": {
+        "wins": 1,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 2,
+        "losses": 1
+      },
+      "us": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 3,
+        "losses": 1
+      },
+      "high_vol": {
+        "wins": 2,
+        "losses": 2
+      },
+      "low_vol": {
+        "wins": 0,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760596920000": {
+    "pattern_id": "BTCUSDT_1760596920000",
+    "times_matched": 0,
+    "times_traded": 10,
+    "wins": 6,
+    "losses": 4,
+    "total_pnl": 16.84471787313459,
+    "avg_profit": 4.464057106120223,
+    "avg_loss": -1.8453302321545757,
+    "win_rate": 0.6,
+    "expectancy": 1.9403021708103032,
+    "confidence_score": 0.5388060434162061,
+    "last_updated": 1760629370.1893187,
+    "regime_performance": {
+      "volatile": {
+        "wins": 3,
+        "losses": 2
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "overlap": {
+        "wins": 2,
+        "losses": 0
+      },
+      "asian_early": {
+        "wins": 2,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 2,
+        "losses": 1
+      },
+      "european": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 2,
+        "losses": 1
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 1
+      },
+      "high_vol": {
+        "wins": 3,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760627910000": {
+    "pattern_id": "BTCUSDT_1760627910000",
+    "times_matched": 0,
+    "times_traded": 9,
+    "wins": 5,
+    "losses": 4,
+    "total_pnl": 12.893512856391428,
+    "avg_profit": 3.9074610686941265,
+    "avg_loss": -1.4275105812212745,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.536362557620615,
+    "confidence_score": 0.4985050289301901,
+    "last_updated": 1760629370.2354696,
+    "regime_performance": {
+      "sideways": {
+        "wins": 2,
+        "losses": 3
+      },
+      "volatile": {
+        "wins": 3,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "overlap": {
+        "wins": 1,
+        "losses": 2
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 0
+      },
+      "us": {
+        "wins": 2,
+        "losses": 1
+      },
+      "european": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 3,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 2,
+        "losses": 1
+      },
+      "medium_vol": {
+        "wins": 0,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760625730000": {
+    "pattern_id": "BTCUSDT_1760625730000",
+    "times_matched": 0,
+    "times_traded": 10,
+    "wins": 5,
+    "losses": 5,
+    "total_pnl": 9.15880102182349,
+    "avg_profit": 4.42052974277106,
+    "avg_loss": -1.6906690080696212,
+    "win_rate": 0.5,
+    "expectancy": 1.3649303673507194,
+    "confidence_score": 0.47729860734701435,
+    "last_updated": 1760629370.2897153,
+    "regime_performance": {
+      "volatile": {
+        "wins": 0,
+        "losses": 4
+      },
+      "sideways": {
+        "wins": 3,
+        "losses": 0
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "overlap": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 2,
+        "losses": 2
+      },
+      "us": {
+        "wins": 1,
+        "losses": 1
+      },
+      "european": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 0,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 3,
+        "losses": 1
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760598325000": {
+    "pattern_id": "BTCUSDT_1760598325000",
+    "times_matched": 0,
+    "times_traded": 7,
+    "wins": 4,
+    "losses": 3,
+    "total_pnl": 9.90149461015383,
+    "avg_profit": 3.93171862461936,
+    "avg_loss": -1.6142627883164624,
+    "win_rate": 0.5714285714285714,
+    "expectancy": 1.5548694476468645,
+    "confidence_score": 0.48681167466722297,
+    "last_updated": 1760629370.3389473,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 2,
+        "losses": 2
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 1,
+        "losses": 0
+      },
+      "asian_late": {
+        "wins": 0,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 3,
+        "losses": 1
+      },
+      "us": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 3,
+        "losses": 0
+      },
+      "low_vol": {
+        "wins": 1,
+        "losses": 1
+      },
+      "high_vol": {
+        "wins": 0,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760600020000": {
+    "pattern_id": "BTCUSDT_1760600020000",
+    "times_matched": 0,
+    "times_traded": 5,
+    "wins": 3,
+    "losses": 2,
+    "total_pnl": 7.157107984695144,
+    "avg_profit": 4.1983707648293525,
+    "avg_loss": -1.7508165836059597,
+    "win_rate": 0.6,
+    "expectancy": 1.8186958254552277,
+    "confidence_score": 0.48637391650910455,
+    "last_updated": 1760629370.3797202,
+    "regime_performance": {
+      "bull_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 1,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "overlap": {
+        "wins": 1,
+        "losses": 0
+      },
+      "european": {
+        "wins": 1,
+        "losses": 2
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 3,
+        "losses": 0
+      },
+      "low_vol": {
+        "wins": 0,
+        "losses": 1
+      },
+      "high_vol": {
+        "wins": 0,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760597270000": {
+    "pattern_id": "BTCUSDT_1760597270000",
+    "times_matched": 0,
+    "times_traded": 6,
+    "wins": 3,
+    "losses": 3,
+    "total_pnl": 4.788463586252048,
+    "avg_profit": 3.9239557830165053,
+    "avg_loss": -1.8527128264987174,
+    "win_rate": 0.5,
+    "expectancy": 1.035621478258894,
+    "confidence_score": 0.43071242956517786,
+    "last_updated": 1760629370.4161346,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 0,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 0
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 0
+      },
+      "volatile": {
+        "wins": 0,
+        "losses": 2
+      }
+    },
+    "session_performance": {
+      "us": {
+        "wins": 1,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 0
+      },
+      "european": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 2,
+        "losses": 1
+      },
+      "high_vol": {
+        "wins": 1,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760628665000": {
+    "pattern_id": "BTCUSDT_1760628665000",
+    "times_matched": 0,
+    "times_traded": 10,
+    "wins": 6,
+    "losses": 4,
+    "total_pnl": 17.02558418152872,
+    "avg_profit": 4.455718814166982,
+    "avg_loss": -1.9526113824101081,
+    "win_rate": 0.6,
+    "expectancy": 1.8923867355361457,
+    "confidence_score": 0.5378477347107229,
+    "last_updated": 1760629370.4768176,
+    "regime_performance": {
+      "volatile": {
+        "wins": 1,
+        "losses": 3
+      },
+      "sideways": {
+        "wins": 0,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 3,
+        "losses": 0
+      },
+      "bull_market": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "us": {
+        "wins": 1,
+        "losses": 1
+      },
+      "european": {
+        "wins": 1,
+        "losses": 2
+      },
+      "asian_early": {
+        "wins": 2,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 2,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 1,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 3,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760600820000": {
+    "pattern_id": "BTCUSDT_1760600820000",
+    "times_matched": 0,
+    "times_traded": 8,
+    "wins": 4,
+    "losses": 4,
+    "total_pnl": 8.376456587356053,
+    "avg_profit": 3.78000156225553,
+    "avg_loss": -1.9004942605264494,
+    "win_rate": 0.5,
+    "expectancy": 0.9397536508645403,
+    "confidence_score": 0.4487950730172908,
+    "last_updated": 1760629370.523293,
+    "regime_performance": {
+      "volatile": {
+        "wins": 2,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 3
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "asian_late": {
+        "wins": 1,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 2,
+        "losses": 2
+      },
+      "european": {
+        "wins": 0,
+        "losses": 1
+      },
+      "us": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 1,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 1,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760600680000": {
+    "pattern_id": "BTCUSDT_1760600680000",
+    "times_matched": 0,
+    "times_traded": 9,
+    "wins": 5,
+    "losses": 4,
+    "total_pnl": 13.18502092526635,
+    "avg_profit": 4.289340238614283,
+    "avg_loss": -1.3094199717532566,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.8010023673398212,
+    "confidence_score": 0.5037978251245742,
+    "last_updated": 1760629370.5785491,
+    "regime_performance": {
+      "volatile": {
+        "wins": 2,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 0,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "asian_late": {
+        "wins": 2,
+        "losses": 1
+      },
+      "us": {
+        "wins": 0,
+        "losses": 2
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 0
+      },
+      "european": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 1,
+        "losses": 0
+      },
+      "high_vol": {
+        "wins": 3,
+        "losses": 1
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 3
+      }
+    }
+  },
+  "BTCUSDT_1760625240000": {
+    "pattern_id": "BTCUSDT_1760625240000",
+    "times_matched": 0,
+    "times_traded": 17,
+    "wins": 10,
+    "losses": 7,
+    "total_pnl": 22.51933686019339,
+    "avg_profit": 4.4460547851635575,
+    "avg_loss": -1.8491962216610387,
+    "win_rate": 0.5882352941176471,
+    "expectancy": 1.8538926058828415,
+    "confidence_score": 0.6011954991764804,
+    "last_updated": 1760629370.6760426,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 4,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 2,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 3,
+        "losses": 3
+      }
+    },
+    "session_performance": {
+      "overlap": {
+        "wins": 4,
+        "losses": 1
+      },
+      "european": {
+        "wins": 2,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 0
+      },
+      "us": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 2,
+        "losses": 3
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 6,
+        "losses": 0
+      },
+      "low_vol": {
+        "wins": 3,
+        "losses": 3
+      },
+      "high_vol": {
+        "wins": 1,
+        "losses": 4
+      }
+    }
+  },
+  "BTCUSDT_1760627005000": {
+    "pattern_id": "BTCUSDT_1760627005000",
+    "times_matched": 0,
+    "times_traded": 15,
+    "wins": 8,
+    "losses": 7,
+    "total_pnl": 16.886388484442847,
+    "avg_profit": 4.09739833455415,
+    "avg_loss": -1.8708719494156665,
+    "win_rate": 0.5333333333333333,
+    "expectancy": 1.3122055353682356,
+    "confidence_score": 0.5429107773740314,
+    "last_updated": 1760629370.7733402,
+    "regime_performance": {
+      "bull_market": {
+        "wins": 6,
+        "losses": 3
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 3
+      },
+      "bear_market": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "us": {
+        "wins": 4,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 0,
+        "losses": 2
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 2
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 2
+      },
+      "european": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 3,
+        "losses": 3
+      },
+      "high_vol": {
+        "wins": 3,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760598080000": {
+    "pattern_id": "BTCUSDT_1760598080000",
+    "times_matched": 0,
+    "times_traded": 10,
+    "wins": 5,
+    "losses": 5,
+    "total_pnl": 10.088691414371196,
+    "avg_profit": 4.235354978974607,
+    "avg_loss": -1.989168997055331,
+    "win_rate": 0.5,
+    "expectancy": 1.123092990959638,
+    "confidence_score": 0.47246185981919275,
+    "last_updated": 1760629370.8311238,
+    "regime_performance": {
+      "bull_market": {
+        "wins": 2,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 0,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 2
+      },
+      "bear_market": {
+        "wins": 2,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "asian_late": {
+        "wins": 2,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 1
+      },
+      "us": {
+        "wins": 2,
+        "losses": 3
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 4,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 1,
+        "losses": 1
+      },
+      "medium_vol": {
+        "wins": 0,
+        "losses": 3
+      }
+    }
+  },
+  "BTCUSDT_1760596270000": {
+    "pattern_id": "BTCUSDT_1760596270000",
+    "times_matched": 0,
+    "times_traded": 17,
+    "wins": 10,
+    "losses": 7,
+    "total_pnl": 24.81317117229197,
+    "avg_profit": 4.33280145999535,
+    "avg_loss": -1.9681789395765326,
+    "win_rate": 0.5882352941176471,
+    "expectancy": 1.738280118995163,
+    "confidence_score": 0.5988832494387268,
+    "last_updated": 1760629370.927454,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 2,
+        "losses": 2
+      },
+      "volatile": {
+        "wins": 3,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 3,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 2
+      }
+    },
+    "session_performance": {
+      "overlap": {
+        "wins": 4,
+        "losses": 2
+      },
+      "us": {
+        "wins": 3,
+        "losses": 0
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 0,
+        "losses": 2
+      },
+      "european": {
+        "wins": 2,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 3,
+        "losses": 3
+      },
+      "high_vol": {
+        "wins": 1,
+        "losses": 1
+      },
+      "medium_vol": {
+        "wins": 6,
+        "losses": 3
+      }
+    }
+  },
+  "BTCUSDT_1760593515000": {
+    "pattern_id": "BTCUSDT_1760593515000",
+    "times_matched": 0,
+    "times_traded": 10,
+    "wins": 6,
+    "losses": 4,
+    "total_pnl": 14.79353376172043,
+    "avg_profit": 4.260807624900871,
+    "avg_loss": -1.8940060074312084,
+    "win_rate": 0.6,
+    "expectancy": 1.7988821719680392,
+    "confidence_score": 0.5359776434393607,
+    "last_updated": 1760629370.9856522,
+    "regime_performance": {
+      "sideways": {
+        "wins": 3,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 0,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 2
+      },
+      "bear_market": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "european": {
+        "wins": 2,
+        "losses": 0
+      },
+      "overlap": {
+        "wins": 0,
+        "losses": 1
+      },
+      "us": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 0,
+        "losses": 2
+      },
+      "asian_early": {
+        "wins": 3,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 2,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 2
+      },
+      "low_vol": {
+        "wins": 3,
+        "losses": 0
+      }
+    }
+  },
+  "BTCUSDT_1760625550000": {
+    "pattern_id": "BTCUSDT_1760625550000",
+    "times_matched": 0,
+    "times_traded": 19,
+    "wins": 10,
+    "losses": 9,
+    "total_pnl": 25.503139103879988,
+    "avg_profit": 4.413701780574456,
+    "avg_loss": -1.8850233137423307,
+    "win_rate": 0.5263157894736842,
+    "expectancy": 1.4300951569507148,
+    "confidence_score": 0.5817597978758564,
+    "last_updated": 1760629371.097119,
+    "regime_performance": {
+      "bull_market": {
+        "wins": 3,
+        "losses": 2
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 3
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 3
+      },
+      "bear_market": {
+        "wins": 3,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 7,
+        "losses": 2
+      },
+      "overlap": {
+        "wins": 0,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 2,
+        "losses": 2
+      },
+      "us": {
+        "wins": 1,
+        "losses": 2
+      },
+      "european": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 4,
+        "losses": 4
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 3
+      },
+      "low_vol": {
+        "wins": 4,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760595460000": {
+    "pattern_id": "BTCUSDT_1760595460000",
+    "times_matched": 0,
+    "times_traded": 17,
+    "wins": 9,
+    "losses": 8,
+    "total_pnl": 21.076859957781583,
+    "avg_profit": 4.499433599106881,
+    "avg_loss": -1.8664954882845899,
+    "win_rate": 0.5294117647058824,
+    "expectancy": 1.5037022638638362,
+    "confidence_score": 0.5647799276302179,
+    "last_updated": 1760629371.1971855,
+    "regime_performance": {
+      "sideways": {
+        "wins": 1,
+        "losses": 4
+      },
+      "bull_market": {
+        "wins": 3,
+        "losses": 3
+      },
+      "bear_market": {
+        "wins": 4,
+        "losses": 0
+      },
+      "volatile": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 4,
+        "losses": 2
+      },
+      "us": {
+        "wins": 1,
+        "losses": 3
+      },
+      "european": {
+        "wins": 4,
+        "losses": 0
+      },
+      "overlap": {
+        "wins": 0,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 4,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 4
+      },
+      "high_vol": {
+        "wins": 4,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760627720000": {
+    "pattern_id": "BTCUSDT_1760627720000",
+    "times_matched": 0,
+    "times_traded": 15,
+    "wins": 9,
+    "losses": 6,
+    "total_pnl": 24.188556620555136,
+    "avg_profit": 4.165386005143747,
+    "avg_loss": -1.7696172490450381,
+    "win_rate": 0.6,
+    "expectancy": 1.7913847034682329,
+    "confidence_score": 0.5858276940693646,
+    "last_updated": 1760629371.288434,
+    "regime_performance": {
+      "bull_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 2
+      },
+      "bear_market": {
+        "wins": 5,
+        "losses": 2
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 2,
+        "losses": 1
+      },
+      "us": {
+        "wins": 1,
+        "losses": 3
+      },
+      "overlap": {
+        "wins": 4,
+        "losses": 0
+      },
+      "asian_late": {
+        "wins": 2,
+        "losses": 1
+      },
+      "european": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 1,
+        "losses": 3
+      },
+      "low_vol": {
+        "wins": 4,
+        "losses": 1
+      },
+      "medium_vol": {
+        "wins": 4,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760594655000": {
+    "pattern_id": "BTCUSDT_1760594655000",
+    "times_matched": 0,
+    "times_traded": 12,
+    "wins": 7,
+    "losses": 5,
+    "total_pnl": 16.713023285838656,
+    "avg_profit": 4.467162977351236,
+    "avg_loss": -1.9681143071351492,
+    "win_rate": 0.5833333333333334,
+    "expectancy": 1.7857974421485756,
+    "confidence_score": 0.5473826155096382,
+    "last_updated": 1760629371.361544,
+    "regime_performance": {
+      "sideways": {
+        "wins": 3,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 2,
+        "losses": 2
+      },
+      "volatile": {
+        "wins": 0,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 1,
+        "losses": 3
+      },
+      "overlap": {
+        "wins": 2,
+        "losses": 1
+      },
+      "european": {
+        "wins": 3,
+        "losses": 1
+      },
+      "us": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 2,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 3,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 2,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760594345000": {
+    "pattern_id": "BTCUSDT_1760594345000",
+    "times_matched": 0,
+    "times_traded": 5,
+    "wins": 3,
+    "losses": 2,
+    "total_pnl": 7.042802999493899,
+    "avg_profit": 3.9194702948241646,
+    "avg_loss": -1.544925151968925,
+    "win_rate": 0.6,
+    "expectancy": 1.7337121161069287,
+    "confidence_score": 0.48467424232213857,
+    "last_updated": 1760629371.392163,
+    "regime_performance": {
+      "volatile": {
+        "wins": 2,
+        "losses": 0
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 0
+      },
+      "bull_market": {
+        "wins": 0,
+        "losses": 2
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 1,
+        "losses": 0
+      },
+      "european": {
+        "wins": 2,
+        "losses": 0
+      },
+      "asian_late": {
+        "wins": 0,
+        "losses": 1
+      },
+      "us": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 1,
+        "losses": 1
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 1,
+        "losses": 0
+      }
+    }
+  },
+  "BTCUSDT_1760598870000": {
+    "pattern_id": "BTCUSDT_1760598870000",
+    "times_matched": 0,
+    "times_traded": 8,
+    "wins": 4,
+    "losses": 4,
+    "total_pnl": 8.649395218539722,
+    "avg_profit": 3.7047603130675877,
+    "avg_loss": -1.4065351351896767,
+    "win_rate": 0.5,
+    "expectancy": 1.1491125889389555,
+    "confidence_score": 0.45298225177877915,
+    "last_updated": 1760629371.441822,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 1,
+        "losses": 3
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 1,
+        "losses": 0
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "overlap": {
+        "wins": 2,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 2
+      },
+      "european": {
+        "wins": 0,
+        "losses": 1
+      },
+      "us": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 2,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 0,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 0
+      }
+    }
+  },
+  "BTCUSDT_1760626090000": {
+    "pattern_id": "BTCUSDT_1760626090000",
+    "times_matched": 0,
+    "times_traded": 9,
+    "wins": 5,
+    "losses": 4,
+    "total_pnl": 10.221105106226949,
+    "avg_profit": 3.9618872707318062,
+    "avg_loss": -1.7415029193483056,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.4270471862517566,
+    "confidence_score": 0.4963187215028129,
+    "last_updated": 1760629371.4989321,
+    "regime_performance": {
+      "sideways": {
+        "wins": 0,
+        "losses": 2
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 2
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 0
+      },
+      "bull_market": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 1,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 0
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 2
+      },
+      "european": {
+        "wins": 1,
+        "losses": 0
+      },
+      "us": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 0,
+        "losses": 1
+      },
+      "high_vol": {
+        "wins": 3,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760593635000": {
+    "pattern_id": "BTCUSDT_1760593635000",
+    "times_matched": 0,
+    "times_traded": 18,
+    "wins": 10,
+    "losses": 8,
+    "total_pnl": 23.05198007765698,
+    "avg_profit": 4.325300030462368,
+    "avg_loss": -1.980285840319505,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.5228174212259802,
+    "confidence_score": 0.5882341262022974,
+    "last_updated": 1760629371.614302,
+    "regime_performance": {
+      "sideways": {
+        "wins": 5,
+        "losses": 3
+      },
+      "bear_market": {
+        "wins": 4,
+        "losses": 3
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 0
+      },
+      "volatile": {
+        "wins": 0,
+        "losses": 2
+      }
+    },
+    "session_performance": {
+      "european": {
+        "wins": 2,
+        "losses": 2
+      },
+      "overlap": {
+        "wins": 5,
+        "losses": 1
+      },
+      "us": {
+        "wins": 3,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 0,
+        "losses": 2
+      },
+      "asian_early": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 1,
+        "losses": 3
+      },
+      "medium_vol": {
+        "wins": 3,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 6,
+        "losses": 3
+      }
+    }
+  },
+  "BTCUSDT_1760600450000": {
+    "pattern_id": "BTCUSDT_1760600450000",
+    "times_matched": 0,
+    "times_traded": 11,
+    "wins": 6,
+    "losses": 5,
+    "total_pnl": 13.353116618859138,
+    "avg_profit": 4.252001237503565,
+    "avg_loss": -1.9706493816267854,
+    "win_rate": 0.5454545454545454,
+    "expectancy": 1.4235236833534055,
+    "confidence_score": 0.5111977463943408,
+    "last_updated": 1760629371.6852102,
+    "regime_performance": {
+      "sideways": {
+        "wins": 3,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 2,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 2,
+        "losses": 2
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 0
+      },
+      "european": {
+        "wins": 0,
+        "losses": 1
+      },
+      "us": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 1,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 5,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 0,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760598305000": {
+    "pattern_id": "BTCUSDT_1760598305000",
+    "times_matched": 0,
+    "times_traded": 16,
+    "wins": 9,
+    "losses": 7,
+    "total_pnl": 20.752609162424626,
+    "avg_profit": 4.183316218316368,
+    "avg_loss": -1.9416855932005517,
+    "win_rate": 0.5625,
+    "expectancy": 1.5036279257777159,
+    "confidence_score": 0.5713225585155544,
+    "last_updated": 1760629371.7894258,
+    "regime_performance": {
+      "volatile": {
+        "wins": 2,
+        "losses": 2
+      },
+      "sideways": {
+        "wins": 4,
+        "losses": 0
+      },
+      "bear_market": {
+        "wins": 3,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 0,
+        "losses": 4
+      }
+    },
+    "session_performance": {
+      "asian_late": {
+        "wins": 1,
+        "losses": 3
+      },
+      "european": {
+        "wins": 5,
+        "losses": 0
+      },
+      "us": {
+        "wins": 3,
+        "losses": 3
+      },
+      "overlap": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 3,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 4,
+        "losses": 3
+      },
+      "low_vol": {
+        "wins": 2,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760628090000": {
+    "pattern_id": "BTCUSDT_1760628090000",
+    "times_matched": 0,
+    "times_traded": 5,
+    "wins": 3,
+    "losses": 2,
+    "total_pnl": 5.795488399154561,
+    "avg_profit": 3.0505198955805493,
+    "avg_loss": -1.5853603427340959,
+    "win_rate": 0.6,
+    "expectancy": 1.196167800254691,
+    "confidence_score": 0.4739233560050938,
+    "last_updated": 1760629371.8222919,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 1,
+        "losses": 0
+      },
+      "volatile": {
+        "wins": 0,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 0
+      },
+      "bull_market": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 1,
+        "losses": 1
+      },
+      "us": {
+        "wins": 1,
+        "losses": 0
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 2,
+        "losses": 0
+      },
+      "medium_vol": {
+        "wins": 0,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 1,
+        "losses": 0
+      }
+    }
+  },
+  "BTCUSDT_1760629120000": {
+    "pattern_id": "BTCUSDT_1760629120000",
+    "times_matched": 0,
+    "times_traded": 19,
+    "wins": 11,
+    "losses": 8,
+    "total_pnl": 25.3652405008532,
+    "avg_profit": 4.487608086161955,
+    "avg_loss": -1.8598449868289584,
+    "win_rate": 0.5789473684210527,
+    "expectancy": 1.8149962659552545,
+    "confidence_score": 0.6157736095296313,
+    "last_updated": 1760629371.9616241,
+    "regime_performance": {
+      "bull_market": {
+        "wins": 5,
+        "losses": 3
+      },
+      "volatile": {
+        "wins": 3,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 3,
+        "losses": 2
+      },
+      "sideways": {
+        "wins": 0,
+        "losses": 2
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 0,
+        "losses": 5
+      },
+      "us": {
+        "wins": 4,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 4,
+        "losses": 1
+      },
+      "european": {
+        "wins": 2,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 5,
+        "losses": 5
+      },
+      "high_vol": {
+        "wins": 3,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 3,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760597685000": {
+    "pattern_id": "BTCUSDT_1760597685000",
+    "times_matched": 0,
+    "times_traded": 5,
+    "wins": 3,
+    "losses": 2,
+    "total_pnl": 7.828804496708754,
+    "avg_profit": 4.246980290958319,
+    "avg_loss": -1.157982282155933,
+    "win_rate": 0.6,
+    "expectancy": 2.0849952617126184,
+    "confidence_score": 0.49169990523425233,
+    "last_updated": 1760629371.995824,
+    "regime_performance": {
+      "sideways": {
+        "wins": 0,
+        "losses": 2
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 0
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "european": {
+        "wins": 0,
+        "losses": 1
+      },
+      "us": {
+        "wins": 2,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 1,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 2,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760600265000": {
+    "pattern_id": "BTCUSDT_1760600265000",
+    "times_matched": 0,
+    "times_traded": 14,
+    "wins": 8,
+    "losses": 6,
+    "total_pnl": 21.190302537408492,
+    "avg_profit": 4.469078735027743,
+    "avg_loss": -1.714131955366704,
+    "win_rate": 0.5714285714285714,
+    "expectancy": 1.8191312962872654,
+    "confidence_score": 0.5620969116400311,
+    "last_updated": 1760629372.0958054,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 1,
+        "losses": 3
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 3,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "overlap": {
+        "wins": 1,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 2,
+        "losses": 0
+      },
+      "asian_early": {
+        "wins": 2,
+        "losses": 1
+      },
+      "us": {
+        "wins": 3,
+        "losses": 1
+      },
+      "european": {
+        "wins": 0,
+        "losses": 2
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 2,
+        "losses": 4
+      },
+      "high_vol": {
+        "wins": 5,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 0
+      }
+    }
+  },
+  "BTCUSDT_1760626825000": {
+    "pattern_id": "BTCUSDT_1760626825000",
+    "times_matched": 0,
+    "times_traded": 20,
+    "wins": 10,
+    "losses": 10,
+    "total_pnl": 23.403747167819265,
+    "avg_profit": 4.243840682703732,
+    "avg_loss": -1.9370430234636729,
+    "win_rate": 0.5,
+    "expectancy": 1.1533988296200297,
+    "confidence_score": 0.5730679765924005,
+    "last_updated": 1760629372.2347982,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 4,
+        "losses": 4
+      },
+      "volatile": {
+        "wins": 3,
+        "losses": 3
+      },
+      "bull_market": {
+        "wins": 3,
+        "losses": 0
+      },
+      "sideways": {
+        "wins": 0,
+        "losses": 3
+      }
+    },
+    "session_performance": {
+      "asian_late": {
+        "wins": 2,
+        "losses": 4
+      },
+      "us": {
+        "wins": 2,
+        "losses": 2
+      },
+      "european": {
+        "wins": 1,
+        "losses": 3
+      },
+      "asian_early": {
+        "wins": 2,
+        "losses": 0
+      },
+      "overlap": {
+        "wins": 3,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 2,
+        "losses": 4
+      },
+      "high_vol": {
+        "wins": 2,
+        "losses": 3
+      },
+      "low_vol": {
+        "wins": 6,
+        "losses": 3
+      }
+    }
+  },
+  "BTCUSDT_1760590760000": {
+    "pattern_id": "BTCUSDT_1760590760000",
+    "times_matched": 0,
+    "times_traded": 15,
+    "wins": 8,
+    "losses": 7,
+    "total_pnl": 14.03641296125464,
+    "avg_profit": 4.4455764753031515,
+    "avg_loss": -1.9714390849262906,
+    "win_rate": 0.5333333333333333,
+    "expectancy": 1.4509692138627455,
+    "confidence_score": 0.5456860509439215,
+    "last_updated": 1760629372.3406796,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 3,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 2
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 2,
+        "losses": 3
+      }
+    },
+    "session_performance": {
+      "us": {
+        "wins": 3,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 2,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 2,
+        "losses": 2
+      },
+      "european": {
+        "wins": 1,
+        "losses": 2
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 4,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 2,
+        "losses": 4
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760627545000": {
+    "pattern_id": "BTCUSDT_1760627545000",
+    "times_matched": 0,
+    "times_traded": 12,
+    "wins": 7,
+    "losses": 5,
+    "total_pnl": 17.194149630322556,
+    "avg_profit": 4.119099759675189,
+    "avg_loss": -1.8716500843068542,
+    "win_rate": 0.5833333333333334,
+    "expectancy": 1.6229539913493378,
+    "confidence_score": 0.5441257464936534,
+    "last_updated": 1760629372.42667,
+    "regime_performance": {
+      "sideways": {
+        "wins": 3,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 2,
+        "losses": 2
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 2
+      },
+      "volatile": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "us": {
+        "wins": 3,
+        "losses": 0
+      },
+      "overlap": {
+        "wins": 0,
+        "losses": 3
+      },
+      "european": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 2,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 2,
+        "losses": 2
+      },
+      "low_vol": {
+        "wins": 3,
+        "losses": 1
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760593990000": {
+    "pattern_id": "BTCUSDT_1760593990000",
+    "times_matched": 0,
+    "times_traded": 12,
+    "wins": 6,
+    "losses": 6,
+    "total_pnl": 11.442325779706671,
+    "avg_profit": 4.4549386763346375,
+    "avg_loss": -1.6843091506410088,
+    "win_rate": 0.5,
+    "expectancy": 1.3853147628468143,
+    "confidence_score": 0.4977062952569363,
+    "last_updated": 1760629372.5137904,
+    "regime_performance": {
+      "bull_market": {
+        "wins": 3,
+        "losses": 2
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 0
+      },
+      "bear_market": {
+        "wins": 2,
+        "losses": 3
+      },
+      "volatile": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "overlap": {
+        "wins": 1,
+        "losses": 0
+      },
+      "us": {
+        "wins": 1,
+        "losses": 3
+      },
+      "european": {
+        "wins": 4,
+        "losses": 2
+      },
+      "asian_early": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 3,
+        "losses": 3
+      },
+      "high_vol": {
+        "wins": 3,
+        "losses": 2
+      },
+      "low_vol": {
+        "wins": 0,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760601275000": {
+    "pattern_id": "BTCUSDT_1760601275000",
+    "times_matched": 0,
+    "times_traded": 19,
+    "wins": 10,
+    "losses": 9,
+    "total_pnl": 19.376076311401746,
+    "avg_profit": 4.327748374872015,
+    "avg_loss": -1.9075844430844846,
+    "win_rate": 0.5263157894736842,
+    "expectancy": 1.3741696716294622,
+    "confidence_score": 0.5806412881694314,
+    "last_updated": 1760629372.6542466,
+    "regime_performance": {
+      "volatile": {
+        "wins": 6,
+        "losses": 3
+      },
+      "bull_market": {
+        "wins": 3,
+        "losses": 0
+      },
+      "bear_market": {
+        "wins": 0,
+        "losses": 3
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 3
+      }
+    },
+    "session_performance": {
+      "us": {
+        "wins": 1,
+        "losses": 3
+      },
+      "european": {
+        "wins": 4,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 3,
+        "losses": 2
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 1,
+        "losses": 5
+      },
+      "low_vol": {
+        "wins": 6,
+        "losses": 1
+      },
+      "high_vol": {
+        "wins": 3,
+        "losses": 3
+      }
+    }
+  },
+  "BTCUSDT_1760626395000": {
+    "pattern_id": "BTCUSDT_1760626395000",
+    "times_matched": 0,
+    "times_traded": 8,
+    "wins": 5,
+    "losses": 3,
+    "total_pnl": 10.823326774401432,
+    "avg_profit": 3.7871528809625357,
+    "avg_loss": -1.7641582862483238,
+    "win_rate": 0.625,
+    "expectancy": 1.7054111932584637,
+    "confidence_score": 0.5266082238651693,
+    "last_updated": 1760629372.7137685,
+    "regime_performance": {
+      "bull_market": {
+        "wins": 2,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 0
+      },
+      "bear_market": {
+        "wins": 0,
+        "losses": 2
+      },
+      "volatile": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "us": {
+        "wins": 1,
+        "losses": 0
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 1
+      },
+      "european": {
+        "wins": 2,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 0
+      },
+      "asian_early": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 2,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 0
+      },
+      "low_vol": {
+        "wins": 1,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760593730000": {
+    "pattern_id": "BTCUSDT_1760593730000",
+    "times_matched": 0,
+    "times_traded": 18,
+    "wins": 10,
+    "losses": 8,
+    "total_pnl": 24.14487024472284,
+    "avg_profit": 4.223587297112156,
+    "avg_loss": -1.9797520177740107,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.4665476016071934,
+    "confidence_score": 0.5871087298099217,
+    "last_updated": 1760629372.8464444,
+    "regime_performance": {
+      "sideways": {
+        "wins": 2,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 3,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 3
+      },
+      "bull_market": {
+        "wins": 3,
+        "losses": 3
+      }
+    },
+    "session_performance": {
+      "asian_late": {
+        "wins": 5,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 3
+      },
+      "us": {
+        "wins": 2,
+        "losses": 0
+      },
+      "overlap": {
+        "wins": 2,
+        "losses": 4
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 4,
+        "losses": 4
+      },
+      "low_vol": {
+        "wins": 5,
+        "losses": 1
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 3
+      }
+    }
+  },
+  "BTCUSDT_1760625410000": {
+    "pattern_id": "BTCUSDT_1760625410000",
+    "times_matched": 0,
+    "times_traded": 17,
+    "wins": 10,
+    "losses": 7,
+    "total_pnl": 24.69178204178681,
+    "avg_profit": 4.385467306365286,
+    "avg_loss": -1.975864964713694,
+    "win_rate": 0.5882352941176471,
+    "expectancy": 1.7660951947445298,
+    "confidence_score": 0.5994395509537142,
+    "last_updated": 1760629372.982362,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 4,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 3,
+        "losses": 2
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 4
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "asian_late": {
+        "wins": 1,
+        "losses": 2
+      },
+      "european": {
+        "wins": 4,
+        "losses": 0
+      },
+      "overlap": {
+        "wins": 3,
+        "losses": 2
+      },
+      "us": {
+        "wins": 2,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 0,
+        "losses": 2
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 3,
+        "losses": 3
+      },
+      "high_vol": {
+        "wins": 7,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 0,
+        "losses": 3
+      }
+    }
+  },
+  "BTCUSDT_1760595215000": {
+    "pattern_id": "BTCUSDT_1760595215000",
+    "times_matched": 0,
+    "times_traded": 15,
+    "wins": 8,
+    "losses": 7,
+    "total_pnl": 17.6385080219546,
+    "avg_profit": 4.3098287204057675,
+    "avg_loss": -1.7393803007160669,
+    "win_rate": 0.5333333333333333,
+    "expectancy": 1.4868645105489113,
+    "confidence_score": 0.5464039568776449,
+    "last_updated": 1760629373.0910568,
+    "regime_performance": {
+      "bull_market": {
+        "wins": 1,
+        "losses": 2
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 2
+      },
+      "volatile": {
+        "wins": 3,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 2,
+        "losses": 2
+      }
+    },
+    "session_performance": {
+      "overlap": {
+        "wins": 4,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 3
+      },
+      "european": {
+        "wins": 2,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 0,
+        "losses": 1
+      },
+      "us": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 2,
+        "losses": 3
+      },
+      "medium_vol": {
+        "wins": 4,
+        "losses": 3
+      },
+      "low_vol": {
+        "wins": 2,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760596375000": {
+    "pattern_id": "BTCUSDT_1760596375000",
+    "times_matched": 0,
+    "times_traded": 16,
+    "wins": 8,
+    "losses": 8,
+    "total_pnl": 16.10597050471304,
+    "avg_profit": 4.111306625251167,
+    "avg_loss": -1.6664964100404518,
+    "win_rate": 0.5,
+    "expectancy": 1.2224051076053577,
+    "confidence_score": 0.5344481021521073,
+    "last_updated": 1760629373.213855,
+    "regime_performance": {
+      "sideways": {
+        "wins": 4,
+        "losses": 4
+      },
+      "bull_market": {
+        "wins": 4,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 0,
+        "losses": 2
+      },
+      "volatile": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "us": {
+        "wins": 2,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 2
+      },
+      "european": {
+        "wins": 3,
+        "losses": 3
+      },
+      "overlap": {
+        "wins": 2,
+        "losses": 0
+      },
+      "asian_late": {
+        "wins": 0,
+        "losses": 2
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 2,
+        "losses": 1
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 4
+      },
+      "low_vol": {
+        "wins": 4,
+        "losses": 3
+      }
+    }
+  },
+  "BTCUSDT_1760594170000": {
+    "pattern_id": "BTCUSDT_1760594170000",
+    "times_matched": 0,
+    "times_traded": 5,
+    "wins": 3,
+    "losses": 2,
+    "total_pnl": 8.199338717290487,
+    "avg_profit": 4.347606778880872,
+    "avg_loss": -1.7320170538629607,
+    "win_rate": 0.6,
+    "expectancy": 1.9157572457833387,
+    "confidence_score": 0.48831514491566674,
+    "last_updated": 1760629373.2528677,
+    "regime_performance": {
+      "sideways": {
+        "wins": 2,
+        "losses": 0
+      },
+      "bull_market": {
+        "wins": 0,
+        "losses": 2
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "european": {
+        "wins": 1,
+        "losses": 0
+      },
+      "overlap": {
+        "wins": 2,
+        "losses": 0
+      },
+      "us": {
+        "wins": 0,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 2,
+        "losses": 1
+      },
+      "high_vol": {
+        "wins": 1,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760593255000": {
+    "pattern_id": "BTCUSDT_1760593255000",
+    "times_matched": 0,
+    "times_traded": 11,
+    "wins": 6,
+    "losses": 5,
+    "total_pnl": 13.636441362093894,
+    "avg_profit": 4.497044789260148,
+    "avg_loss": -1.9403490782212192,
+    "win_rate": 0.5454545454545454,
+    "expectancy": 1.570956667677708,
+    "confidence_score": 0.5141464060808268,
+    "last_updated": 1760629373.341818,
+    "regime_performance": {
+      "volatile": {
+        "wins": 1,
+        "losses": 2
+      },
+      "bear_market": {
+        "wins": 3,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "european": {
+        "wins": 1,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 2,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 2
+      },
+      "asian_early": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 3,
+        "losses": 3
+      },
+      "low_vol": {
+        "wins": 0,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 3,
+        "losses": 0
+      }
+    }
+  },
+  "BTCUSDT_1760628555000": {
+    "pattern_id": "BTCUSDT_1760628555000",
+    "times_matched": 0,
+    "times_traded": 7,
+    "wins": 4,
+    "losses": 3,
+    "total_pnl": 11.241468407081095,
+    "avg_profit": 4.355258816526711,
+    "avg_loss": -1.7328938609553093,
+    "win_rate": 0.5714285714285714,
+    "expectancy": 1.7460505261772736,
+    "confidence_score": 0.4906352962378312,
+    "last_updated": 1760629373.3954709,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 2,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "asian_late": {
+        "wins": 3,
+        "losses": 1
+      },
+      "us": {
+        "wins": 0,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 2,
+        "losses": 1
+      },
+      "high_vol": {
+        "wins": 1,
+        "losses": 0
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760596480000": {
+    "pattern_id": "BTCUSDT_1760596480000",
+    "times_matched": 0,
+    "times_traded": 20,
+    "wins": 12,
+    "losses": 8,
+    "total_pnl": 27.768611621125363,
+    "avg_profit": 4.484577874272274,
+    "avg_loss": -1.786482802045466,
+    "win_rate": 0.6,
+    "expectancy": 1.976153603745178,
+    "confidence_score": 0.6395230720749036,
+    "last_updated": 1760629373.5511684,
+    "regime_performance": {
+      "sideways": {
+        "wins": 3,
+        "losses": 4
+      },
+      "bear_market": {
+        "wins": 2,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 4,
+        "losses": 0
+      },
+      "volatile": {
+        "wins": 3,
+        "losses": 2
+      }
+    },
+    "session_performance": {
+      "european": {
+        "wins": 5,
+        "losses": 4
+      },
+      "asian_late": {
+        "wins": 2,
+        "losses": 3
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 1
+      },
+      "us": {
+        "wins": 3,
+        "losses": 0
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 3,
+        "losses": 3
+      },
+      "medium_vol": {
+        "wins": 5,
+        "losses": 3
+      },
+      "high_vol": {
+        "wins": 4,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760627180000": {
+    "pattern_id": "BTCUSDT_1760627180000",
+    "times_matched": 0,
+    "times_traded": 5,
+    "wins": 3,
+    "losses": 2,
+    "total_pnl": 8.765386035470286,
+    "avg_profit": 3.8372443322605925,
+    "avg_loss": -1.264315884138823,
+    "win_rate": 0.6,
+    "expectancy": 1.796620245700826,
+    "confidence_score": 0.4859324049140165,
+    "last_updated": 1760629373.5928216,
+    "regime_performance": {
+      "sideways": {
+        "wins": 1,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 2,
+        "losses": 0
+      },
+      "volatile": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "us": {
+        "wins": 1,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 0
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 3,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760596760000": {
+    "pattern_id": "BTCUSDT_1760596760000",
+    "times_matched": 0,
+    "times_traded": 18,
+    "wins": 10,
+    "losses": 8,
+    "total_pnl": 25.016729279184037,
+    "avg_profit": 4.179027697580312,
+    "avg_loss": -1.6639725702914734,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.5821386896372966,
+    "confidence_score": 0.5894205515705238,
+    "last_updated": 1760629373.741767,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 1,
+        "losses": 3
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 2
+      },
+      "sideways": {
+        "wins": 3,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 4,
+        "losses": 2
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 4,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 3,
+        "losses": 2
+      },
+      "european": {
+        "wins": 1,
+        "losses": 3
+      },
+      "us": {
+        "wins": 1,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 2,
+        "losses": 3
+      },
+      "medium_vol": {
+        "wins": 6,
+        "losses": 3
+      },
+      "high_vol": {
+        "wins": 2,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760629175000": {
+    "pattern_id": "BTCUSDT_1760629175000",
+    "times_matched": 0,
+    "times_traded": 19,
+    "wins": 11,
+    "losses": 8,
+    "total_pnl": 24.746844336974817,
+    "avg_profit": 4.101935330838862,
+    "avg_loss": -1.9706211508757037,
+    "win_rate": 0.5789473684210527,
+    "expectancy": 1.5450694438011507,
+    "confidence_score": 0.6103750730865493,
+    "last_updated": 1760629373.906766,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 3,
+        "losses": 3
+      },
+      "sideways": {
+        "wins": 3,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 4,
+        "losses": 3
+      },
+      "volatile": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "us": {
+        "wins": 3,
+        "losses": 0
+      },
+      "overlap": {
+        "wins": 2,
+        "losses": 3
+      },
+      "european": {
+        "wins": 1,
+        "losses": 2
+      },
+      "asian_early": {
+        "wins": 3,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 2,
+        "losses": 2
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 3,
+        "losses": 1
+      },
+      "medium_vol": {
+        "wins": 6,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 2,
+        "losses": 6
+      }
+    }
+  },
+  "BTCUSDT_1760594990000": {
+    "pattern_id": "BTCUSDT_1760594990000",
+    "times_matched": 0,
+    "times_traded": 12,
+    "wins": 7,
+    "losses": 5,
+    "total_pnl": 14.618118033409356,
+    "avg_profit": 3.8404308735012904,
+    "avg_loss": -1.969973103904012,
+    "win_rate": 0.5833333333333334,
+    "expectancy": 1.4194292162490814,
+    "confidence_score": 0.5400552509916483,
+    "last_updated": 1760629374.009616,
+    "regime_performance": {
+      "volatile": {
+        "wins": 2,
+        "losses": 0
+      },
+      "bear_market": {
+        "wins": 2,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 3
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "asian_late": {
+        "wins": 4,
+        "losses": 3
+      },
+      "asian_early": {
+        "wins": 2,
+        "losses": 1
+      },
+      "european": {
+        "wins": 0,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 3,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 2,
+        "losses": 0
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 3
+      }
+    }
+  },
+  "BTCUSDT_1760595600000": {
+    "pattern_id": "BTCUSDT_1760595600000",
+    "times_matched": 0,
+    "times_traded": 7,
+    "wins": 4,
+    "losses": 3,
+    "total_pnl": 8.462764625815266,
+    "avg_profit": 3.632690121818456,
+    "avg_loss": -1.391487900796751,
+    "win_rate": 0.5714285714285714,
+    "expectancy": 1.4794709692690815,
+    "confidence_score": 0.48530370509966736,
+    "last_updated": 1760629374.065404,
+    "regime_performance": {
+      "bull_market": {
+        "wins": 4,
+        "losses": 0
+      },
+      "bear_market": {
+        "wins": 0,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 0,
+        "losses": 2
+      }
+    },
+    "session_performance": {
+      "asian_late": {
+        "wins": 1,
+        "losses": 1
+      },
+      "european": {
+        "wins": 3,
+        "losses": 2
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 1,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 1,
+        "losses": 1
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 0
+      }
+    }
+  },
+  "BTCUSDT_1760595390000": {
+    "pattern_id": "BTCUSDT_1760595390000",
+    "times_matched": 0,
+    "times_traded": 17,
+    "wins": 9,
+    "losses": 8,
+    "total_pnl": 14.80076102263575,
+    "avg_profit": 3.9550652442109353,
+    "avg_loss": -1.890690643622965,
+    "win_rate": 0.5294117647058824,
+    "expectancy": 1.2041212969949822,
+    "confidence_score": 0.5587883082928409,
+    "last_updated": 1760629374.2114975,
+    "regime_performance": {
+      "bull_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 3,
+        "losses": 3
+      },
+      "bear_market": {
+        "wins": 3,
+        "losses": 0
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 4
+      }
+    },
+    "session_performance": {
+      "us": {
+        "wins": 2,
+        "losses": 0
+      },
+      "asian_late": {
+        "wins": 2,
+        "losses": 2
+      },
+      "overlap": {
+        "wins": 4,
+        "losses": 2
+      },
+      "asian_early": {
+        "wins": 0,
+        "losses": 2
+      },
+      "european": {
+        "wins": 1,
+        "losses": 2
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 6,
+        "losses": 3
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 2
+      },
+      "low_vol": {
+        "wins": 2,
+        "losses": 3
+      }
+    }
+  },
+  "BTCUSDT_1760600270000": {
+    "pattern_id": "BTCUSDT_1760600270000",
+    "times_matched": 0,
+    "times_traded": 10,
+    "wins": 6,
+    "losses": 4,
+    "total_pnl": 15.484583172310971,
+    "avg_profit": 4.13610397200157,
+    "avg_loss": -1.713225928880414,
+    "win_rate": 0.6,
+    "expectancy": 1.7963720116487765,
+    "confidence_score": 0.5359274402329754,
+    "last_updated": 1760629374.300555,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 2,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "european": {
+        "wins": 2,
+        "losses": 1
+      },
+      "us": {
+        "wins": 2,
+        "losses": 3
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 0
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 3,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 1
+      },
+      "high_vol": {
+        "wins": 1,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760626150000": {
+    "pattern_id": "BTCUSDT_1760626150000",
+    "times_matched": 0,
+    "times_traded": 10,
+    "wins": 5,
+    "losses": 5,
+    "total_pnl": 7.880840944252129,
+    "avg_profit": 4.398480485709643,
+    "avg_loss": -1.920752937618985,
+    "win_rate": 0.5,
+    "expectancy": 1.2388637740453292,
+    "confidence_score": 0.47477727548090654,
+    "last_updated": 1760629374.3881302,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 2,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 0,
+        "losses": 2
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "asian_late": {
+        "wins": 3,
+        "losses": 2
+      },
+      "overlap": {
+        "wins": 0,
+        "losses": 3
+      },
+      "us": {
+        "wins": 1,
+        "losses": 0
+      },
+      "european": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 2,
+        "losses": 3
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 2,
+        "losses": 0
+      }
+    }
+  },
+  "BTCUSDT_1760594925000": {
+    "pattern_id": "BTCUSDT_1760594925000",
+    "times_matched": 0,
+    "times_traded": 18,
+    "wins": 11,
+    "losses": 7,
+    "total_pnl": 31.639984005086202,
+    "avg_profit": 4.41449111412857,
+    "avg_loss": -1.4648304158269319,
+    "win_rate": 0.6111111111111112,
+    "expectancy": 2.1280882969236528,
+    "confidence_score": 0.6281173214940287,
+    "last_updated": 1760629374.546714,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 1,
+        "losses": 2
+      },
+      "sideways": {
+        "wins": 3,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 3,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 4,
+        "losses": 2
+      }
+    },
+    "session_performance": {
+      "us": {
+        "wins": 3,
+        "losses": 2
+      },
+      "overlap": {
+        "wins": 3,
+        "losses": 0
+      },
+      "asian_early": {
+        "wins": 3,
+        "losses": 1
+      },
+      "european": {
+        "wins": 2,
+        "losses": 3
+      },
+      "asian_late": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 9,
+        "losses": 2
+      },
+      "low_vol": {
+        "wins": 1,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 1,
+        "losses": 3
+      }
+    }
+  },
+  "BTCUSDT_1760597280000": {
+    "pattern_id": "BTCUSDT_1760597280000",
+    "times_matched": 0,
+    "times_traded": 10,
+    "wins": 5,
+    "losses": 5,
+    "total_pnl": 12.951301690515194,
+    "avg_profit": 4.26297637010914,
+    "avg_loss": -1.6489299018409245,
+    "win_rate": 0.5,
+    "expectancy": 1.3070232341341077,
+    "confidence_score": 0.4761404646826821,
+    "last_updated": 1760629374.6362126,
+    "regime_performance": {
+      "volatile": {
+        "wins": 1,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 2,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "us": {
+        "wins": 1,
+        "losses": 1
+      },
+      "european": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 3
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 0
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 1,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 3,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 1,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760595360000": {
+    "pattern_id": "BTCUSDT_1760595360000",
+    "times_matched": 0,
+    "times_traded": 6,
+    "wins": 3,
+    "losses": 3,
+    "total_pnl": 5.643238002867928,
+    "avg_profit": 3.7118294555528566,
+    "avg_loss": -1.3300732532353552,
+    "win_rate": 0.5,
+    "expectancy": 1.1908781011587508,
+    "confidence_score": 0.433817562023175,
+    "last_updated": 1760629374.6908598,
+    "regime_performance": {
+      "volatile": {
+        "wins": 3,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 0,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 1,
+        "losses": 0
+      },
+      "asian_late": {
+        "wins": 0,
+        "losses": 2
+      },
+      "overlap": {
+        "wins": 2,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 2,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 1,
+        "losses": 0
+      },
+      "medium_vol": {
+        "wins": 0,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760594495000": {
+    "pattern_id": "BTCUSDT_1760594495000",
+    "times_matched": 0,
+    "times_traded": 15,
+    "wins": 9,
+    "losses": 6,
+    "total_pnl": 22.80774918062982,
+    "avg_profit": 4.465196953329526,
+    "avg_loss": -1.9416822681284422,
+    "win_rate": 0.6,
+    "expectancy": 1.9024452647463386,
+    "confidence_score": 0.5880489052949267,
+    "last_updated": 1760629374.827158,
+    "regime_performance": {
+      "sideways": {
+        "wins": 2,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 3
+      },
+      "bear_market": {
+        "wins": 2,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 3,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "overlap": {
+        "wins": 3,
+        "losses": 2
+      },
+      "european": {
+        "wins": 0,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 2,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 4,
+        "losses": 2
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 2,
+        "losses": 2
+      },
+      "low_vol": {
+        "wins": 4,
+        "losses": 4
+      },
+      "high_vol": {
+        "wins": 3,
+        "losses": 0
+      }
+    }
+  },
+  "BTCUSDT_1760598365000": {
+    "pattern_id": "BTCUSDT_1760598365000",
+    "times_matched": 0,
+    "times_traded": 10,
+    "wins": 5,
+    "losses": 5,
+    "total_pnl": 11.63020145554575,
+    "avg_profit": 4.272094232107081,
+    "avg_loss": -1.8554510803326676,
+    "win_rate": 0.5,
+    "expectancy": 1.2083215758872068,
+    "confidence_score": 0.4741664315177441,
+    "last_updated": 1760629374.910445,
+    "regime_performance": {
+      "sideways": {
+        "wins": 0,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 2,
+        "losses": 0
+      },
+      "volatile": {
+        "wins": 3,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 0,
+        "losses": 3
+      }
+    },
+    "session_performance": {
+      "european": {
+        "wins": 2,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 1
+      },
+      "us": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 3,
+        "losses": 4
+      },
+      "low_vol": {
+        "wins": 1,
+        "losses": 0
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760598840000": {
+    "pattern_id": "BTCUSDT_1760598840000",
+    "times_matched": 0,
+    "times_traded": 13,
+    "wins": 8,
+    "losses": 5,
+    "total_pnl": 20.47300675208756,
+    "avg_profit": 4.47509538999614,
+    "avg_loss": -1.9569289324234425,
+    "win_rate": 0.6153846153846154,
+    "expectancy": 2.0012398813732237,
+    "confidence_score": 0.5777171053197722,
+    "last_updated": 1760629375.0187747,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 2,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 0,
+        "losses": 2
+      },
+      "volatile": {
+        "wins": 5,
+        "losses": 0
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 2
+      }
+    },
+    "session_performance": {
+      "european": {
+        "wins": 2,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 3,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 3
+      },
+      "us": {
+        "wins": 1,
+        "losses": 0
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 1,
+        "losses": 2
+      },
+      "low_vol": {
+        "wins": 4,
+        "losses": 3
+      },
+      "high_vol": {
+        "wins": 3,
+        "losses": 0
+      }
+    }
+  },
+  "BTCUSDT_1760626135000": {
+    "pattern_id": "BTCUSDT_1760626135000",
+    "times_matched": 0,
+    "times_traded": 7,
+    "wins": 4,
+    "losses": 3,
+    "total_pnl": 8.602029426355584,
+    "avg_profit": 3.9752688729338264,
+    "avg_loss": -1.8405617413199078,
+    "win_rate": 0.5714285714285714,
+    "expectancy": 1.4827700382536544,
+    "confidence_score": 0.4853696864793588,
+    "last_updated": 1760629375.0769806,
+    "regime_performance": {
+      "volatile": {
+        "wins": 1,
+        "losses": 3
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 0
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 0
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "european": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 0
+      },
+      "us": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 2,
+        "losses": 0
+      },
+      "low_vol": {
+        "wins": 2,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 0,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760597585000": {
+    "pattern_id": "BTCUSDT_1760597585000",
+    "times_matched": 0,
+    "times_traded": 18,
+    "wins": 9,
+    "losses": 9,
+    "total_pnl": 17.64433755974645,
+    "avg_profit": 4.288379875873537,
+    "avg_loss": -1.9425215775187108,
+    "win_rate": 0.5,
+    "expectancy": 1.1729291491774132,
+    "confidence_score": 0.5534585829835482,
+    "last_updated": 1760629375.2418847,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 4,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 1,
+        "losses": 5
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 3
+      },
+      "bull_market": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 3,
+        "losses": 1
+      },
+      "european": {
+        "wins": 1,
+        "losses": 3
+      },
+      "asian_late": {
+        "wins": 3,
+        "losses": 3
+      },
+      "us": {
+        "wins": 1,
+        "losses": 2
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 3,
+        "losses": 4
+      },
+      "low_vol": {
+        "wins": 4,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 3
+      }
+    }
+  },
+  "BTCUSDT_1760600040000": {
+    "pattern_id": "BTCUSDT_1760600040000",
+    "times_matched": 0,
+    "times_traded": 11,
+    "wins": 6,
+    "losses": 5,
+    "total_pnl": 12.721703005666821,
+    "avg_profit": 4.373283070857713,
+    "avg_loss": -1.9120560811820924,
+    "win_rate": 0.5454545454545454,
+    "expectancy": 1.5163107290214377,
+    "confidence_score": 0.5130534873077015,
+    "last_updated": 1760629375.347836,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 2,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 1,
+        "losses": 3
+      },
+      "sideways": {
+        "wins": 3,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "overlap": {
+        "wins": 0,
+        "losses": 1
+      },
+      "european": {
+        "wins": 1,
+        "losses": 2
+      },
+      "us": {
+        "wins": 3,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 0
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 1,
+        "losses": 2
+      },
+      "low_vol": {
+        "wins": 4,
+        "losses": 1
+      },
+      "high_vol": {
+        "wins": 1,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760626865000": {
+    "pattern_id": "BTCUSDT_1760626865000",
+    "times_matched": 0,
+    "times_traded": 9,
+    "wins": 5,
+    "losses": 4,
+    "total_pnl": 11.44088917045597,
+    "avg_profit": 4.002129979255236,
+    "avg_loss": -1.8198430722109404,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.4145864008258244,
+    "confidence_score": 0.4960695057942942,
+    "last_updated": 1760629375.433611,
+    "regime_performance": {
+      "volatile": {
+        "wins": 1,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 0
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 1,
+        "losses": 2
+      },
+      "european": {
+        "wins": 2,
+        "losses": 0
+      },
+      "us": {
+        "wins": 1,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 2,
+        "losses": 3
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 1
+      },
+      "high_vol": {
+        "wins": 2,
+        "losses": 0
+      }
+    }
+  },
+  "BTCUSDT_1760600805000": {
+    "pattern_id": "BTCUSDT_1760600805000",
+    "times_matched": 0,
+    "times_traded": 10,
+    "wins": 5,
+    "losses": 5,
+    "total_pnl": 9.71940456772786,
+    "avg_profit": 4.236043962505355,
+    "avg_loss": -1.8237645998468515,
+    "win_rate": 0.5,
+    "expectancy": 1.2061396813292518,
+    "confidence_score": 0.47412279362658505,
+    "last_updated": 1760629375.527,
+    "regime_performance": {
+      "volatile": {
+        "wins": 2,
+        "losses": 2
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 0
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 2
+      }
+    },
+    "session_performance": {
+      "us": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 2,
+        "losses": 0
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 1
+      },
+      "european": {
+        "wins": 0,
+        "losses": 3
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 2,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 2,
+        "losses": 4
+      },
+      "high_vol": {
+        "wins": 1,
+        "losses": 0
+      }
+    }
+  },
+  "BTCUSDT_1760601380000": {
+    "pattern_id": "BTCUSDT_1760601380000",
+    "times_matched": 0,
+    "times_traded": 12,
+    "wins": 7,
+    "losses": 5,
+    "total_pnl": 16.777050123808092,
+    "avg_profit": 4.213482680252909,
+    "avg_loss": -1.9268233792547518,
+    "win_rate": 0.5833333333333334,
+    "expectancy": 1.6550218221247173,
+    "confidence_score": 0.544767103109161,
+    "last_updated": 1760629375.6406505,
+    "regime_performance": {
+      "bull_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 2
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 2,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 0,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 2,
+        "losses": 2
+      },
+      "us": {
+        "wins": 2,
+        "losses": 0
+      },
+      "overlap": {
+        "wins": 0,
+        "losses": 1
+      },
+      "european": {
+        "wins": 3,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 4,
+        "losses": 1
+      },
+      "high_vol": {
+        "wins": 3,
+        "losses": 4
+      }
+    }
+  },
+  "BTCUSDT_1760625780000": {
+    "pattern_id": "BTCUSDT_1760625780000",
+    "times_matched": 0,
+    "times_traded": 15,
+    "wins": 8,
+    "losses": 7,
+    "total_pnl": 17.54006325762833,
+    "avg_profit": 4.408241765881998,
+    "avg_loss": -1.6384729542328185,
+    "win_rate": 0.5333333333333333,
+    "expectancy": 1.5864415631617503,
+    "confidence_score": 0.5483954979299017,
+    "last_updated": 1760629375.7855422,
+    "regime_performance": {
+      "bull_market": {
+        "wins": 2,
+        "losses": 2
+      },
+      "bear_market": {
+        "wins": 1,
+        "losses": 2
+      },
+      "sideways": {
+        "wins": 5,
+        "losses": 2
+      },
+      "volatile": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "european": {
+        "wins": 1,
+        "losses": 1
+      },
+      "us": {
+        "wins": 1,
+        "losses": 2
+      },
+      "asian_early": {
+        "wins": 2,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 3,
+        "losses": 0
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 3
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 3,
+        "losses": 4
+      },
+      "high_vol": {
+        "wins": 4,
+        "losses": 0
+      },
+      "low_vol": {
+        "wins": 1,
+        "losses": 3
+      }
+    }
+  },
+  "BTCUSDT_1760600320000": {
+    "pattern_id": "BTCUSDT_1760600320000",
+    "times_matched": 0,
+    "times_traded": 18,
+    "wins": 10,
+    "losses": 8,
+    "total_pnl": 19.618737582209224,
+    "avg_profit": 3.902261218303595,
+    "avg_loss": -1.9729057658497253,
+    "win_rate": 0.5555555555555556,
+    "expectancy": 1.2910758920132306,
+    "confidence_score": 0.5835992956180424,
+    "last_updated": 1760629375.9596896,
+    "regime_performance": {
+      "sideways": {
+        "wins": 2,
+        "losses": 3
+      },
+      "bull_market": {
+        "wins": 4,
+        "losses": 0
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 2
+      },
+      "bear_market": {
+        "wins": 2,
+        "losses": 3
+      }
+    },
+    "session_performance": {
+      "european": {
+        "wins": 3,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 2
+      },
+      "overlap": {
+        "wins": 2,
+        "losses": 2
+      },
+      "us": {
+        "wins": 1,
+        "losses": 2
+      },
+      "asian_early": {
+        "wins": 3,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 3,
+        "losses": 3
+      },
+      "medium_vol": {
+        "wins": 4,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 3,
+        "losses": 4
+      }
+    }
+  },
+  "BTCUSDT_1760597255000": {
+    "pattern_id": "BTCUSDT_1760597255000",
+    "times_matched": 0,
+    "times_traded": 11,
+    "wins": 6,
+    "losses": 5,
+    "total_pnl": 14.529491188153578,
+    "avg_profit": 4.084852042741429,
+    "avg_loss": -1.9773820791320769,
+    "win_rate": 0.5454545454545454,
+    "expectancy": 1.3292910782534713,
+    "confidence_score": 0.5093130942923421,
+    "last_updated": 1760629376.071444,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 2,
+        "losses": 4
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 0
+      },
+      "volatile": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 2,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 3,
+        "losses": 0
+      },
+      "european": {
+        "wins": 0,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 2
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 2,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 3,
+        "losses": 1
+      },
+      "high_vol": {
+        "wins": 1,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760598330000": {
+    "pattern_id": "BTCUSDT_1760598330000",
+    "times_matched": 0,
+    "times_traded": 20,
+    "wins": 11,
+    "losses": 9,
+    "total_pnl": 22.250238952722803,
+    "avg_profit": 4.349044531138144,
+    "avg_loss": -1.954221912972375,
+    "win_rate": 0.55,
+    "expectancy": 1.5125746312884107,
+    "confidence_score": 0.6052514926257682,
+    "last_updated": 1760629376.277244,
+    "regime_performance": {
+      "volatile": {
+        "wins": 3,
+        "losses": 4
+      },
+      "sideways": {
+        "wins": 3,
+        "losses": 3
+      },
+      "bull_market": {
+        "wins": 3,
+        "losses": 2
+      },
+      "bear_market": {
+        "wins": 2,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 2,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 3,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 3,
+        "losses": 3
+      },
+      "us": {
+        "wins": 2,
+        "losses": 2
+      },
+      "european": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 5,
+        "losses": 4
+      },
+      "medium_vol": {
+        "wins": 4,
+        "losses": 3
+      },
+      "low_vol": {
+        "wins": 2,
+        "losses": 2
+      }
+    }
+  },
+  "BTCUSDT_1760600970000": {
+    "pattern_id": "BTCUSDT_1760600970000",
+    "times_matched": 0,
+    "times_traded": 8,
+    "wins": 4,
+    "losses": 4,
+    "total_pnl": 6.914078197857501,
+    "avg_profit": 3.7693367102277664,
+    "avg_loss": -1.8867848599100916,
+    "win_rate": 0.5,
+    "expectancy": 0.9412759251588374,
+    "confidence_score": 0.44882551850317676,
+    "last_updated": 1760629376.35946,
+    "regime_performance": {
+      "bull_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 2
+      },
+      "bear_market": {
+        "wins": 2,
+        "losses": 0
+      },
+      "volatile": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 2
+      },
+      "european": {
+        "wins": 2,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "medium_vol": {
+        "wins": 1,
+        "losses": 2
+      },
+      "low_vol": {
+        "wins": 1,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 2,
+        "losses": 0
+      }
+    }
+  },
+  "BTCUSDT_1760599190000": {
+    "pattern_id": "BTCUSDT_1760599190000",
+    "times_matched": 0,
+    "times_traded": 7,
+    "wins": 4,
+    "losses": 3,
+    "total_pnl": 8.805584006209605,
+    "avg_profit": 3.8987562541123477,
+    "avg_loss": -1.7717228141027412,
+    "win_rate": 0.5714285714285714,
+    "expectancy": 1.4685509391630236,
+    "confidence_score": 0.48508530449754617,
+    "last_updated": 1760629376.432183,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 0,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 0
+      },
+      "bull_market": {
+        "wins": 2,
+        "losses": 0
+      },
+      "volatile": {
+        "wins": 0,
+        "losses": 2
+      }
+    },
+    "session_performance": {
+      "asian_early": {
+        "wins": 0,
+        "losses": 1
+      },
+      "european": {
+        "wins": 2,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 0
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 1,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 2,
+        "losses": 0
+      },
+      "medium_vol": {
+        "wins": 1,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760594810000": {
+    "pattern_id": "BTCUSDT_1760594810000",
+    "times_matched": 0,
+    "times_traded": 8,
+    "wins": 4,
+    "losses": 4,
+    "total_pnl": 8.812560997399808,
+    "avg_profit": 3.9648369120006457,
+    "avg_loss": -1.896802921413337,
+    "win_rate": 0.5,
+    "expectancy": 1.0340169952936544,
+    "confidence_score": 0.45068033990587314,
+    "last_updated": 1760629376.5116878,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 1,
+        "losses": 1
+      },
+      "sideways": {
+        "wins": 2,
+        "losses": 1
+      },
+      "volatile": {
+        "wins": 1,
+        "losses": 2
+      }
+    },
+    "session_performance": {
+      "asian_late": {
+        "wins": 1,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 1,
+        "losses": 2
+      },
+      "european": {
+        "wins": 1,
+        "losses": 0
+      },
+      "us": {
+        "wins": 0,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "high_vol": {
+        "wins": 2,
+        "losses": 2
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 1
+      },
+      "low_vol": {
+        "wins": 0,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760595350000": {
+    "pattern_id": "BTCUSDT_1760595350000",
+    "times_matched": 0,
+    "times_traded": 13,
+    "wins": 7,
+    "losses": 6,
+    "total_pnl": 17.424682669902154,
+    "avg_profit": 4.360501735628772,
+    "avg_loss": -1.8980442331142093,
+    "win_rate": 0.5384615384615384,
+    "expectancy": 1.471942057747396,
+    "confidence_score": 0.5286696103857171,
+    "last_updated": 1760629376.6439912,
+    "regime_performance": {
+      "volatile": {
+        "wins": 3,
+        "losses": 1
+      },
+      "bear_market": {
+        "wins": 3,
+        "losses": 0
+      },
+      "sideways": {
+        "wins": 0,
+        "losses": 1
+      },
+      "bull_market": {
+        "wins": 1,
+        "losses": 4
+      }
+    },
+    "session_performance": {
+      "european": {
+        "wins": 1,
+        "losses": 1
+      },
+      "overlap": {
+        "wins": 4,
+        "losses": 2
+      },
+      "asian_early": {
+        "wins": 0,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 2,
+        "losses": 0
+      },
+      "us": {
+        "wins": 0,
+        "losses": 1
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 4,
+        "losses": 4
+      },
+      "medium_vol": {
+        "wins": 2,
+        "losses": 1
+      },
+      "high_vol": {
+        "wins": 1,
+        "losses": 1
+      }
+    }
+  },
+  "BTCUSDT_1760594385000": {
+    "pattern_id": "BTCUSDT_1760594385000",
+    "times_matched": 0,
+    "times_traded": 14,
+    "wins": 7,
+    "losses": 7,
+    "total_pnl": 14.918629366422973,
+    "avg_profit": 4.35206992658403,
+    "avg_loss": -1.8330577643689834,
+    "win_rate": 0.5,
+    "expectancy": 1.2595060811075234,
+    "confidence_score": 0.5151901216221505,
+    "last_updated": 1760629376.7857966,
+    "regime_performance": {
+      "bear_market": {
+        "wins": 0,
+        "losses": 3
+      },
+      "bull_market": {
+        "wins": 3,
+        "losses": 4
+      },
+      "sideways": {
+        "wins": 1,
+        "losses": 0
+      },
+      "volatile": {
+        "wins": 3,
+        "losses": 0
+      }
+    },
+    "session_performance": {
+      "overlap": {
+        "wins": 3,
+        "losses": 2
+      },
+      "european": {
+        "wins": 2,
+        "losses": 2
+      },
+      "us": {
+        "wins": 1,
+        "losses": 1
+      },
+      "asian_early": {
+        "wins": 0,
+        "losses": 2
+      },
+      "asian_late": {
+        "wins": 1,
+        "losses": 0
+      }
+    },
+    "volatility_performance": {
+      "low_vol": {
+        "wins": 2,
+        "losses": 5
+      },
+      "medium_vol": {
+        "wins": 4,
+        "losses": 2
+      },
+      "high_vol": {
+        "wins": 1,
+        "losses": 0
+      }
+    }
+  }
+}

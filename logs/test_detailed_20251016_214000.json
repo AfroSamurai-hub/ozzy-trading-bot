@@ -1,0 +1,74 @@
+{
+  "config": {
+    "symbol": "BTCUSDT",
+    "duration": 120,
+    "interval": 20,
+    "capital": 10000.0
+  },
+  "results": {
+    "total_time": 100.12245225906372,
+    "decisions_made": 6,
+    "decisions_expected": 6
+  },
+  "decisions": [
+    {
+      "index": 1,
+      "timestamp": "2025-10-16T21:38:20.279644",
+      "action": "SKIP",
+      "confidence": 0.5,
+      "reasoning": "Test mode - systematic skipping",
+      "price": 66897.03090466761,
+      "duration_seconds": 0.0039014816284179688
+    },
+    {
+      "index": 2,
+      "timestamp": "2025-10-16T21:38:40.302483",
+      "action": "SKIP",
+      "confidence": 0.5,
+      "reasoning": "Test mode - systematic skipping",
+      "price": 66757.09911036154,
+      "duration_seconds": 0.0045468807220458984
+    },
+    {
+      "index": 3,
+      "timestamp": "2025-10-16T21:39:00.325481",
+      "action": "SKIP",
+      "confidence": 0.5,
+      "reasoning": "Test mode - systematic skipping",
+      "price": 66909.18573647969,
+      "duration_seconds": 0.00416254997253418
+    },
+    {
+      "index": 4,
+      "timestamp": "2025-10-16T21:39:20.348268",
+      "action": "SKIP",
+      "confidence": 0.5,
+      "reasoning": "Test mode - systematic skipping",
+      "price": 66787.51255958588,
+      "duration_seconds": 0.004514217376708984
+    },
+    {
+      "index": 5,
+      "timestamp": "2025-10-16T21:39:40.371395",
+      "action": "SKIP",
+      "confidence": 0.5,
+      "reasoning": "Test mode - systematic skipping",
+      "price": 67022.84897428147,
+      "duration_seconds": 0.004187107086181641
+    },
+    {
+      "index": 6,
+      "timestamp": "2025-10-16T21:40:00.394630",
+      "action": "SKIP",
+      "confidence": 0.5,
+      "reasoning": "Test mode - systematic skipping",
+      "price": 67147.39915817635,
+      "duration_seconds": 0.004359245300292969
+    }
+  ],
+  "portfolio": {
+    "capital": 10000.0,
+    "open_positions": 0,
+    "closed_trades": 0
+  }
+}

@@ -1,0 +1,34 @@
+[2025-10-17 05:49:53.346235] Sleeping 900s
+[2025-10-17 05:51:32.685649] Test starting: BTCUSDT, 24 decisions
+[2025-10-17 05:51:32.693672] Portfolio initialized: R10,000.00
+[2025-10-17 05:51:32.869191] MCP Server initialized
+[2025-10-17 05:51:32.901655] Trading Agent initialized
+[2025-10-17 05:51:32.906841] Mock feed initialized
+[2025-10-17 05:51:32.907490] Decision loop starting
+[2025-10-17 05:51:32.908067] Decision #1/24 starting
+[2025-10-17 05:51:34.632051] Decision #1 complete: SKIP (0.0%)
+[2025-10-17 05:51:34.641253] Sleeping 900s
+[2025-10-17 06:06:34.642168] Sleep complete
+[2025-10-17 06:06:34.652958] Decision #2/24 starting
+[2025-10-17 06:06:36.958859] Decision #2 complete: SKIP (0.0%)
+[2025-10-17 06:06:36.971196] Sleeping 900s
+[2025-10-17 06:21:36.974881] Sleep complete
+[2025-10-17 06:21:36.984528] Decision #3/24 starting
+[2025-10-17 06:21:38.514257] Decision #3 complete: SKIP (50.0%)
+[2025-10-17 06:21:38.524687] Sleeping 900s
+[2025-10-17 06:36:38.527788] Sleep complete
+[2025-10-17 06:36:38.539098] Decision #4/24 starting
+[2025-10-17 06:36:41.433566] Decision #4 complete: SKIP (0.0%)
+[2025-10-17 06:36:41.445354] Sleeping 900s
+[2025-10-17 06:51:41.448896] Sleep complete
+[2025-10-17 06:51:41.451561] Decision #5/24 starting
+[2025-10-17 06:51:44.249594] Decision #5 complete: SKIP (0.0%)
+[2025-10-17 06:51:44.260092] Sleeping 900s
+[2025-10-17 07:06:44.263311] Sleep complete
+[2025-10-17 07:06:44.275693] Decision #6/24 starting
+[2025-10-17 07:06:45.864874] Decision #6 complete: SKIP (0.0%)
+[2025-10-17 07:06:45.876350] Sleeping 900s
+[2025-10-17 07:21:45.878781] Sleep complete
+[2025-10-17 07:21:45.889156] Decision #7/24 starting
+[2025-10-17 07:21:47.261697] Decision #7 complete: SKIP (0.0%)
+[2025-10-17 07:21:47.273143] Sleeping 900s

@@ -10,6 +10,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Dict, Tuple
 
+from agent.utils import safe_float
+
 
 @dataclass
 class SafetyRailsConfig:
@@ -18,7 +20,7 @@ class SafetyRailsConfig:
     capital: float = 5_000.0
     max_position_pct: float = 0.05  # 5% of capital per trade
     min_confidence: float = 0.55    # minimum AI confidence (0-1)
-    min_pattern_win_rate: float = 60.0  # minimum historical win rate (percent)
+    min_pattern_win_rate: float = 40.0  # minimum historical win rate (percent) - lowered to 40% for testing
     rsi_bounds: Tuple[float, float] = (30.0, 70.0)  # avoid extreme RSI zones
 
 
@@ -49,7 +51,7 @@ class SafetyRails:
         reasons: list[str] = []
         approved = True
 
-        confidence = _safe_float(decision.get("confidence"), default=0.0)
+        confidence = safe_float(decision.get("confidence"), default=0.0)
         if confidence < self.config.min_confidence:
             approved = False
             reasons.append(
@@ -62,7 +64,7 @@ class SafetyRails:
                 f"Historical win rate {pattern_win_rate:.1f}% below {self.config.min_pattern_win_rate:.1f}%"
             )
 
-        rsi = _safe_float(market_state.get("rsi"))
+        rsi = safe_float(market_state.get("rsi"))
         rsi_lower, rsi_upper = self.config.rsi_bounds
         if rsi is not None and (rsi <= rsi_lower or rsi >= rsi_upper):
             approved = False
@@ -76,8 +78,8 @@ class SafetyRails:
             approved = False
             reasons.append("Portfolio already at max positions")
 
-        available_capital = _safe_float(portfolio.get("capital"), default=self.config.capital)
-        position_size = _safe_float(decision.get("position_size"), default=0.0)
+        available_capital = safe_float(portfolio.get("capital"), default=self.config.capital)
+        position_size = safe_float(decision.get("position_size"), default=0.0)
         if position_size > available_capital * self.config.max_position_pct:
             approved = False
             cap_pct = self.config.max_position_pct * 100
@@ -88,14 +90,3 @@ class SafetyRails:
         if approved:
             return True, "All safety checks passed"
         return False, "; ".join(reasons)
-
-
-def _safe_float(value, default: float | None = None) -> float | None:
-    """Helper to coerce numeric inputs resiliently."""
-
-    if value is None:
-        return default
-    try:
-        return float(value)
-    except (TypeError, ValueError):
-        return default

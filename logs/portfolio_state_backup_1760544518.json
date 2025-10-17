@@ -1,0 +1,66 @@
+{
+  "starting_capital": 5000.0,
+  "capital": 4250.0,
+  "total_equity": 4989.146801337828,
+  "total_pnl": -10.853198662171678,
+  "positions": [
+    {
+      "id": 1,
+      "symbol": "BTCUSDT",
+      "side": "LONG",
+      "entry_price": 112570.5,
+      "current_price": 110941.5,
+      "size": 250.0,
+      "qty": 0.0022208305017744436,
+      "pnl": -3.6177328873905594,
+      "pnl_pct": -1.4470931549562238,
+      "confidence": 0.75,
+      "reason": "The market shows a whale accumulation pattern with a win rate of approximately 75% and an average profit of 4.5%. The RSI is within a neutral range, and the volume change indicates potential upward momentum.",
+      "entry_time": "2025-10-15T18:06:12.854205",
+      "status": "OPEN"
+    },
+    {
+      "id": 2,
+      "symbol": "BTCUSDT",
+      "side": "LONG",
+      "entry_price": 112570.5,
+      "current_price": 110941.5,
+      "size": 250.0,
+      "qty": 0.0022208305017744436,
+      "pnl": -3.6177328873905594,
+      "pnl_pct": -1.4470931549562238,
+      "confidence": 0.75,
+      "reason": "The market shows a whale accumulation pattern with a win rate of approximately 75%. The RSI is at 40.36, indicating it is not oversold, and the volume change suggests some interest in the asset. Given the available capital and favorable pattern, a buy is warranted.",
+      "entry_time": "2025-10-15T18:07:19.219276",
+      "status": "OPEN"
+    },
+    {
+      "id": 3,
+      "symbol": "BTCUSDT",
+      "side": "LONG",
+      "entry_price": 112570.5,
+      "current_price": 110941.5,
+      "size": 250.0,
+      "qty": 0.0022208305017744436,
+      "pnl": -3.6177328873905594,
+      "pnl_pct": -1.4470931549562238,
+      "confidence": 0.75,
+      "reason": "The market shows a whale accumulation pattern with a win rate of approximately 75%. The RSI is within a neutral range, and the volume change indicates potential upward movement. A position size of 250.00 is within the limit.",
+      "entry_time": "2025-10-15T18:08:22.951284",
+      "status": "OPEN"
+    }
+  ],
+  "closed_trades": [],
+  "performance": {
+    "total_trades": 0,
+    "wins": 0,
+    "losses": 0,
+    "win_rate": 0.0,
+    "avg_profit": 0.0,
+    "avg_loss": 0.0,
+    "profit_factor": 0.0,
+    "sharpe_ratio": 0.0,
+    "max_drawdown": 0.0
+  },
+  "last_update": "2025-10-15T18:08:37.828421"
+}

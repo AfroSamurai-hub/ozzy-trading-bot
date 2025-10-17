@@ -1,0 +1,9 @@
+{
+  "decisions": [],
+  "portfolio": {
+    "starting_capital": 5000.0,
+    "current_capital": 5000.0,
+    "total_pnl": 0.0,
+    "total_pnl_pct": 0.0
+  }
+}

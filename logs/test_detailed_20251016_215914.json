@@ -1,0 +1,74 @@
+{
+  "config": {
+    "symbol": "BTCUSDT",
+    "duration": 120,
+    "interval": 20,
+    "capital": 10000.0
+  },
+  "results": {
+    "total_time": 118.82558488845825,
+    "decisions_made": 6,
+    "decisions_expected": 6
+  },
+  "decisions": [
+    {
+      "index": 1,
+      "timestamp": "2025-10-16T21:57:19.901222",
+      "action": "SKIP",
+      "confidence": 0.6,
+      "reasoning": "While the RSI is within acceptable limits and the EMA ratio indicates an uptrend, the overall win rates during the US session are below the required threshold of 60%. Therefore, it is prudent to skip trading.",
+      "price": 67230.19431978924,
+      "duration_seconds": 4.464270830154419
+    },
+    {
+      "index": 2,
+      "timestamp": "2025-10-16T21:57:43.378877",
+      "action": "SKIP",
+      "confidence": 0.63,
+      "reasoning": "No favorable trading patterns identified during the current session despite RSI being within acceptable range. Overall win rates are close to the threshold but not sufficient for a confident trade.",
+      "price": 66767.16409092657,
+      "duration_seconds": 3.455958127975464
+    },
+    {
+      "index": 3,
+      "timestamp": "2025-10-16T21:58:05.907501",
+      "action": "SKIP",
+      "confidence": 0.6,
+      "reasoning": "While the RSI is within acceptable limits and the EMA ratio indicates an uptrend, the overall win rates for patterns during the US session are not favorable enough to justify a trade. Additionally, the volume change is negative, indicating potential weakness.",
+      "price": 66662.5989432106,
+      "duration_seconds": 2.499661445617676
+    },
+    {
+      "index": 4,
+      "timestamp": "2025-10-16T21:58:29.518954",
+      "action": "SKIP",
+      "confidence": 0.6,
+      "reasoning": "The current market conditions show an RSI of 56.19, which is acceptable, but the top performing patterns during the US session indicate unfavorable conditions with a win rate of 60.0%. Given the lack of a clear favorable pattern and the slight volume decrease, it is prudent to skip trading.",
+      "price": 66364.91685904445,
+      "duration_seconds": 3.583465814590454
+    },
+    {
+      "index": 5,
+      "timestamp": "2025-10-16T21:58:52.075452",
+      "action": "SKIP",
+      "confidence": 0.6,
+      "reasoning": "Despite the RSI being within acceptable limits and the EMA ratio indicating an uptrend, the overall win rates during the US session are below 60%, making it unfavorable to enter a trade.",
+      "price": 66060.81786650201,
+      "duration_seconds": 2.5296764373779297
+    },
+    {
+      "index": 6,
+      "timestamp": "2025-10-16T21:59:14.251411",
+      "action": "SKIP",
+      "confidence": 0.6,
+      "reasoning": "The overall win rate of patterns is above 60%, but during the current US session, the win rate is unfavorable at 60.0%. Additionally, the volume change is negative, indicating potential weakness in the trend.",
+      "price": 65751.70314597314,
+      "duration_seconds": 2.1492438316345215
+    }
+  ],
+  "portfolio": {
+    "capital": 10000.0,
+    "open_positions": 0,
+    "closed_trades": 0
+  }
+}

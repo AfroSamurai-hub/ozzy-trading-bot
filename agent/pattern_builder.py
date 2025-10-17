@@ -97,16 +97,16 @@ class RealtimePatternBuilder:
 
         metadata = {
             "timestamp": candle["end_ts"] / 1000,
-            "label": candle.get("label", "UNKNOWN"),
+            "label": "PENDING",  # Start as PENDING, to be updated by the labeler
+            "price": float(latest.get("close", 0.0)),
             "rsi": latest_rsi,
             "ema_ratio": ema_ratio,
             "price_change": float(latest.get("price_change", 0.0)),
             "volume_change": float(latest.get("volume_change", 0.0)),
             "symbol": symbol,
-            "hit_takeprofit": False,
-            "hit_stoploss": False,
-            "max_profit_pct": None,
-            "max_drawdown_pct": None,
+            "outcome": None,
+            "exit_price": None,
+            "labeled_at": None,
         }
         metadata = {k: v for k, v in metadata.items() if v is not None}
 

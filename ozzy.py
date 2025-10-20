@@ -322,7 +322,7 @@ def cmd_test():
                 print(f"Runtime: {elapsed}")
                 
                 # Next decision timing
-                interval_mins = 15  # 15-minute intervals
+                interval_mins = 240  # 4-hour intervals (swing trading)
                 if progress['completed'] > 0:
                     next_decision_mins = interval_mins - (elapsed.total_seconds() / 60 % interval_mins)
                     print(f"Next decision: ~{int(next_decision_mins)} minutes")

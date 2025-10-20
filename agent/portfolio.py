@@ -46,7 +46,8 @@ class PaperTradingPortfolio:
         entry_price: float,
         size: float,
         confidence: float,
-        reason: str
+        reason: str,
+        pattern_id: Optional[str] = None
     ) -> Optional[Dict]:
         """
         Open a simulated position
@@ -58,6 +59,7 @@ class PaperTradingPortfolio:
             size: Position size in USD
             confidence: AI confidence (0.0-1.0)
             reason: AI reasoning for trade
+            pattern_id: Optional pattern ID for learning (e.g., "bullish_engulfing")
         
         Returns:
             Position dictionary, or None if rejected by risk checks
@@ -105,6 +107,7 @@ class PaperTradingPortfolio:
             'pnl_pct': 0.0,
             'confidence': confidence,
             'reason': reason,
+            'pattern_id': pattern_id,  # 🧠 Store pattern for learning
             'entry_time': datetime.now().isoformat(),
             'status': 'OPEN'
         }

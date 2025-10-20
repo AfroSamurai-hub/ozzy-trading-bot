@@ -1,0 +1,14 @@
+[
+  {
+    "timestamp": "2025-10-17T19:09:10.998960",
+    "pattern": "unknown_pattern",
+    "old_multiplier": 1.0,
+    "new_multiplier": 1.1,
+    "reason": "100% WR excellent (n=3)",
+    "stats": {
+      "trades": 3,
+      "win_rate": 1.0,
+      "avg_pnl": 2.3671696110856324
+    }
+  }
+]

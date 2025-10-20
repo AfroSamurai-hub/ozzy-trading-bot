@@ -109,3 +109,58 @@
 [2025-10-17 10:29:14.622456] Decision #11/24 starting
 [2025-10-17 10:29:16.968100] Decision #11 complete: SKIP (50.0%)
 [2025-10-17 10:29:16.977346] Sleeping 900s
+[2025-10-17 10:44:16.978397] Sleep complete
+[2025-10-17 10:44:16.979562] Decision #12/24 starting
+[2025-10-17 10:44:19.311052] Decision #12 complete: SKIP (50.0%)
+[2025-10-17 10:44:19.320029] Sleeping 900s
+[2025-10-17 10:59:19.321516] Sleep complete
+[2025-10-17 10:59:19.331005] Decision #13/24 starting
+[2025-10-17 10:59:21.090510] Decision #13 complete: SKIP (50.0%)
+[2025-10-17 10:59:21.100633] Sleeping 900s
+[2025-10-17 11:14:21.102977] Sleep complete
+[2025-10-17 11:14:21.114071] Decision #14/24 starting
+[2025-10-17 11:14:23.848894] Decision #14 complete: SKIP (50.0%)
+[2025-10-17 11:14:23.858827] Sleeping 900s
+[2025-10-17 11:29:23.861021] Sleep complete
+[2025-10-17 11:29:23.872427] Decision #15/24 starting
+[2025-10-17 11:29:27.201780] Decision #15 complete: BUY (60.0%)
+[2025-10-17 11:29:27.212524] Position #3 opened: BTCUSDT @ R66,901.11
+[2025-10-17 11:29:27.215484] Sleeping 900s
+[2025-10-17 11:44:27.217741] Sleep complete
+[2025-10-17 11:44:27.229484] Decision #16/24 starting
+[2025-10-17 11:44:30.735908] Decision #16 complete: SKIP (0.0%)
+[2025-10-17 11:44:30.748329] Sleeping 900s
+[2025-10-17 11:59:30.751958] Sleep complete
+[2025-10-17 11:59:30.754930] Decision #17/24 starting
+[2025-10-17 11:59:33.827807] Decision #17 complete: BUY (65.0%)
+[2025-10-17 11:59:33.837944] Position #4 opened: BTCUSDT @ R67,004.16
+[2025-10-17 11:59:33.840993] Sleeping 900s
+[2025-10-17 12:14:33.843390] Sleep complete
+[2025-10-17 12:14:33.855190] Decision #18/24 starting
+[2025-10-17 12:14:36.496025] Decision #18 complete: SKIP (0.0%)
+[2025-10-17 12:14:36.507792] Sleeping 900s
+[2025-10-17 12:29:36.510463] Sleep complete
+[2025-10-17 12:29:36.520925] Decision #19/24 starting
+[2025-10-17 12:29:40.340192] Decision #19 complete: SKIP (50.0%)
+[2025-10-17 12:29:40.350742] Sleeping 900s
+[2025-10-17 12:44:40.353034] Sleep complete
+[2025-10-17 12:44:40.364007] Decision #20/24 starting
+[2025-10-17 12:44:43.302915] Decision #20 complete: SKIP (50.0%)
+[2025-10-17 12:44:43.313316] Sleeping 900s
+[2025-10-17 12:59:43.315584] Sleep complete
+[2025-10-17 12:59:43.326991] Decision #21/24 starting
+[2025-10-17 12:59:46.471406] Decision #21 complete: SKIP (50.0%)
+[2025-10-17 12:59:46.476859] Sleeping 900s
+[2025-10-17 13:14:46.481376] Sleep complete
+[2025-10-17 13:14:46.492290] Decision #22/24 starting
+[2025-10-17 13:14:50.103978] Decision #22 complete: BUY (57.0%)
+[2025-10-17 13:14:50.116748] Position #5 opened: BTCUSDT @ R67,412.55
+[2025-10-17 13:14:50.121222] Sleeping 900s
+[2025-10-17 13:29:50.124908] Sleep complete
+[2025-10-17 13:29:50.135050] Decision #23/24 starting
+[2025-10-17 13:29:52.859699] Decision #23 complete: SKIP (50.0%)
+[2025-10-17 13:29:52.872294] Sleeping 900s
+[2025-10-17 13:44:52.874737] Sleep complete
+[2025-10-17 13:44:52.886457] Decision #24/24 starting
+[2025-10-17 13:44:54.798561] Decision #24 complete: SKIP (50.0%)
+[2025-10-17 13:44:54.809233] Test complete! 24/24 decisions

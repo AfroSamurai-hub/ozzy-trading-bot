@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List
 
-from pybit.usdt_perpetual import WebSocket
+from pybit.unified_trading import WebSocket  # V5 API (upgraded from V3 usdt_perpetual)
 
 # Add project root to path to allow imports
 import sys
@@ -52,22 +52,21 @@ class LiveLabeler:
         logger.info("🏷️ Live Labeler initialized.")
 
     def _handle_message(self, msg: Dict):
-        """Callback function to handle incoming WebSocket messages."""
-        if "data" in msg and "last_price" in msg["data"]:
-            self.latest_price = float(msg["data"]["last_price"])
+        """Callback function to handle incoming WebSocket messages (V5 API format)."""
+        # V5 API: trade data comes as a list under "data" key, each item has "p" for price
+        if "data" in msg and isinstance(msg["data"], list) and len(msg["data"]) > 0:
+            self.latest_price = float(msg["data"][0].get("p", self.latest_price or 0))
 
     async def _setup_websocket(self):
-        """Initializes and connects the WebSocket client."""
-        logger.info("🔌 Setting up WebSocket connection to Bybit...")
+        """Initializes and connects the WebSocket client (V5 API)."""
+        logger.info("🔌 Setting up WebSocket connection to Bybit V5...")
         self.ws = WebSocket(
-            test=False,  # Use mainnet
-            api_key=API_KEY,
-            api_secret=API_SECRET,
-            ping_interval=30,
-            ping_timeout=10,
+            channel_type="linear",  # V5 API uses channel_type instead of test
+            testnet=False,  # Use mainnet
         )
-        self.ws.instrument_info_stream(self._handle_message, SYMBOL)
-        logger.info("✅ WebSocket connected.")
+        # V5 API uses trade_stream instead of instrument_info_stream
+        self.ws.trade_stream(symbol=SYMBOL, callback=self._handle_message)
+        logger.info("✅ WebSocket connected (V5 API).")
 
     def _get_pending_patterns(self) -> List[Dict]:
         """Fetches all patterns from the DB with a 'PENDING' label."""

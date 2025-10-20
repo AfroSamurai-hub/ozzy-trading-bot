@@ -143,7 +143,7 @@ async def quick_test(duration: int = 60, interval: int = 60, model: str = "gpt-4
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="quick_validation.py")
     parser.add_argument("--duration", type=int, default=60, help="Total run time in seconds")
-    parser.add_argument("--interval", type=int, default=60, help="Decision interval in seconds (default 60 -> 1m timeframe)")
+    parser.add_argument("--interval", type=int, default=14400, help="Decision interval in seconds (default 14400 -> 4h timeframe, swing trading)")
     parser.add_argument("--model", type=str, default="gpt-4o-mini", help="OpenAI model to use")
     parser.add_argument("--capital", type=float, default=None, help="Starting capital override (USD)")
     parser.add_argument("--bootstrap-csv", type=str, default=None, help="Optional CSV to load historical patterns from")

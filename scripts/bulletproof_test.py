@@ -679,10 +679,10 @@ if __name__ == "__main__":
     import argparse
     
     parser = argparse.ArgumentParser(description='Bulletproof Live Stream Test - Optimized for 15-min overnight runs')
-    parser.add_argument('--symbol', default='BTCUSDT', help='Trading symbol')
-    parser.add_argument('--duration', type=int, default=21600, help='Test duration in seconds (default: 6 hours for overnight)')
-    parser.add_argument('--interval', type=int, default=900, help='Decision interval in seconds (default: 900 = 15 minutes, less noisy)')
-    parser.add_argument('--capital', type=float, default=10000.0, help='Starting capital')
+        parser.add_argument('--symbol', default='BTCUSDT', help='Trading symbol')
+        parser.add_argument('--duration', type=int, default=21600, help='Test duration in seconds (default: 6 hours for overnight)')
+        parser.add_argument('--interval', type=int, default=14400, help='Decision interval in seconds (default: 14400 = 4 hours, optimal for small accounts, swing trading)')
+        parser.add_argument('--capital', type=float, default=10000.0, help='Starting capital')
     
     args = parser.parse_args()
     

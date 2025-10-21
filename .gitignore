@@ -1,47 +1,38 @@
-# Sensitive files - NEVER commit these!
+# Sensitive files
 .env
 config.py
 *.key
 *.secret
 api_keys.txt
-credentials.json
 
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
-.Python
 venv/
 env/
-ENV/
-*.egg-info/
 
-# Trading data & logs
+# Trading data
 *.csv
 *.db
-*.sqlite
 logs/
 data/
 trades/
 *.log
-positions.json
-state.json
-snapshots/
 
 # IDE
 .vscode/
 .idea/
-*.swp
-*.swo
-*~
 
 # OS
 .DS_Store
-Thumbs.db
-EOFpshots/
 
-# Test outputs
-.pytest_cache/
-.coverage
-htmlcov/
+# Snapshots and backups
+snapshots/
+backups/
+*.sanitized
+*_backup/
+
+# Any other sensitive patterns
+config/.env*
+*.env.*
+snapshots/**/config/.env*

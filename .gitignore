@@ -1,21 +1,47 @@
-# Environment and secrets
+# Sensitive files - NEVER commit these!
 .env
-*.log
+config.py
+*.key
+*.secret
+api_keys.txt
+credentials.json
 
 # Python
-venv/
 __pycache__/
-*.pyc
-*.pyo
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
 
-# Runtime data (don't commit these)
-state.json
-positions.json
+# Trading data & logs
 *.csv
-
-# Backups
-config.py.bak*
+*.db
+*.sqlite
+logs/
+data/
+trades/
+*.log
+positions.json
+state.json
+snapshots/
 
 # IDE
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+EOFpshots/
+
+# Test outputs
+.pytest_cache/
+.coverage
+htmlcov/

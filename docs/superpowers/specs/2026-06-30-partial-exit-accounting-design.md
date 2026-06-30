@@ -65,7 +65,7 @@ Each new partial-exit note will include enough evidence to reproduce the calcula
 - `original_qty`;
 - resulting original-position `qty_pct`;
 - configured current-position reduction percentage, when applicable;
-- exact `qty_source` (`create_response.executedQty`, `order_query.executedQty`, `account_trade_qty_sum`, `filled_order.executedQty`, or `requested_rounded_unconfirmed`);
+- exact `qty_source` (`create_response.executedQty`, `create_response.cumQty`, `order_query.executedQty`, `order_query.cumQty`, `account_trade_qty_sum`, `filled_order.executedQty`, `filled_order.cumQty`, or `requested_rounded_unconfirmed`);
 - Binance `orderId` and account-trade fill `id` values when available.
 
 This is diagnostic metadata only; no new strategy decision depends on the note text.

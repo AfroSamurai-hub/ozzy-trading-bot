@@ -384,30 +384,53 @@ def _protection_ref(
     )
 
 
+_QUANTITY_PRECISION = {
+    "BTCUSDT": 3,
+    "ETHUSDT": 2,
+    "SOLUSDT": 0,
+    "XRPUSDT": 0,
+    "LINKUSDT": 2,
+    "DOGEUSDT": 0,
+    "SUIUSDT": 1,
+    "HYPEUSDT": 2,
+    "BNBUSDT": 2,
+    "XAUUSDT": 3,
+    "WLDUSDT": 0,
+    "ZECUSDT": 3,
+    "DRIFTUSDT": 0,
+    "INJUSDT": 1,
+    "NEARUSDT": 1,
+    "ONDOUSDT": 1,
+    "RENDERUSDT": 1,
+    "ENAUSDT": 0,
+    "SEIUSDT": 0,
+}
+_quantity_step_cache: dict[str, float] = {}
+
+
 def _format_quantity(symbol: str, raw_qty: float) -> float:
-    precision_map = {
-        "BTCUSDT": 3,
-        "ETHUSDT": 2,
-        "SOLUSDT": 0,
-        "XRPUSDT": 0,
-        "LINKUSDT": 2,
-        "DOGEUSDT": 0,
-        "SUIUSDT": 1,
-        "HYPEUSDT": 2,
-        "BNBUSDT": 2,
-        "XAUUSDT": 3,
-        "WLDUSDT": 0,
-        "ZECUSDT": 3,
-        "DRIFTUSDT": 0,
-        "INJUSDT": 1,
-        "NEARUSDT": 1,
-        "ONDOUSDT": 1,
-        "RENDERUSDT": 1,
-        "ENAUSDT": 0,
-        "SEIUSDT": 0,
-    }
-    decimals = precision_map.get(symbol, 3)
-    return round(raw_qty, decimals)
+    return round(raw_qty, _QUANTITY_PRECISION.get(symbol, 3))
+
+
+def get_quantity_step_size(symbol: str, client=None) -> float:
+    """Return the exchange LOT_SIZE step, cached per mapped symbol."""
+    mapped = _map_symbol(symbol)
+    if mapped in _quantity_step_cache:
+        return _quantity_step_cache[mapped]
+    exchange = client or _get_client()
+    try:
+        info = exchange.futures_exchange_info()
+        symbol_info = next(row for row in info.get("symbols", []) if row.get("symbol") == mapped)
+        lot_filter = next(
+            row for row in symbol_info.get("filters", []) if row.get("filterType") == "LOT_SIZE"
+        )
+        step = abs(float(lot_filter.get("stepSize") or 0.0))
+    except (StopIteration, TypeError, ValueError):
+        step = 10 ** (-_QUANTITY_PRECISION.get(mapped, 3))
+    if step <= 0:
+        step = 10 ** (-_QUANTITY_PRECISION.get(mapped, 3))
+    _quantity_step_cache[mapped] = step
+    return step
 
 
 def _floor_quantity(symbol: str, raw_qty: float) -> float:
@@ -1858,11 +1881,87 @@ def close_position(position_id: str, position_side: str | None = None) -> dict:
         return {"status": "error", "symbol": symbol, "position_side": position_side, "error": str(e)}
 
 
+_EXECUTED_ORDER_STATUSES = {"FILLED", "PARTIALLY_FILLED"}
+
+
+def _positive_order_quantity(order: dict, source_prefix: str) -> tuple[float | None, str | None]:
+    status = str(order.get("status") or "").upper()
+    if status not in _EXECUTED_ORDER_STATUSES:
+        return None, None
+    for field in ("executedQty", "cumQty"):
+        raw = order.get(field)
+        if raw in (None, ""):
+            continue
+        try:
+            quantity = abs(float(raw))
+        except (TypeError, ValueError):
+            continue
+        if quantity > 0:
+            return quantity, f"{source_prefix}.{field}"
+    return None, None
+
+
+def _resolve_close_execution(client, symbol: str, order: dict, requested_qty: float) -> dict:
+    order_id = order.get("orderId")
+    quantity, source = _positive_order_quantity(order, "create_response")
+    if quantity is not None:
+        return {
+            "quantity": quantity,
+            "quantity_source": source,
+            "fill_ids": [],
+            "accounting_confirmed": True,
+        }
+
+    if order_id is not None:
+        try:
+            queried = client.futures_get_order(symbol=symbol, orderId=order_id)
+        except Exception:
+            queried = {}
+        quantity, source = _positive_order_quantity(queried, "order_query")
+        if quantity is not None:
+            return {
+                "quantity": quantity,
+                "quantity_source": source,
+                "fill_ids": [],
+                "accounting_confirmed": True,
+            }
+
+        try:
+            fills = client.futures_account_trades(symbol=symbol, orderId=order_id)
+        except Exception:
+            fills = []
+        matched = [row for row in fills or [] if str(row.get("orderId")) == str(order_id)]
+        fill_qty = sum(abs(float(row.get("qty") or 0.0)) for row in matched)
+        if fill_qty > 0:
+            return {
+                "quantity": fill_qty,
+                "quantity_source": "account_trade_qty_sum",
+                "fill_ids": [str(row.get("id")) for row in matched if row.get("id") is not None],
+                "accounting_confirmed": True,
+            }
+
+    return {
+        "quantity": requested_qty,
+        "quantity_source": "requested_rounded_unconfirmed",
+        "fill_ids": [],
+        "accounting_confirmed": False,
+    }
+
+
 def close_position_qty(
     position_id: str, quantity: float, reason: str = "protective_exit", position_side: str | None = None
 ) -> dict:
     if PAPER_MODE:
-        return {"status": "closed", "symbol": position_id, "quantity": quantity, "position_side": position_side}
+        return {
+            "status": "closed",
+            "symbol": position_id,
+            "quantity": quantity,
+            "requested_quantity": quantity,
+            "quantity_source": "paper_simulated",
+            "fill_ids": [],
+            "accounting_confirmed": True,
+            "position_side": position_side,
+        }
     client = _get_client()
     symbol = _map_symbol(position_id)
     try:
@@ -1891,19 +1990,27 @@ def close_position_qty(
                     "error": "formatted quantity is zero",
                 }
             side = "SELL" if amt > 0 else "BUY"
-            payload = {"symbol": symbol, "side": side, "type": "MARKET", "quantity": close_qty}
+            payload = {
+                "symbol": symbol,
+                "side": side,
+                "type": "MARKET",
+                "quantity": close_qty,
+                "newOrderRespType": "RESULT",
+            }
             if raw_pos_side in {"LONG", "SHORT"}:
                 payload["positionSide"] = raw_pos_side
             else:
                 payload["reduceOnly"] = True
             order = client.futures_create_order(**payload)
+            execution = _resolve_close_execution(client, symbol, order, close_qty)
             return {
                 "status": "partial_closed",
                 "symbol": symbol,
                 "position_side": pos_side,
                 "order_id": order.get("orderId"),
-                "quantity": close_qty,
+                "requested_quantity": close_qty,
                 "reason": reason,
+                **execution,
             }
         return {"status": "not_found", "symbol": symbol, "position_side": position_side}
     except Exception as e:

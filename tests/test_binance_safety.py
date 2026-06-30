@@ -100,6 +100,27 @@ class FakeClient:
         return self.leverage_bracket_payload
 
 
+class QuantityCloseClient:
+    def __init__(self, create_order, queried_order=None, fills=None):
+        self.create_order = create_order
+        self.queried_order = queried_order or {}
+        self.fills = fills or []
+        self.create_payload = None
+
+    def futures_position_information(self, symbol):
+        return [{"symbol": symbol, "positionSide": "SHORT", "positionAmt": "-10"}]
+
+    def futures_create_order(self, **payload):
+        self.create_payload = payload
+        return self.create_order
+
+    def futures_get_order(self, symbol, orderId):
+        return self.queried_order
+
+    def futures_account_trades(self, symbol, orderId):
+        return self.fills
+
+
 class BinanceSafetyTests(unittest.TestCase):
     def setUp(self):
         # Unit tests intentionally drive execution and fail-close branches.
@@ -224,6 +245,91 @@ class BinanceSafetyTests(unittest.TestCase):
         self.assertEqual(client.orders[0]["side"], "BUY")
         self.assertEqual(client.orders[0]["quantity"], 1.25)
         self.assertTrue(client.orders[0]["reduceOnly"])
+
+    def test_close_position_qty_prefers_result_executed_qty(self):
+        client = QuantityCloseClient({
+            "orderId": 41,
+            "status": "FILLED",
+            "executedQty": "2.49",
+            "cumQty": "2.49",
+        })
+        with (
+            patch.object(binance_connector, "PAPER_MODE", False),
+            patch.object(binance_connector, "_get_client", return_value=client),
+        ):
+            result = binance_connector.close_position_qty("BNBUSDT", 2.5, position_side="SHORT")
+
+        self.assertEqual(client.create_payload["newOrderRespType"], "RESULT")
+        self.assertEqual(result["quantity"], 2.49)
+        self.assertEqual(result["requested_quantity"], 2.5)
+        self.assertEqual(result["quantity_source"], "create_response.executedQty")
+        self.assertTrue(result["accounting_confirmed"])
+
+    def test_close_position_qty_queries_order_before_fills(self):
+        client = QuantityCloseClient(
+            {"orderId": 42, "status": "NEW", "executedQty": "0"},
+            {"orderId": 42, "status": "FILLED", "executedQty": "2.48"},
+            [{"id": 901, "orderId": 42, "qty": "2.47"}],
+        )
+        with (
+            patch.object(binance_connector, "PAPER_MODE", False),
+            patch.object(binance_connector, "_get_client", return_value=client),
+        ):
+            result = binance_connector.close_position_qty("BNBUSDT", 2.5, position_side="SHORT")
+
+        self.assertEqual(result["quantity"], 2.48)
+        self.assertEqual(result["quantity_source"], "order_query.executedQty")
+        self.assertEqual(result["fill_ids"], [])
+
+    def test_close_position_qty_aggregates_same_order_fills(self):
+        client = QuantityCloseClient(
+            {"orderId": 43, "status": "NEW", "executedQty": "0"},
+            {"orderId": 43, "status": "NEW", "executedQty": "0"},
+            [
+                {"id": 902, "orderId": 43, "qty": "1.20"},
+                {"id": 903, "orderId": 43, "qty": "1.29"},
+                {"id": 904, "orderId": 99, "qty": "8.00"},
+            ],
+        )
+        with (
+            patch.object(binance_connector, "PAPER_MODE", False),
+            patch.object(binance_connector, "_get_client", return_value=client),
+        ):
+            result = binance_connector.close_position_qty("BNBUSDT", 2.5, position_side="SHORT")
+
+        self.assertEqual(result["quantity"], 2.49)
+        self.assertEqual(result["quantity_source"], "account_trade_qty_sum")
+        self.assertEqual(result["fill_ids"], ["902", "903"])
+
+    def test_close_position_qty_labels_unconfirmed_rounded_fallback(self):
+        client = QuantityCloseClient(
+            {"orderId": 44, "status": "NEW", "executedQty": "0"},
+            {"orderId": 44, "status": "NEW", "executedQty": "0"},
+            [],
+        )
+        with (
+            patch.object(binance_connector, "PAPER_MODE", False),
+            patch.object(binance_connector, "_get_client", return_value=client),
+        ):
+            result = binance_connector.close_position_qty("BNBUSDT", 2.5, position_side="SHORT")
+
+        self.assertEqual(result["quantity"], 2.5)
+        self.assertEqual(result["quantity_source"], "requested_rounded_unconfirmed")
+        self.assertFalse(result["accounting_confirmed"])
+
+    def test_quantity_step_size_uses_exchange_lot_size_and_cache(self):
+        client = MagicMock()
+        client.futures_exchange_info.return_value = {
+            "symbols": [{
+                "symbol": "BNBUSDT",
+                "filters": [{"filterType": "LOT_SIZE", "stepSize": "0.01"}],
+            }]
+        }
+        binance_connector._quantity_step_cache.clear()
+
+        self.assertEqual(binance_connector.get_quantity_step_size("BNBUSDT", client=client), 0.01)
+        self.assertEqual(binance_connector.get_quantity_step_size("BNBUSDT", client=client), 0.01)
+        client.futures_exchange_info.assert_called_once()
 
     def test_order_state_persists_risk_when_lot_param_is_used(self):
         client = FakeClient()

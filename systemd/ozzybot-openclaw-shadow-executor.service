@@ -1,0 +1,22 @@
+[Unit]
+Description=OzzyBot OpenClaw Shadow Executor (TESTNET)
+After=network-online.target ozzybot-webhook.service ozzybot-openclaw-trend-executor.service
+Wants=network-online.target ozzybot-webhook.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/rick/ozzy-bot
+Environment=HERMES_OPENCLAW_SHADOW_MODE=true
+Environment=HERMES_BINANCE_SYMBOLS=BTCUSDT,ETHUSDT,SOLUSDT,LINKUSDT,SUIUSDT,HYPEUSDT,XAUUSDT,NEARUSDT,BNBUSDT,ONDOUSDT,WLDUSDT,ZECUSDT,DRIFTUSDT,INJUSDT,RENDERUSDT,ENAUSDT,SEIUSDT
+Environment=HERMES_OPENCLAW_BREAKOUT_WEBHOOK_URL=http://127.0.0.1:5001/webhook
+Environment=HERMES_OPENCLAW_BREAKOUT_EXECUTE=false
+Environment=HERMES_OPENCLAW_BREAKOUT_USE_CLOSED_CANDLE=true
+Environment=HERMES_OPENCLAW_SHADOW_MIN_VOLUME_RATIO=0.65
+Environment=HERMES_OPENCLAW_SHADOW_MIN_BODY_ATR=0.20
+Environment=HERMES_OPENCLAW_SHADOW_MAX_REJECTION_WICK=0.50
+ExecStart=/home/rick/ozzy-bot/venv/bin/python /home/rick/ozzy-bot/core/openclaw_breakout_executor.py
+StandardOutput=journal
+StandardError=journal
+Environment=PATH=/usr/bin:/usr/local/bin
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/home/rick/ozzy-bot

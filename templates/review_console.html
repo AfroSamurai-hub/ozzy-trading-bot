@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Signal Review Console</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      margin: 0;
+      padding: 24px;
+    }
+    h1, h2 { margin: 0 0 12px; }
+    p { margin: 4px 0 16px; color: #94a3b8; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .card {
+      background: #111827;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 14px;
+    }
+    .card .label {
+      font-size: 12px;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .card .value {
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+      background: #111827;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #1e293b;
+      vertical-align: top;
+      font-size: 14px;
+    }
+    th {
+      background: #1e293b;
+      color: #cbd5e1;
+      position: sticky;
+      top: 0;
+    }
+    tr:last-child td { border-bottom: none; }
+    .mono { font-family: monospace; }
+    .pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 12px;
+      border: 1px solid #475569;
+    }
+    .approved { color: #86efac; }
+    .rejected { color: #fca5a5; }
+    .muted { color: #94a3b8; }
+    .section { margin-bottom: 28px; }
+  </style>
+</head>
+<body>
+  <h1>Signal Review Console</h1>
+  <p>Generated at {{ generated_at }}</p>
+
+  <div class="grid">
+    {% for key, value in totals.items() %}
+    <div class="card">
+      <div class="label">{{ key }}</div>
+      <div class="value">{{ value }}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="section">
+    <h2>Latest Signals</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Symbol</th>
+          <th>Side</th>
+          <th>Status</th>
+          <th>Entry</th>
+          <th>Reason / Outcome</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in latest_signals %}
+        <tr>
+          <td class="mono">{{ row.ts }}</td>
+          <td>{{ row.symbol }}</td>
+          <td>{{ row.signal }}</td>
+          <td>
+            <span class="pill {{ row.decision }}">{{ row.decision }}</span>
+          </td>
+          <td class="mono">{{ row.entry }}</td>
+          <td>
+            {% if row.filter_reason %}<div>{{ row.filter_reason }}</div>{% endif %}
+            {% if row.outcome_status %}<div class="muted">status={{ row.outcome_status }}</div>{% endif %}
+            {% if row.outcome %}<div class="muted">outcome={{ row.outcome }}</div>{% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Filter Summary</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Filter</th>
+          <th>Signals</th>
+          <th>Blocked winners</th>
+          <th>Blocked losers</th>
+          <th>Ambiguous</th>
+          <th>Net R</th>
+          <th>Flagged</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in filters %}
+        <tr>
+          <td>{{ row.filter_name }}</td>
+          <td>{{ row.signals }}</td>
+          <td>{{ row.blocked_winners }}</td>
+          <td>{{ row.blocked_losers }}</td>
+          <td>{{ row.ambiguous }}</td>
+          <td>{{ row.net_r_impact }}</td>
+          <td>{{ 'yes' if row.flagged else 'no' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Symbol Summary</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Symbol</th>
+          <th>Total</th>
+          <th>Approved</th>
+          <th>Rejected</th>
+          <th>Wins</th>
+          <th>Losses</th>
+          <th>Pending</th>
+          <th>Unavailable</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in symbols %}
+        <tr>
+          <td>{{ row.symbol }}</td>
+          <td>{{ row.total }}</td>
+          <td>{{ row.approved }}</td>
+          <td>{{ row.rejected }}</td>
+          <td>{{ row.wins }}</td>
+          <td>{{ row.losses }}</td>
+          <td>{{ row.pending }}</td>
+          <td>{{ row.unavailable }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Recent Log Events</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Event</th>
+          <th>Symbol</th>
+          <th>Side</th>
+          <th>Entry</th>
+          <th>Reason</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in recent_events %}
+        <tr>
+          <td class="mono">{{ row.ts }}</td>
+          <td>{{ row.event }}</td>
+          <td>{{ row.symbol }}</td>
+          <td>{{ row.signal }}</td>
+          <td class="mono">{{ row.entry }}</td>
+          <td>{{ row.reason or '' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

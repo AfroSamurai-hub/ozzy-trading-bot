@@ -1,0 +1,12 @@
+[Unit]
+Description=Run OzzyBot Derivatives Shadow Report every 6 hours
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=6h
+AccuracySec=5min
+Persistent=true
+Unit=ozzybot-derivatives-shadow-report.service
+
+[Install]
+WantedBy=timers.target

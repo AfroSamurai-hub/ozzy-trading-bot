@@ -1,0 +1,28 @@
+# RETIRED 2026-06-08 — Do NOT re-enable this timer.
+#
+# This service ran the 15m MR scanner across ALL 17 symbols on the testnet
+# as a shadow/research pass. It was superseded by:
+#   - ozzybot-live-micro-15m.timer  (sniper lane: LINK+BNB only, regime-gated)
+#
+# The full-17-symbol pass was permanently blocked by the OpenClaw regime gate
+# (all symbols in 4H_MACRO_BREAKOUT DOWN or STANDBY), producing 17 REGIME_SKIP
+# rows every 15 minutes with no signal value — pure Telegram noise.
+#
+# The timer (ozzybot-testnet-15m.timer) has been stopped and disabled.
+[Unit]
+Description=OzzyBot Testnet 15m Mean Reversion Scanner (RETIRED - see comments above)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/rick/ozzy-bot
+Environment="HERMES_BINANCE_TESTNET=true"
+Environment="HERMES_DYNAMIC_CONFIG=/home/rick/ozzy-bot/config/dynamic_config_testnet.json"
+Environment="HERMES_WEBHOOK_URL=http://127.0.0.1:5001/webhook"
+Environment="HERMES_MR_LIVE_SYMBOLS=BTCUSDT,ETHUSDT,SOLUSDT,LINKUSDT,SUIUSDT,HYPEUSDT,NEARUSDT,BNBUSDT,ONDOUSDT,XAUUSDT,WLDUSDT,ZECUSDT,DRIFTUSDT,INJUSDT,RENDERUSDT,ENAUSDT,SEIUSDT"
+ExecStart=/bin/false
+StandardOutput=journal
+StandardError=journal
+Environment="PATH=/usr/bin:/usr/local/bin"
+Environment="PYTHONUNBUFFERED=1"

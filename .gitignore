@@ -1,66 +1,49 @@
-# Sensitive files
+# Secrets and local runtime state
 .env
-config.py
-*.key
-*.secret
-api_keys.txt
+.env.*
+!.env.example
+config/*.env
+config/*.env.*
+config/*.env.bak*
+.cache/
+*.log
+*.pid
 
 # Python
 __pycache__/
 *.py[cod]
-venv/
-env/
-
-# Trading data
-*.csv
-*.db
-logs/
-data/
-trades/
-*.log
-
-# IDE
-.vscode/
-.idea/
-
-# OS
-.DS_Store
-
-# Snapshots and backups
-snapshots/
-backups/
-*.sanitized
-*_backup/
-
-# Any other sensitive patterns
-config/.env*
-*.env.*
-snapshots/**/config/.env*
-
-# Snapshots with potentially sensitive data
-snapshots/
-logs/
-*.log
-
-# Environment files
-.env
-.env.local
-.env.*.local
-**/.env*
-!.env.example
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-
-# Testing
-.coverage
 .pytest_cache/
+.ruff_cache/
+.mypy_cache/
+venv/
+.venv/
 
-# IDE
-.vscode/
-.idea/
+# Local trading state and generated outputs
+trades.log
+day_equity.json
+paper_trades.json
+signal_reviews.json
+signal_stats.json
+*.db
+*.db-*
+charts/
+reports/daily_*.json
+reports/weekly_*.json
+backups/
+live_micro/
+reconcile_status.json
+economic_calendar.json
+*.swp
+.*.swp
+scratch/
+.antigravitycli/
 
+# Freqtrade generated data/results
+freqtrade/user_data/data/
+freqtrade/user_data/backtest_results/
+freqtrade/user_data/hyperopt_results/
+freqtrade/exit_optimization_results.csv
+
+# Editor and OS noise
+.DS_Store
+config/secrets.json

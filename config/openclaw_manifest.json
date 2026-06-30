@@ -1,0 +1,51 @@
+{
+  "framework": {
+    "name": "OzzyBot Multi-Agent Network",
+    "version": "1.1.0",
+    "environment": "TESTNET",
+    "llm_provider": "external_api"
+  },
+  "data_sources": {
+    "primary": "binance_klines",
+    "secondary_optional": "hyperliquid_testnet_mids",
+    "secondary_policy": "confluence_only"
+  },
+  "regime_detection": {
+    "trend_threshold_adx": 22.0,
+    "range_threshold_adx": 20.0,
+    "evaluation_interval_hours": 4,
+    "primary_timeframe": "4h",
+    "trigger_timeframe": "1h",
+    "sniper_timeframe": "15m"
+  },
+  "openclaw_setup_types": {
+    "supported": ["BREAKOUT", "RETEST", "PULLBACK", "CONTINUATION", "SHADOW_ONLY"],
+    "execution_enabled": ["BREAKOUT"],
+    "promotion_requires_human_approval": true
+  },
+  "shadow_mode": {
+    "enabled": false,
+    "env_flag": "HERMES_OPENCLAW_SHADOW_MODE",
+    "opportunities_file": "shared/openclaw_shadow_opportunities.json",
+    "retest_state_file": "shared/openclaw_opportunity_state.json"
+  },
+  "assets": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "LINKUSDT",
+    "SUIUSDT",
+    "HYPEUSDT",
+    "XAUUSDT",
+    "NEARUSDT",
+    "BNBUSDT",
+    "ONDOUSDT",
+    "WLDUSDT",
+    "ZECUSDT",
+    "DRIFTUSDT",
+    "INJUSDT",
+    "RENDERUSDT",
+    "ENAUSDT",
+    "SEIUSDT"
+  ]
+}

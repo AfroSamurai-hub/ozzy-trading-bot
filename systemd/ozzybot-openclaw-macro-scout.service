@@ -1,0 +1,16 @@
+[Unit]
+Description=OzzyBot OpenClaw Macro Scout
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/rick/ozzy-bot
+EnvironmentFile=/home/rick/ozzy-bot/config/live-micro.env
+ExecStartPre=/usr/bin/mkdir -p /home/rick/ozzy-bot/shared
+ExecStart=/home/rick/ozzy-bot/venv/bin/python /home/rick/ozzy-bot/core/macro_scout.py
+StandardOutput=journal
+StandardError=journal
+Environment="PATH=/usr/bin:/usr/local/bin"
+Environment="PYTHONUNBUFFERED=1"
+Environment="PYTHONPATH=/home/rick/ozzy-bot"

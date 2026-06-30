@@ -1,0 +1,248 @@
+#!/home/rick/ozzy-bot/venv/bin/python
+"""
+OZZYCTL — Command Line Operator Tool for OzzyBot Infrastructure
+Designed by Antigravity AI
+"""
+import sys
+import os
+import subprocess
+import argparse
+import json
+
+# Ensure parent directory is in path for imports
+sys.path.insert(0, '/home/rick/ozzy-bot')
+
+C_GREEN = '\033[92m'
+C_RED = '\033[91m'
+C_YELLOW = '\033[93m'
+C_BLUE = '\033[94m'
+C_CYAN = '\033[96m'
+C_BOLD = '\033[1m'
+C_RESET = '\033[0m'
+
+GROUPS = {
+    "webhooks": ["ozzybot-webhook.service", "ozzybot-live-micro-webhook.service"],
+    "monitors": ["ozzybot-live-micro-monitor.service", "ozzybot-breakeven.service"],
+    "telegram": ["ozzybot-telegram-cmd.service"],
+    "timers": ["ozzybot-live-micro-signal.timer", "ozzybot-live-micro-15m.timer"],
+}
+
+GROUP_ALIASES = {
+    "webhook": "webhooks",
+    "webhooks": "webhooks",
+    "monitor": "monitors",
+    "monitors": "monitors",
+    "telegram": "telegram",
+    "tg": "telegram",
+    "timer": "timers",
+    "timers": "timers",
+    "all": "all",
+}
+
+def get_unit_status(unit_name):
+    try:
+        proc = subprocess.run(
+            ["systemctl", "--user", "show", "-p", "ActiveState", "-p", "SubState", unit_name],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        lines = proc.stdout.strip().split('\n')
+        state = "unknown"
+        substate = "unknown"
+        for line in lines:
+            if line.startswith("ActiveState="):
+                state = line.split("=", 1)[1]
+            elif line.startswith("SubState="):
+                substate = line.split("=", 1)[1]
+        return state, substate
+    except Exception:
+        return "unknown", "error"
+
+def check_positions(env_file=None):
+    python_path = "/home/rick/ozzy-bot/venv/bin/python"
+    code = """
+import os, sys, json
+sys.path.append('/home/rick/ozzy-bot')
+env_file = {env_file_repr}
+if env_file:
+    with open(env_file) as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith('#') and '=' in line:
+                k, v = line.split('=', 1)
+                os.environ[k] = v.strip('\"\\'')
+try:
+    from binance_connector import get_open_positions
+    positions = get_open_positions()
+    if positions is None:
+        print("ERROR_API")
+    else:
+        active = [p for p in positions if float(p.get('volume', 0)) > 0]
+        print(json.dumps(active))
+except Exception as e:
+    print("ERROR_" + str(e))
+"""
+    code_formatted = code.format(env_file_repr=repr(env_file))
+    try:
+        proc = subprocess.run(
+            [python_path, "-c", code_formatted],
+            capture_output=True,
+            text=True,
+            timeout=10
+        )
+        out = proc.stdout.strip()
+        if out.startswith("ERROR") or not out:
+            return {"success": False, "error": out or "No output", "positions": []}
+        return {"success": True, "positions": json.loads(out)}
+    except Exception as e:
+        return {"success": False, "error": str(e), "positions": []}
+
+def check_active_positions():
+    active = []
+    # 1. Check standard/testnet
+    res_std = check_positions(None)
+    if res_std["success"]:
+        for p in res_std["positions"]:
+            p["instance"] = "Standard/Testnet"
+            active.append(p)
+            
+    # 2. Check live micro
+    res_live = check_positions("/home/rick/ozzy-bot/config/live-micro.env")
+    if res_live["success"]:
+        for p in res_live["positions"]:
+            p["instance"] = "Live Micro"
+            active.append(p)
+            
+    return active
+
+def print_active_positions(positions):
+    print(f"\n{C_BOLD}{C_RED}!" * 65)
+    print(f"!!! CRITICAL WARNING: ACTIVE OPEN POSITIONS DETECTED !!!")
+    print("!" * 65 + f"{C_RESET}")
+    print(f"  {'Instance/Account':<18} {'Symbol':<10} {'Side':<6} {'Volume':>10} {'Unrealized PnL':>15}")
+    print("  " + "-" * 62)
+    for p in positions:
+        pnl = float(p.get("profit", 0))
+        pnl_color = C_GREEN if pnl >= 0 else C_RED
+        print(
+            f"  {p.get('instance','?'):<18} {p.get('symbol','?'):<10} {p.get('type','?'):<6} "
+            f"{float(p.get('volume',0)):>10.4f} "
+            f"{pnl_color}{pnl:+.2f} USDT{C_RESET}"
+        )
+    print(f"{C_BOLD}{C_RED}" + "!" * 65 + f"{C_RESET}\n")
+
+def run_status(group_name="all"):
+    print(f"{C_BOLD}{C_BLUE}============================================================{C_RESET}")
+    print(f"{C_BOLD}{C_BLUE}               OZZYBOT INFRASTRUCTURE STATUS                {C_RESET}")
+    print(f"{C_BOLD}{C_BLUE}============================================================{C_RESET}")
+    print(f"  {'Group':<12} {'Unit/Service Name':<36} {'State':<10} {'SubState':<10}")
+    print("-" * 72)
+    
+    if group_name == "all":
+        groups_to_check = GROUPS.keys()
+    else:
+        groups_to_check = [group_name]
+        
+    for g in sorted(groups_to_check):
+        for unit in GROUPS[g]:
+            state, substate = get_unit_status(unit)
+            state_color = C_GREEN if state == "active" else (C_RED if state == "failed" else C_RESET)
+            print(f"  {g:<12} {unit:<36} {state_color}{state:<10}{C_RESET} {substate:<10}")
+            
+    print(f"{C_BOLD}{C_BLUE}============================================================{C_RESET}")
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="OZZYCTL — Command Line Operator Tool for OzzyBot Infrastructure",
+        formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument("action", choices=["start", "stop", "restart", "status", "doctor"], help="Action to perform")
+    parser.add_argument("group", nargs="?", default="all", help="Target group (webhooks, monitors, telegram, timers, all)")
+    parser.add_argument("--force", action="store_true", help="Force action despite open exchange positions")
+    
+    if len(sys.argv) == 1:
+        parser.print_help()
+        sys.exit(0)
+        
+    args = parser.parse_args()
+    
+    # Handle doctor action
+    if args.action == "doctor":
+        doctor_path = "/home/rick/ozzy-bot/ozzybot_doctor.py"
+        if os.path.exists(doctor_path):
+            os.execv(doctor_path, [doctor_path])
+        else:
+            print(f"{C_RED}[ERROR] Diagnostics script not found at {doctor_path}!{C_RESET}")
+            sys.exit(1)
+            
+    # Parse and validate group
+    group_input = args.group.lower()
+    if group_input not in GROUP_ALIASES:
+        print(f"{C_RED}[ERROR] Invalid group '{args.group}'. Choose from: webhooks, monitors, telegram, timers, all.{C_RESET}")
+        sys.exit(1)
+        
+    group = GROUP_ALIASES[group_input]
+    
+    # Handle status action
+    if args.action == "status":
+        run_status(group)
+        sys.exit(0)
+        
+    # Safety Check for Stop/Restart on critical groups (all, monitors)
+    if args.action in ["stop", "restart"] and group in ["all", "monitors"]:
+        print(f"Checking Binance accounts for active open positions...")
+        positions = check_active_positions()
+        if positions:
+            print_active_positions(positions)
+            if not args.force:
+                print(f"{C_RED}[ERROR] Blocked: Cannot {args.action} monitors or all services while active positions are open.{C_RESET}")
+                print(f"To override this safety lock and force the operation, append the {C_BOLD}--force{C_RESET} flag.")
+                sys.exit(1)
+            else:
+                print(f"{C_BOLD}{C_YELLOW}[WARNING] PROCEEDING WITH FORCE: Executing {args.action} despite active open positions!{C_RESET}")
+                
+    # Define units to manage
+    units = []
+    if group == "all":
+        units = GROUPS["webhooks"] + GROUPS["monitors"] + GROUPS["telegram"] + GROUPS["timers"]
+    else:
+        units = GROUPS[group]
+        
+    print(f"\n{C_BOLD}{C_BLUE}Executing {args.action.upper()} on group: {group.upper()}...{C_RESET}")
+    print("-" * 60)
+    
+    success = True
+    for unit in units:
+        print(f"  Managing {C_BOLD}{unit}{C_RESET} ... ", end="", flush=True)
+        try:
+            subprocess.run(["systemctl", "--user", args.action, unit], check=True, capture_output=True)
+            state, substate = get_unit_status(unit)
+            state_color = C_GREEN if state == "active" else (C_RED if state == "failed" else C_YELLOW)
+            print(f"{C_GREEN}OK{C_RESET} ({state_color}{state}/{substate}{C_RESET})")
+        except subprocess.CalledProcessError as e:
+            print(f"{C_RED}FAILED{C_RESET}")
+            print(f"    Error: {e.stderr.strip()}")
+            success = False
+            
+    # Align stack target for "all" group starts/stops/restarts
+    if group == "all" and args.action in ["start", "stop", "restart"]:
+        print(f"  Aligning stack target {C_BOLD}ozzybot-stack.target{C_RESET} ... ", end="", flush=True)
+        try:
+            subprocess.run(["systemctl", "--user", args.action, "ozzybot-stack.target"], check=True, capture_output=True)
+            print(f"{C_GREEN}OK{C_RESET}")
+        except subprocess.CalledProcessError as e:
+            print(f"{C_RED}FAILED{C_RESET}")
+            print(f"    Error: {e.stderr.strip()}")
+            success = False
+            
+    print("-" * 60)
+    if success:
+        print(f"{C_BOLD}{C_GREEN}Operation completed successfully.{C_RESET}\n")
+        sys.exit(0)
+    else:
+        print(f"{C_BOLD}{C_RED}Operation finished with errors.{C_RESET}\n")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,12 @@
+[Unit]
+Description=Run OzzyBot Doctor Watchdog every 10 minutes
+
+[Timer]
+OnBootSec=3min
+OnUnitActiveSec=10min
+AccuracySec=30s
+Unit=ozzybot-doctor-watchdog.service
+Persistent=true
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,17 @@
+# ════════════════════════════════════════════════════════════
+# LANE: 🔄 UNIFIED  |  Reads unified trades.db state
+# Runs every 5m. Writes to observer/ directory (loss cooldowns, orphans).
+# ════════════════════════════════════════════════════════════
+[Unit]
+Description=OzzyBot Context Observer — SHARED (both instances)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/rick/ozzy-bot
+ExecStart=/home/rick/ozzy-bot/venv/bin/python /home/rick/ozzy-bot/ozzy_context_observer.py --once
+StandardOutput=journal
+StandardError=journal
+Environment="PATH=/usr/bin:/usr/local/bin"
+Environment="PYTHONUNBUFFERED=1"

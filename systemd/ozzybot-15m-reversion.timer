@@ -1,0 +1,11 @@
+[Unit]
+Description=Run OzzyBot Hermes 15m mean reversion scanner every 15 minutes
+After=network-online.target
+Wants=network-online.target
+
+[Timer]
+OnCalendar=*:0/15
+Persistent=true
+
+[Install]
+WantedBy=timers.target

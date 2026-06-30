@@ -1,0 +1,16 @@
+[Unit]
+Description=DEPRECATED OzzyBot split Testnet 15m Reversal Capture Scanner
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/rick/ozzy-bot
+Environment="HERMES_BINANCE_TESTNET=true"
+Environment="HERMES_WEBHOOK_URL=http://127.0.0.1:5001/webhook"
+Environment="HERMES_SOURCE_SERVICE=testnet_15m_reversal_capture"
+ExecStart=/bin/false
+StandardOutput=journal
+StandardError=journal
+Environment="PATH=/usr/bin:/usr/local/bin"
+Environment="PYTHONUNBUFFERED=1"

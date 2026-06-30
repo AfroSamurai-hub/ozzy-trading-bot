@@ -1,0 +1,10 @@
+[Unit]
+Description=Run OzzyBot OpenClaw Trend Executor hourly
+
+[Timer]
+OnCalendar=*-*-* *:02:00
+Persistent=true
+Unit=ozzybot-openclaw-trend-executor.service
+
+[Install]
+WantedBy=timers.target

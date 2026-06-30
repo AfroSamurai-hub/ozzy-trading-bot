@@ -1,0 +1,15 @@
+[Unit]
+Description=OzzyBot Derivatives Shadow Report
+Documentation=file:/home/rick/ozzy-bot/scripts/report_derivatives_shadow.py
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/rick/ozzy-bot
+ExecStart=/home/rick/ozzy-bot/venv/bin/python /home/rick/ozzy-bot/scripts/report_derivatives_shadow.py --since-days 14 --tolerance-minutes 180 --out-dir /home/rick/ozzy-bot/reports
+StandardOutput=journal
+StandardError=journal
+Environment=PATH=/usr/bin:/usr/local/bin
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/home/rick/ozzy-bot

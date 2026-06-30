@@ -1,0 +1,61 @@
+{
+  "adx_threshold": 25.0,
+  "adx_interval": "1h",
+  "quiet_atr_multiplier": 1.33,
+  "fast_atr_multiplier": 0.8,
+  "breakeven_trigger_r": 1.0,
+  "trail_activation_r": 1.0,
+  "trail_distance_r": 0.5,
+  "momentum_exit_r": 0.5,
+  "momentum_lookback_seconds": 7200,
+  "profit_protect_r": 0.3,
+  "time_reduce_hours": 16,
+  "time_exit_hours": 24,
+  "active_symbols": [
+    "BTCUSDT",
+    "ETHUSDT",
+    "SOLUSDT",
+    "LINKUSDT",
+    "SUIUSDT",
+    "HYPEUSDT",
+    "XAUUSDT",
+    "NEARUSDT",
+    "BNBUSDT",
+    "ONDOUSDT",
+    "WLDUSDT",
+    "ZECUSDT",
+    "DRIFTUSDT",
+    "INJUSDT",
+    "RENDERUSDT",
+    "ENAUSDT",
+    "SEIUSDT"
+  ],
+  "macro_trend_hunter": {
+    "pullback_limit_depth_r": 0.3
+  },
+  "mean_reversion_15m": {
+    "rsi_oversold_threshold": 25,
+    "bollinger_lower_bound": 2.0,
+    "require_absorption_wick": true
+  },
+  "per_symbol": {
+    "BNBUSDT": {
+      "strategy_mode": "momentum",
+      "adx_threshold": 15.0,
+      "trailing_profit_protection": {
+        "enabled": true,
+        "activation_profit_usd": 15.0,
+        "max_giveback_pct": 0.15
+      }
+    },
+    "LINKUSDT": {
+      "strategy_mode": "momentum",
+      "adx_threshold": 15.0,
+      "trailing_profit_protection": {
+        "enabled": true,
+        "activation_profit_usd": 25.0,
+        "max_giveback_pct": 0.15
+      }
+    }
+  }
+}

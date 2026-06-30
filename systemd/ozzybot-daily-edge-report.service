@@ -1,0 +1,15 @@
+[Unit]
+Description=OzzyBot Daily Edge and Bottleneck Report
+Documentation=file:/home/rick/ozzy-bot/scripts/report_daily_edge.py
+After=network-online.target ozzybot-webhook.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/rick/ozzy-bot
+ExecStart=/home/rick/ozzy-bot/venv/bin/python /home/rick/ozzy-bot/scripts/report_daily_edge.py --hours 24 --report-dir /home/rick/ozzy-bot/reports
+StandardOutput=journal
+StandardError=journal
+Environment=PATH=/usr/bin:/usr/local/bin
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/home/rick/ozzy-bot

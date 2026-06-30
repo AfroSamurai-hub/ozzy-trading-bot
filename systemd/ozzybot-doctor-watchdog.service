@@ -1,0 +1,14 @@
+[Unit]
+Description=OzzyBot Doctor Watchdog Scorecard
+After=network-online.target ozzybot-webhook.service ozzybot-openclaw-breakout-executor.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/rick/ozzy-bot
+ExecStart=/home/rick/ozzy-bot/venv/bin/python /home/rick/ozzy-bot/ozzybot_doctor.py --watchdog-only --watchdog-alert
+StandardOutput=journal
+StandardError=journal
+Environment=PATH=/usr/bin:/usr/local/bin
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONPATH=/home/rick/ozzy-bot

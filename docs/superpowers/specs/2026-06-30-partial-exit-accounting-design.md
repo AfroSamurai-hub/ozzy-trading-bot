@@ -55,7 +55,7 @@ Apply the contract to every path that can record a partial close, including:
 - tiered reductions;
 - time-based position reductions.
 
-Terminal exits represent the actual final slice divided by the immutable original quantity and must not use a configured percentage. The audit found that explicit protective terminal paths already calculate `current_exchange_qty / original_qty` when the denominator is valid. Implementation must also correct three terminal edge cases: a missing original quantity currently falls back to `1.0`; the externally detected close path passes the original quantity instead of the final slice; and `time_reduce` is incorrectly classified as terminal, which can suppress the later final exit row. Terminal quantities must become evidence-based or unknown, never an invented full-close fraction, and partial reductions must not act as terminal markers.
+Terminal exits represent the actual final slice divided by the immutable original quantity and must not use a configured percentage. The audit found that explicit protective terminal paths already calculate `current_exchange_qty / original_qty` when the denominator is valid. Implementation must also correct three terminal edge cases: a missing original quantity currently falls back to `1.0`; the externally detected close path passes the original quantity instead of the final slice; and `time_reduce` is incorrectly classified as terminal, which can suppress the later final exit row. Terminal quantities must become evidence-based or unknown, never an invented full-close fraction, and partial reductions must not act as terminal markers. Fractional terminal rows carry `terminal=true` in their audit evidence and are excluded from helpers that sum realized partial-only fractions.
 
 ### Audit evidence
 
@@ -107,6 +107,7 @@ Focused regression tests must prove:
 - invalid or missing original quantity never becomes an invented full-close fraction;
 - every partial-exit writer passes an original-position fraction to `trade_db.log_exit`;
 - explicit and externally detected terminal exits record only the final original-position slice;
+- fractional terminal rows cannot be counted again as realized partial reductions;
 - realized-PnL accounting remains unchanged.
 
 The full automated test suite must pass before rollout and provides path coverage for every listed writer. After rollout, the first observed partial lifecycle must reconcile against exchange fills before the shared accounting mechanism is considered operationally proven. Each distinct writer path receives the same first-use runtime audit when it is eventually exercised; a mismatch marks that trade's accounting unchecked and raises an alert without changing exchange execution.

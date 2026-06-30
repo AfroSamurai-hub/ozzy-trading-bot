@@ -425,7 +425,7 @@ def get_quantity_step_size(symbol: str, client=None) -> float:
             row for row in symbol_info.get("filters", []) if row.get("filterType") == "LOT_SIZE"
         )
         step = abs(float(lot_filter.get("stepSize") or 0.0))
-    except (StopIteration, TypeError, ValueError):
+    except Exception:
         step = 10 ** (-_QUANTITY_PRECISION.get(mapped, 3))
     if step <= 0:
         step = 10 ** (-_QUANTITY_PRECISION.get(mapped, 3))

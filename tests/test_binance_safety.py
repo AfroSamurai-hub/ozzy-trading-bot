@@ -331,6 +331,13 @@ class BinanceSafetyTests(unittest.TestCase):
         self.assertEqual(binance_connector.get_quantity_step_size("BNBUSDT", client=client), 0.01)
         client.futures_exchange_info.assert_called_once()
 
+    def test_quantity_step_size_falls_back_when_exchange_info_fails(self):
+        client = MagicMock()
+        client.futures_exchange_info.side_effect = RuntimeError("exchange info unavailable")
+        binance_connector._quantity_step_cache.clear()
+
+        self.assertEqual(binance_connector.get_quantity_step_size("BNBUSDT", client=client), 0.01)
+
     def test_order_state_persists_risk_when_lot_param_is_used(self):
         client = FakeClient()
 

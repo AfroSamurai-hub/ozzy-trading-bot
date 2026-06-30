@@ -666,7 +666,7 @@ def _prune_state(open_symbols: set):
                         qty_pct=terminal_fraction,
                         notes=(
                             f"Position closed via {exit_reason}; final_slice_qty={final_slice_qty:.12g}; "
-                            f"original_qty={original_qty:.12g}"
+                            f"original_qty={original_qty:.12g}; terminal=true"
                         ),
                     )
 
@@ -2678,7 +2678,7 @@ def _record_terminal_exit(
     notes = (
         f"{base_notes}; closed_qty={terminal_qty:.12g}; "
         f"original_qty={abs(float(state.get('original_qty') or 0.0)):.12g}; "
-        f"qty_pct={terminal_fraction if terminal_fraction is not None else 'unknown'}; "
+        f"qty_pct={terminal_fraction if terminal_fraction is not None else 'unknown'}; terminal=true; "
         f"qty_source={qty_source}; order_id={close_result.get('order_id', 'unknown')}"
     )
     trade_db.log_exit(

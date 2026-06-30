@@ -886,7 +886,7 @@ def _record_terminal_exit(
     notes = (
         f"{base_notes}; closed_qty={terminal_qty:.12g}; "
         f"original_qty={abs(float(state.get('original_qty') or 0.0)):.12g}; "
-        f"qty_pct={terminal_fraction if terminal_fraction is not None else 'unknown'}; "
+        f"qty_pct={terminal_fraction if terminal_fraction is not None else 'unknown'}; terminal=true; "
         f"qty_source={qty_source}; order_id={close_result.get('order_id', 'unknown')}"
     )
     trade_db.log_exit(
@@ -912,6 +912,8 @@ def _record_terminal_exit(
 ```
 
 Remove `"time_reduce"` from `PROTECTIVE_EXIT_TYPES`; it is a partial writer and must not suppress the later terminal row or become a terminal fill-query boundary.
+
+Update `trade_db.get_realized_exit_qty_pct` with `AND COALESCE(notes, '') NOT LIKE '%terminal=true%'`, and add a regression test proving a `0.4375` partial plus a `0.5625` terminal row returns only `0.4375` from the partial-only helper.
 
 Replace the six explicit terminal writers with these exact calls:
 

@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import patch
 
-sys.path.insert(0, "/home/rick/ozzy-bot")
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import trade_db
 from scripts.report_derivatives_shadow import (

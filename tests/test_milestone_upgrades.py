@@ -2,10 +2,11 @@ import unittest
 from unittest.mock import MagicMock, patch
 import time
 from datetime import datetime, timezone
+from pathlib import Path
 
 # We append the project root path
 import sys
-sys.path.insert(0, '/home/rick/ozzy-bot')
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import binance_monitor
 from binance_monitor import (
@@ -77,6 +78,8 @@ class TestMilestoneUpgrades(unittest.TestCase):
         mock_move_sl.assert_called_once_with(symbol, 600.0)
         mock_trade_db.log_exit.assert_called_once()
         self.assertEqual(mock_trade_db.log_exit.call_args[1]["exit_type"], "15m_time_decay_trim")
+        self.assertAlmostEqual(mock_trade_db.log_exit.call_args.kwargs["qty_pct"], 0.15, delta=1e-12)
+        self.assertIn("qty_source=paper_simulated", mock_trade_db.log_exit.call_args.kwargs["notes"])
 
     @patch('binance_monitor.trade_db')
     @patch('binance_monitor.move_sl_to_breakeven')
@@ -133,10 +136,9 @@ class TestMilestoneUpgrades(unittest.TestCase):
         mock_move_sl.assert_not_called()
 
     @patch('binance_monitor.trade_db')
-    @patch('binance_indicators.calculate_adx')
     @patch('binance_monitor._get_client')
     @patch('binance_monitor._send_telegram')
-    def test_check_milestone_exits_choppy_regime(self, mock_send_telegram, mock_get_client, mock_adx, mock_trade_db):
+    def test_check_milestone_exits_choppy_regime(self, mock_send_telegram, mock_get_client, mock_trade_db):
         """Verify that a 1h trade in a choppy market (ADX < 25) triggers dynamic chop Milestone at 0.3R."""
         symbol = "BTCUSDT"
         
@@ -145,7 +147,7 @@ class TestMilestoneUpgrades(unittest.TestCase):
         state["trade_id"] = 202
         mock_trade_db.get_trade_by_id.return_value = {"id": 202, "direction": "BUY"}
         state["timeframe"] = "60"
-        state["original_qty"] = 1.0
+        state["original_qty"] = 100.0
         state["milestone_config"] = [
             {"gate_name": "milestone_1", "threshold": 1.5, "close_pct": 0.50}
         ]
@@ -156,26 +158,28 @@ class TestMilestoneUpgrades(unittest.TestCase):
             "tv_symbol": symbol,
             "openPrice": 70000.0,
             "currentPrice": 70030.0,  # 30 points profit
-            "volume": 1.0,
+            "volume": 75.0,
             "type": "BUY",
             "profit": 30.0,
         }
         
         # Mock ADX to choppy
-        mock_adx.return_value = 20.0  # < 25
+        indicator_module = MagicMock()
+        indicator_module.calculate_adx.return_value = 20.0  # < 25
         
         # Mock CC State original stop loss distance to 100
         cc_state = binance_monitor._get_position_state(symbol)
         cc_state["original_sl_distance"] = 100.0
         
         # Run check
-        with patch('binance_monitor.PAPER_MODE', True):
+        with patch('binance_monitor.PAPER_MODE', True), patch.dict(sys.modules, {"binance_indicators": indicator_module}):
             _check_milestone_exits(position)
             
         # Assertions
         self.assertIn("regime_aware_chop_profit_taken", state["milestones_hit"])
         mock_trade_db.log_exit.assert_called_once()
         self.assertEqual(mock_trade_db.log_exit.call_args[1]["exit_type"], "regime_aware_chop_profit_taken")
+        self.assertAlmostEqual(mock_trade_db.log_exit.call_args.kwargs["qty_pct"], 0.1875, delta=1e-12)
 
     @patch('binance_monitor.trade_db')
     @patch('binance_indicators.calculate_adx')
@@ -274,7 +278,7 @@ class TestMilestoneUpgrades(unittest.TestCase):
             "tv_symbol": symbol,
             "openPrice": 7.672,
             "currentPrice": 7.78,
-            "volume": 400.0,
+            "volume": 200.0,
             "type": "BUY",
             "profit": 43.2,
         }
@@ -284,6 +288,7 @@ class TestMilestoneUpgrades(unittest.TestCase):
         self.assertIn("milestone_0", state["milestones_hit"])
         mock_trade_db.log_exit.assert_called_once()
         self.assertEqual(mock_trade_db.log_exit.call_args[1]["exit_type"], "milestone_0")
+        self.assertAlmostEqual(mock_trade_db.log_exit.call_args.kwargs["qty_pct"], 0.25, delta=1e-12)
 
     @patch('binance_monitor.trade_db')
     @patch('binance_monitor.has_exchange_protection')

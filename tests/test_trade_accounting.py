@@ -49,6 +49,29 @@ class TradeAccountingTests(unittest.TestCase):
         self.assertFalse(audit["mismatch"])
         self.assertAlmostEqual(audit["pnl"], 20.0)
 
+    def test_realized_partial_fraction_excludes_fractional_terminal_slice(self):
+        trade_id = trade_db.log_trade(
+            None,
+            "BNBUSDT",
+            "SELL",
+            entry_price=100.0,
+            qty=100.0,
+        )
+        trade_db.log_exit(
+            trade_id,
+            "milestone_0",
+            qty_pct=0.4375,
+            notes="partial=true",
+        )
+        trade_db.log_exit(
+            trade_id,
+            "momentum_exit",
+            qty_pct=0.5625,
+            notes="terminal=true",
+        )
+
+        self.assertAlmostEqual(trade_db.get_realized_exit_qty_pct(trade_id), 0.4375)
+
     def test_exchange_fill_ledger_includes_actual_fills_and_commissions(self):
         fills = [
             {"side": "SELL", "price": "60044.20", "qty": "0.2400", "realizedPnl": "0", "commission": "5.76424320"},

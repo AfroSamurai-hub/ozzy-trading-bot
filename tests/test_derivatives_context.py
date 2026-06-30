@@ -1,7 +1,8 @@
 import unittest
+from pathlib import Path
 
 import sys
-sys.path.insert(0, "/home/rick/ozzy-bot")
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from derivatives_context import evaluate_derivatives_positioning, taker_buy_ratio_from_kline
 

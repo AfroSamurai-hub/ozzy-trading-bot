@@ -959,6 +959,7 @@ def get_realized_exit_qty_pct(trade_id: int) -> float:
             WHERE trade_id = ?
               AND qty_pct IS NOT NULL
               AND COALESCE(qty_pct, 0) < 1.0
+              AND COALESCE(notes, '') NOT LIKE '%terminal=true%'
             """,
             (trade_id,),
         ).fetchone()

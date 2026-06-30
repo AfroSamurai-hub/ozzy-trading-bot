@@ -44,6 +44,7 @@ class BinanceMonitorProtectiveExitTests(unittest.TestCase):
     def test_time_reduce_closes_exactly_half_using_db_open_time(self):
         state = binance_monitor._get_state("SOLUSDT")
         state["trade_id"] = 101
+        state["original_qty"] = 10.0
 
         with (
             patch.object(binance_monitor.trade_db, "get_trade_by_id", return_value=trade_row(17)),
@@ -52,31 +53,78 @@ class BinanceMonitorProtectiveExitTests(unittest.TestCase):
             patch.object(
                 binance_monitor,
                 "close_position_qty",
-                return_value={"status": "partial_closed"},
+                return_value={
+                    "status": "partial_closed",
+                    "quantity": 3.0,
+                    "quantity_source": "create_response.executedQty",
+                    "accounting_confirmed": True,
+                },
             ) as close_mock,
             patch.object(binance_monitor, "_send_telegram"),
         ):
-            binance_monitor._check_time_based_exit(self._position(volume=10.0))
+            binance_monitor._check_time_based_exit(self._position(volume=6.0))
 
-        close_mock.assert_called_once_with("SOLUSDT", 5.0, reason="time_reduce")
+        close_mock.assert_called_once_with("SOLUSDT", 3.0, reason="time_reduce")
         log_exit.assert_called_once()
+        self.assertAlmostEqual(log_exit.call_args.kwargs["qty_pct"], 0.3, delta=1e-12)
         self.assertTrue(state["time_reduced"])
+
+    def test_tiered_exit_records_fraction_of_original_not_current_position(self):
+        state = binance_monitor._get_state("SOLUSDT")
+        state.update({"trade_id": 704, "original_qty": 100.0, "tiered_exits": []})
+        cc_state = binance_monitor._get_position_state("SOLUSDT")
+        cc_state["original_sl_distance"] = 10.0
+        position = {
+            "symbol": "SOLUSDT",
+            "tv_symbol": "SOLUSDT",
+            "type": "BUY",
+            "openPrice": 100.0,
+            "currentPrice": 115.0,
+            "profit": 750.0,
+            "volume": 50.0,
+        }
+        close_result = {
+            "status": "partial_closed",
+            "quantity": 25.0,
+            "requested_quantity": 25.0,
+            "quantity_source": "create_response.executedQty",
+            "accounting_confirmed": True,
+            "order_id": 705,
+            "fill_ids": [],
+        }
+        with (
+            patch.object(binance_monitor, "PAPER_MODE", False),
+            patch.object(binance_monitor, "close_position_qty", return_value=close_result),
+            patch.object(binance_monitor.trade_db, "log_exit") as log_exit,
+            patch.object(binance_monitor, "_send_telegram"),
+        ):
+            binance_monitor._check_tiered_exits(position)
+
+        self.assertAlmostEqual(log_exit.call_args.kwargs["qty_pct"], 0.25, delta=1e-12)
 
     def test_time_exit_closes_remaining_and_uses_db_time_not_position_update_time(self):
         state = binance_monitor._get_state("SOLUSDT")
-        state["trade_id"] = 102
+        state.update({"trade_id": 102, "original_qty": 10.0})
+        close_result = {
+            "status": "closed",
+            "quantity": 5.625,
+            "quantity_source": "create_response.executedQty",
+            "accounting_confirmed": True,
+        }
 
         with (
             patch.object(binance_monitor.trade_db, "get_trade_by_id", return_value=trade_row(25)),
             patch.object(binance_monitor.trade_db, "milestone_exists", return_value=False),
             patch.object(binance_monitor.trade_db, "log_exit") as log_exit,
-            patch.object(binance_monitor, "close_position_qty", return_value={"status": "closed"}) as close_mock,
+            patch.object(binance_monitor, "close_position_qty", return_value=close_result) as close_mock,
             patch.object(binance_monitor, "_send_telegram"),
         ):
-            binance_monitor._check_time_based_exit(self._position(volume=7.0))
+            binance_monitor._check_time_based_exit(self._position(volume=5.625))
 
-        close_mock.assert_called_once_with("SOLUSDT", 7.0, reason="time_exit")
+        close_mock.assert_called_once_with("SOLUSDT", 5.625, reason="time_exit")
         log_exit.assert_called_once()
+        self.assertAlmostEqual(log_exit.call_args.kwargs["qty_pct"], 0.5625, delta=1e-12)
+        self.assertIn("qty_source=create_response.executedQty", log_exit.call_args.kwargs["notes"])
         self.assertTrue(state["time_exited"])
         self.assertFalse(state.get("time_reduced", False))
 
@@ -276,6 +324,150 @@ class BinanceMonitorProtectiveExitTests(unittest.TestCase):
         state = {"original_qty": 0.24}
 
         self.assertAlmostEqual(binance_monitor._remaining_original_fraction(state, 0.09), 0.375)
+        self.assertIsNone(binance_monitor._remaining_original_fraction({}, 7.0))
+        self.assertIsNone(binance_monitor._remaining_original_fraction({"original_qty": 10.0}, 0.0))
+
+    def test_time_reduce_is_not_misclassified_as_a_terminal_protective_exit(self):
+        with patch.object(binance_monitor.trade_db, "get_exits_for_trade", return_value=[
+            {"exit_type": "time_reduce", "qty_pct": 0.5, "price": 99.0},
+        ]):
+            self.assertIsNone(binance_monitor._latest_protective_exit(703))
+
+    def test_external_close_records_only_unlogged_final_slice(self):
+        state = binance_monitor._get_state("BNBUSDT")
+        state.update({
+            "trade_id": 703,
+            "original_qty": 100.0,
+            "entry_price": 100.0,
+            "last_price": 95.0,
+            "first_seen": 1.0,
+            "direction": "SELL",
+        })
+        trade = {
+            "id": 703,
+            "symbol": "BNBUSDT",
+            "direction": "SELL",
+            "qty": 100.0,
+            "exit_price": None,
+        }
+        ledger = {
+            "complete": True,
+            "entry_price": 100.0,
+            "entry_qty": 100.0,
+            "exit_price": 95.0,
+            "net_pnl": 500.0,
+            "gross_pnl": 500.0,
+            "fees": 0.0,
+            "funding": 0.0,
+        }
+        with (
+            patch.object(binance_monitor.trade_db, "get_open_trades", return_value=[]),
+            patch.object(binance_monitor.trade_db, "get_trade_by_id", return_value=trade),
+            patch.object(binance_monitor.trade_db, "get_realized_exit_qty_pct", return_value=0.4375),
+            patch.object(binance_monitor.trade_db, "update_trade_fill"),
+            patch.object(binance_monitor.trade_db, "log_exit") as log_exit,
+            patch.object(binance_monitor.trade_db, "close_trade"),
+            patch.object(binance_monitor.trade_db, "delete_binance_order_state"),
+            patch.object(binance_monitor, "_trade_open_age_hours", return_value=2.0),
+            patch.object(binance_monitor, "_latest_protective_exit", return_value=None),
+            patch.object(binance_monitor, "_cancel_stale_reduce_only_orders", return_value=True),
+            patch.object(binance_monitor, "_fetch_exchange_trade_ledger", return_value=ledger),
+            patch.object(binance_monitor, "_send_telegram"),
+        ):
+            binance_monitor._prune_state(set())
+
+        self.assertAlmostEqual(log_exit.call_args.kwargs["qty_pct"], 0.5625, delta=1e-12)
+
+    def test_original_position_fraction_uses_float_epsilon_only(self):
+        self.assertAlmostEqual(
+            binance_monitor._original_position_fraction(100.0, 25.0),
+            0.25,
+            delta=1e-12,
+        )
+        self.assertEqual(
+            binance_monitor._original_position_fraction(100.0, 100.0 + 5e-8),
+            1.0,
+        )
+        self.assertIsNone(binance_monitor._original_position_fraction(100.0, 100.001))
+        self.assertIsNone(binance_monitor._original_position_fraction(0.0, 1.0))
+
+    def test_record_partial_exit_uses_confirmed_quantity_and_audit_fields(self):
+        state = {"trade_id": 700, "original_qty": 100.0}
+        result = {
+            "quantity": 18.75,
+            "requested_quantity": 18.75,
+            "quantity_source": "create_response.executedQty",
+            "accounting_confirmed": True,
+            "order_id": 1234,
+            "fill_ids": ["81", "82"],
+        }
+        with (
+            patch.object(binance_monitor.trade_db, "log_exit") as log_exit,
+            patch.object(binance_monitor.trade_db, "update_trade_accounting_status") as update_status,
+        ):
+            binance_monitor._record_partial_exit(
+                trade_id=700,
+                exit_type="milestone_0",
+                price=105.0,
+                pnl_contribution=12.0,
+                state=state,
+                close_result=result,
+                requested_qty=18.75,
+                configured_close_pct=0.25,
+                base_notes="milestone",
+            )
+
+        self.assertAlmostEqual(log_exit.call_args.kwargs["qty_pct"], 0.1875, delta=1e-12)
+        notes = log_exit.call_args.kwargs["notes"]
+        self.assertIn("closed_qty=18.75", notes)
+        self.assertIn("original_qty=100", notes)
+        self.assertIn("qty_source=create_response.executedQty", notes)
+        self.assertIn("order_id=1234", notes)
+        self.assertIn("fill_ids=81,82", notes)
+        update_status.assert_not_called()
+
+    def test_unconfirmed_partial_is_recorded_unknown_and_marks_accounting_unchecked(self):
+        state = {"trade_id": 701, "original_qty": 0.0}
+        result = {
+            "quantity": 2.5,
+            "quantity_source": "requested_rounded_unconfirmed",
+            "accounting_confirmed": False,
+            "order_id": 55,
+            "fill_ids": [],
+        }
+        with (
+            patch.object(binance_monitor.trade_db, "log_exit") as log_exit,
+            patch.object(binance_monitor.trade_db, "update_trade_accounting_status") as update_status,
+            patch.object(binance_monitor, "plain_log") as plain_log,
+        ):
+            binance_monitor._record_partial_exit(
+                trade_id=701,
+                exit_type="partial",
+                price=100.0,
+                pnl_contribution=None,
+                state=state,
+                close_result=result,
+                requested_qty=2.5,
+                configured_close_pct=0.25,
+                base_notes="fallback",
+            )
+
+        self.assertIsNone(log_exit.call_args.kwargs["qty_pct"])
+        update_status.assert_called_once()
+        self.assertEqual(update_status.call_args.args[:2], (701, "unchecked"))
+        self.assertIn(
+            "PARTIAL_EXIT_ACCOUNTING_WARNING",
+            [call.args[0] for call in plain_log.call_args_list],
+        )
+
+    def test_quantity_reconciliation_uses_one_exchange_step(self):
+        with patch.object(binance_monitor, "get_quantity_step_size", return_value=0.01):
+            self.assertTrue(binance_monitor._quantities_reconcile("BNBUSDT", 10.00, 10.01))
+            self.assertFalse(binance_monitor._quantities_reconcile("BNBUSDT", 10.00, 10.0101))
+
+    def test_known_exit_fraction_sum_ignores_unknown_rows(self):
+        exits = [{"qty_pct": 0.25}, {"qty_pct": None}, {"qty_pct": 0.1875}]
+        self.assertAlmostEqual(binance_monitor._known_exit_fraction_sum(exits), 0.4375, delta=1e-12)
 
     def test_prune_cleans_exchange_orders_before_deleting_closed_trade_state(self):
         state = binance_monitor._get_state("ETHUSDT")

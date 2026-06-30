@@ -26,7 +26,7 @@ import re
 import sys
 import os
 
-sys.path.insert(0, '/home/rick/ozzy-bot')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import requests
 from config import TELEGRAM_TOKEN, TELEGRAM_CHAT_ID

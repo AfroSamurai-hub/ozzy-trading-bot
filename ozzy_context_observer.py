@@ -15,7 +15,7 @@ from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 # Ensure parent directory is in path for imports
-sys.path.insert(0, '/home/rick/ozzy-bot')
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 C_GREEN = '\033[92m'
 C_RED = '\033[91m'

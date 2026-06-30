@@ -65,10 +65,10 @@ Each new partial-exit note will include enough evidence to reproduce the calcula
 - `original_qty`;
 - resulting original-position `qty_pct`;
 - configured current-position reduction percentage, when applicable;
-- exact `qty_source` (`create_response.executedQty`, `create_response.cumQty`, `order_query.executedQty`, `order_query.cumQty`, `account_trade_qty_sum`, `filled_order.executedQty`, `filled_order.cumQty`, or `requested_rounded_unconfirmed`);
+- exact `qty_source` (`create_response.executedQty`, `create_response.cumQty`, `order_query.executedQty`, `order_query.cumQty`, `account_trade_qty_sum`, `filled_order.executedQty`, `filled_order.cumQty`, `paper_simulated`, or `requested_rounded_unconfirmed`);
 - Binance `orderId` and account-trade fill `id` values when available.
 
-This is diagnostic metadata only; no new strategy decision depends on the note text.
+`paper_simulated` confirms only deterministic simulated quantity accounting; it is never represented as exchange confirmation and does not raise an unconfirmed-exchange warning. This is diagnostic metadata only; no new strategy decision depends on the note text.
 
 ### Known BNBUSDT repair
 

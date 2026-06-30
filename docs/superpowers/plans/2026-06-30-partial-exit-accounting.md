@@ -270,7 +270,7 @@ return {
 }
 ```
 
-Make the PAPER result use the same keys with `quantity_source="requested_rounded_unconfirmed"` and `accounting_confirmed=False`.
+Make the PAPER result use the same keys with `quantity_source="paper_simulated"` and `accounting_confirmed=True`. This confirms deterministic simulated accounting without claiming Binance evidence and prevents false accounting warnings in PAPER mode.
 
 - [ ] **Step 4: Run focused connector tests**
 
@@ -631,15 +631,15 @@ Expected: new fraction assertions fail on the existing hard-coded `close_pct`, `
 
 - [ ] **Step 3: Update time-decay and early-profit writers**
 
-For PAPER branches, construct an explicit unconfirmed result:
+For PAPER branches, construct an explicit simulated result:
 
 ```python
 result = {
     "status": "partial_closed",
     "quantity": close_qty,
     "requested_quantity": close_qty,
-    "quantity_source": "requested_rounded_unconfirmed",
-    "accounting_confirmed": False,
+    "quantity_source": "paper_simulated",
+    "accounting_confirmed": True,
     "order_id": None,
     "fill_ids": [],
 }
@@ -806,6 +806,7 @@ Add assertions for missing original quantity, explicit terminal close response q
 ```python
 def test_terminal_fraction_never_invents_full_close_without_original(self):
     self.assertIsNone(binance_monitor._remaining_original_fraction({}, 7.0))
+    self.assertIsNone(binance_monitor._remaining_original_fraction({"original_qty": 10.0}, 0.0))
 
 
 def test_time_exit_uses_broker_confirmed_terminal_quantity(self):
@@ -1345,9 +1346,11 @@ If any count is nonzero, stop rollout. Leave services and `trades.db` unchanged 
 
 - [ ] **Step 7: Deploy only the reviewed files into the active runtime checkout**
 
-Apply the merged `origin/main` diff for the three runtime targets to `/home/rick/ozzy-bot` without touching unrelated dirty-worktree files. Then verify exact equality:
+First prove the release worktree is clean and pinned to the merged SHA, then apply that merged diff for the three runtime targets to `/home/rick/ozzy-bot` without touching unrelated dirty-worktree files:
 
 ```bash
+test -z "$(git status --porcelain)"
+test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
 diff -u /home/rick/.config/superpowers/worktrees/ozzy-bot/partial-exit-accounting/binance_connector.py /home/rick/ozzy-bot/binance_connector.py
 diff -u /home/rick/.config/superpowers/worktrees/ozzy-bot/partial-exit-accounting/binance_monitor.py /home/rick/ozzy-bot/binance_monitor.py
 diff -u /home/rick/.config/superpowers/worktrees/ozzy-bot/partial-exit-accounting/scripts/repair_bnb_partial_exit_qty.py /home/rick/ozzy-bot/scripts/repair_bnb_partial_exit_qty.py

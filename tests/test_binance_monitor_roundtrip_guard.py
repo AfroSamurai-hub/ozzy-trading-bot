@@ -68,6 +68,7 @@ class RoundtripGuardR1Tests(unittest.TestCase):
             {
                 "trade_id": trade_id,
                 "entry_price": 72.721,
+                "original_qty": 126.29,
                 "original_sl_distance": 1.547,
                 "_peak_r": peak_r,
                 "peak_pnl": peak_pnl,
@@ -108,7 +109,16 @@ class RoundtripGuardR1Tests(unittest.TestCase):
             for p in patches:
                 stack.enter_context(p)
             close_mock = stack.enter_context(
-                patch.object(binance_monitor, "_protective_close", return_value={"status": "closed"})
+                patch.object(
+                    binance_monitor,
+                    "_protective_close",
+                    return_value={
+                        "status": "closed",
+                        "quantity": 126.29,
+                        "quantity_source": "create_response.executedQty",
+                        "accounting_confirmed": True,
+                    },
+                )
             )
             log_exit = stack.enter_context(patch.object(binance_monitor.trade_db, "log_exit"))
             stack.enter_context(patch.object(binance_monitor, "_send_telegram"))
@@ -117,7 +127,8 @@ class RoundtripGuardR1Tests(unittest.TestCase):
 
         close_mock.assert_called_once_with("HYPEUSDT", 126.29, "roundtrip_guard_r1")
         log_exit.assert_called_once()
-        self.assertEqual(log_exit.call_args.args[1], "roundtrip_guard_r1")
+        self.assertEqual(log_exit.call_args.kwargs["exit_type"], "roundtrip_guard_r1")
+        self.assertEqual(log_exit.call_args.kwargs["qty_pct"], 1.0)
         self.assertTrue(any(c.args[0] == "ROUNDTRIP_GUARD_R1_TRIGGERED" for c in plain_log.call_args_list))
 
     def test_live_micro_creates_review_candidate_only(self):

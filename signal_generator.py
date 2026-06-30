@@ -17,10 +17,11 @@ import os
 import sys
 import time
 from datetime import datetime, timezone
+from pathlib import Path
 
 import requests
 
-sys.path.insert(0, "/home/rick/ozzy-bot")
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from binance_indicators import get_live_indicators
 from crypto_entry_policy import classify_crypto_entry

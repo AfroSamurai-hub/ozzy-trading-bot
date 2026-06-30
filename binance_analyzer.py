@@ -4,7 +4,9 @@ Binance Futures Trade Analyzer
 Pulls trade history from Binance testnet and generates a structured report.
 """
 import sys
-sys.path.insert(0, '/home/rick/ozzy-bot')
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from binance.client import Client
 from config import BINANCE_DEMO_API_KEY, BINANCE_DEMO_API_SECRET

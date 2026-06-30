@@ -6,7 +6,7 @@ import unittest
 from datetime import timedelta
 from pathlib import Path
 
-sys.path.insert(0, "/home/rick/ozzy-bot")
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import core.openclaw_breakout_executor as obe
 from core.openclaw_breakout_executor import (

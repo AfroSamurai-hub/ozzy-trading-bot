@@ -1,7 +1,8 @@
 import sys
 import unittest
+from pathlib import Path
 
-sys.path.insert(0, "/home/rick/ozzy-bot")
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from core.macro_scout import MacroScoutAgent
 from core.trend_executor import TrendExecutorAgent

@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-sys.path.insert(0, '/home/rick/ozzy-bot')
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 import logger
 import telegram_command_bot

@@ -44,6 +44,7 @@ class BinanceMonitorProtectiveExitTests(unittest.TestCase):
     def test_time_reduce_closes_exactly_half_using_db_open_time(self):
         state = binance_monitor._get_state("SOLUSDT")
         state["trade_id"] = 101
+        state["original_qty"] = 10.0
 
         with (
             patch.object(binance_monitor.trade_db, "get_trade_by_id", return_value=trade_row(17)),
@@ -52,15 +53,54 @@ class BinanceMonitorProtectiveExitTests(unittest.TestCase):
             patch.object(
                 binance_monitor,
                 "close_position_qty",
-                return_value={"status": "partial_closed"},
+                return_value={
+                    "status": "partial_closed",
+                    "quantity": 3.0,
+                    "quantity_source": "create_response.executedQty",
+                    "accounting_confirmed": True,
+                },
             ) as close_mock,
             patch.object(binance_monitor, "_send_telegram"),
         ):
-            binance_monitor._check_time_based_exit(self._position(volume=10.0))
+            binance_monitor._check_time_based_exit(self._position(volume=6.0))
 
-        close_mock.assert_called_once_with("SOLUSDT", 5.0, reason="time_reduce")
+        close_mock.assert_called_once_with("SOLUSDT", 3.0, reason="time_reduce")
         log_exit.assert_called_once()
+        self.assertAlmostEqual(log_exit.call_args.kwargs["qty_pct"], 0.3, delta=1e-12)
         self.assertTrue(state["time_reduced"])
+
+    def test_tiered_exit_records_fraction_of_original_not_current_position(self):
+        state = binance_monitor._get_state("SOLUSDT")
+        state.update({"trade_id": 704, "original_qty": 100.0, "tiered_exits": []})
+        cc_state = binance_monitor._get_position_state("SOLUSDT")
+        cc_state["original_sl_distance"] = 10.0
+        position = {
+            "symbol": "SOLUSDT",
+            "tv_symbol": "SOLUSDT",
+            "type": "BUY",
+            "openPrice": 100.0,
+            "currentPrice": 115.0,
+            "profit": 750.0,
+            "volume": 50.0,
+        }
+        close_result = {
+            "status": "partial_closed",
+            "quantity": 25.0,
+            "requested_quantity": 25.0,
+            "quantity_source": "create_response.executedQty",
+            "accounting_confirmed": True,
+            "order_id": 705,
+            "fill_ids": [],
+        }
+        with (
+            patch.object(binance_monitor, "PAPER_MODE", False),
+            patch.object(binance_monitor, "close_position_qty", return_value=close_result),
+            patch.object(binance_monitor.trade_db, "log_exit") as log_exit,
+            patch.object(binance_monitor, "_send_telegram"),
+        ):
+            binance_monitor._check_tiered_exits(position)
+
+        self.assertAlmostEqual(log_exit.call_args.kwargs["qty_pct"], 0.25, delta=1e-12)
 
     def test_time_exit_closes_remaining_and_uses_db_time_not_position_update_time(self):
         state = binance_monitor._get_state("SOLUSDT")

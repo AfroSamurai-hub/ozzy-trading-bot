@@ -932,7 +932,12 @@ def _reconcile_order_state(position: dict) -> None:
                 if o.get("status") == "FILLED" and o.get("type") in ("TAKE_PROFIT_MARKET", "TAKE_PROFIT"):
                     o_id = str(o.get("orderId") or o.get("algoId") or "")
                     o_price = float(o.get("avgPrice") or o.get("stopPrice") or 0)
-                    o_qty = float(o.get("executedQty") or o.get("origQty") or 0)
+                    raw_executed = o.get("executedQty")
+                    filled_field = "executedQty"
+                    if raw_executed in (None, ""):
+                        raw_executed = o.get("cumQty")
+                        filled_field = "cumQty"
+                    o_qty = abs(float(raw_executed or 0.0))
 
                     # Match TP1
                     is_tp1 = False
@@ -952,13 +957,25 @@ def _reconcile_order_state(position: dict) -> None:
 
                         # Log realized profit to DB/journal
                         trade_db.log_milestone(trade_id, milestone_name, o_price, realized_pnl)
-                        trade_db.log_exit(
+                        filled_result = {
+                            "status": "partial_closed",
+                            "quantity": o_qty,
+                            "requested_quantity": o_qty,
+                            "quantity_source": f"filled_order.{filled_field}",
+                            "accounting_confirmed": o_qty > 0,
+                            "order_id": o.get("orderId") or o.get("algoId"),
+                            "fill_ids": [],
+                        }
+                        _record_partial_exit(
                             trade_id=trade_id,
                             exit_type=milestone_name,
                             price=o_price,
                             pnl_contribution=realized_pnl,
-                            qty_pct=close_pct,
-                            notes=f"Milestone TP1 filled on exchange @ {o_price:,.4f}",
+                            state=state,
+                            close_result=filled_result,
+                            requested_qty=o_qty,
+                            configured_close_pct=close_pct,
+                            base_notes=f"Milestone TP1 filled on exchange @ {o_price:,.4f}",
                         )
 
                         plain_log("MILESTONE_PNL_RECORDED", {
@@ -1574,11 +1591,12 @@ def _check_time_decay_exit(position: dict):
         plain_log("PAPER_TIME_DECAY_TRIM", {
             "symbol": tv_symbol, "qty": close_qty,
         })
+        result = _paper_close_result(close_qty)
     else:
-        res = _close_position_once(symbol, close_qty, reason="time_decay")
-        if res.get("status") == "error":
+        result = _close_position_once(symbol, close_qty, reason="time_decay")
+        if result.get("status") not in {"ok", "closed", "partial_closed"}:
             plain_log("BINANCE_TIME_DECAY_TRIM_ERROR", {
-                "symbol": tv_symbol, "error": res.get("error"),
+                "symbol": tv_symbol, "error": result.get("error"),
             })
             return
 
@@ -1590,13 +1608,16 @@ def _check_time_decay_exit(position: dict):
 
     # Log milestone and exit in DB
     try:
-        trade_db.log_exit(
+        _record_partial_exit(
             trade_id=tid,
             exit_type="15m_time_decay_trim",
             price=current,
             pnl_contribution=pnl * 0.15,
-            qty_pct=0.15,
-            notes="15m Time-Decay Trim Executed (Closed 15% & SL to entry after 60m)",
+            state=state,
+            close_result=result,
+            requested_qty=close_qty,
+            configured_close_pct=0.15,
+            base_notes="15m Time-Decay Trim Executed (Closed 15% & SL to entry after 60m)",
         )
     except Exception as e:
         plain_log("DB_TIME_DECAY_TRIM_LOG_ERROR", {"trade_id": tid, "error": str(e)})
@@ -1729,14 +1750,17 @@ def _check_early_profit_protection(position: dict):
         if close_qty <= 0 or close_qty > qty:
             continue
 
-        if not PAPER_MODE:
-            res = _close_position_once(symbol, close_qty, reason=f"early_profit_{key}")
-            if res.get("status") not in {"ok", "closed", "partial_closed"}:
+        if PAPER_MODE:
+            result = _paper_close_result(close_qty)
+        else:
+            result = _close_position_once(symbol, close_qty, reason=f"early_profit_{key}")
+            if result.get("status") not in {"ok", "closed", "partial_closed"}:
                 plain_log("EARLY_PROFIT_SCALE_ERROR", {
-                    "symbol": tv_symbol, "key": key, "error": res.get("error"),
+                    "symbol": tv_symbol, "key": key, "error": result.get("error"),
                 })
                 return
-            remaining = qty - close_qty
+            actual_closed_qty = abs(float(result.get("quantity") or close_qty))
+            remaining = max(0.0, qty - actual_closed_qty)
             if remaining > 0:
                 _refresh_remaining_protection_after_partial(position, remaining)
 
@@ -1748,13 +1772,16 @@ def _check_early_profit_protection(position: dict):
 
         partial_pnl = pnl * close_pct
         try:
-            trade_db.log_exit(
-                tid,
-                f"early_profit_{key}",
-                current,
-                partial_pnl,
-                qty_pct=close_pct,
-                notes=f"Early profit scale {key} at {current_r:.2f}R",
+            _record_partial_exit(
+                trade_id=tid,
+                exit_type=f"early_profit_{key}",
+                price=current,
+                pnl_contribution=partial_pnl,
+                state=state,
+                close_result=result,
+                requested_qty=close_qty,
+                configured_close_pct=close_pct,
+                base_notes=f"Early profit scale {key} at {current_r:.2f}R",
             )
         except Exception:
             pass
@@ -1877,20 +1904,22 @@ def _check_milestone_exits(position: dict):
                         "current_r": round(current_r, 2),
                         "qty": close_qty, "remaining": qty - close_qty,
                     })
+                    result = _paper_close_result(close_qty)
                 else:
-                    res = _close_position_once(symbol, close_qty, reason=gate_name, position_side=position_side)
-                    if res.get("status") not in {"ok", "closed", "partial_closed"}:
-                        if res.get("status") == "skipped":
+                    result = _close_position_once(symbol, close_qty, reason=gate_name, position_side=position_side)
+                    if result.get("status") not in {"ok", "closed", "partial_closed"}:
+                        if result.get("status") == "skipped":
                             return
                         retry_after[gate_name] = time.time() + MILESTONE_ERROR_BACKOFF_SECONDS
                         plain_log("BINANCE_MILESTONE_ERROR", {
                             "symbol": tv_symbol, "gate_name": gate_name,
-                            "error": res.get("error"),
+                            "error": result.get("error"),
                             "retry_after_seconds": MILESTONE_ERROR_BACKOFF_SECONDS,
                         })
                         continue
 
-                remaining = qty - close_qty
+                actual_closed_qty = abs(float(result.get("quantity") or close_qty))
+                remaining = max(0.0, qty - actual_closed_qty)
                 refresh_success = True
                 if not PAPER_MODE and remaining > 0:
                     refresh_success = _refresh_remaining_protection_after_partial(position, remaining)
@@ -1899,17 +1928,20 @@ def _check_milestone_exits(position: dict):
                 state["milestones_hit"] = list(hit)
 
                 if refresh_success:
-                    partial_pnl = pnl * (close_qty / qty) if qty > 0 else 0
+                    partial_pnl = pnl * (actual_closed_qty / qty) if qty > 0 else 0
                     tid = state.get("trade_id")
                     if tid:
                         try:
-                            trade_db.log_exit(
+                            _record_partial_exit(
                                 trade_id=tid,
                                 exit_type=gate_name,
                                 price=current,
                                 pnl_contribution=partial_pnl,
-                                qty_pct=ms["close_pct"],
-                                notes=f"{gate_name}: closed {int(ms['close_pct']*100)}% at R={round(current_r, 2)}",
+                                state=state,
+                                close_result=result,
+                                requested_qty=close_qty,
+                                configured_close_pct=float(ms["close_pct"]),
+                                base_notes=f"{gate_name}: closed {int(ms['close_pct']*100)}% at R={round(current_r, 2)}",
                             )
                         except Exception:
                             pass
@@ -2333,11 +2365,12 @@ def _check_tiered_exits(position: dict):
                 plain_log("PAPER_TIERED_EXIT", {
                     "symbol": tv_symbol, "tier": target_r, "qty": close_qty,
                 })
+                result = _paper_close_result(close_qty)
             else:
-                res = _close_position_once(symbol, close_qty, reason=f"tiered_{target_r}r")
-                if res.get("status") not in {"ok", "closed", "partial_closed"}:
+                result = _close_position_once(symbol, close_qty, reason=f"tiered_{target_r}r")
+                if result.get("status") not in {"ok", "closed", "partial_closed"}:
                     plain_log("BINANCE_TIERED_EXIT_ERROR", {
-                        "symbol": tv_symbol, "tier": target_r, "error": res.get("error"),
+                        "symbol": tv_symbol, "tier": target_r, "error": result.get("error"),
                     })
                     continue
 
@@ -2354,12 +2387,16 @@ def _check_tiered_exits(position: dict):
             try:
                 tid = state.get("trade_id")
                 if tid:
-                    trade_db.log_exit(
+                    _record_partial_exit(
                         trade_id=tid,
                         exit_type="partial",
                         price=current,
-                        qty_pct=close_frac,
-                        notes=f"Tiered exit {label} at {target_r}R",
+                        pnl_contribution=None,
+                        state=state,
+                        close_result=result,
+                        requested_qty=close_qty,
+                        configured_close_pct=close_frac,
+                        base_notes=f"Tiered exit {label} at {target_r}R",
                     )
             except Exception:
                 pass
@@ -2609,6 +2646,18 @@ def _record_partial_exit(
     return qty_pct
 
 
+def _paper_close_result(quantity: float) -> dict:
+    return {
+        "status": "partial_closed",
+        "quantity": quantity,
+        "requested_quantity": quantity,
+        "quantity_source": "paper_simulated",
+        "accounting_confirmed": True,
+        "order_id": None,
+        "fill_ids": [],
+    }
+
+
 def _quantity_reconciliation_tolerance(symbol: str) -> float:
     step = abs(float(get_quantity_step_size(symbol) or 0.0))
     return max(step, 1e-12)
@@ -2681,7 +2730,17 @@ def _check_time_based_exit(position: dict):
             result = _protective_close(tv_symbol, reduce_qty, "time_reduce")
             if result.get("status") in {"closed", "partial_closed"}:
                 state["time_reduced"] = True
-                trade_db.log_exit(tid, "time_reduce", float(position.get("currentPrice", 0)), 0, qty_pct=0.5, notes=f"No 1R in {time_reduce_hours}h — reduce 50%")
+                _record_partial_exit(
+                    trade_id=tid,
+                    exit_type="time_reduce",
+                    price=float(position.get("currentPrice", 0)),
+                    pnl_contribution=0,
+                    state=state,
+                    close_result=result,
+                    requested_qty=reduce_qty,
+                    configured_close_pct=0.5,
+                    base_notes=f"No 1R in {time_reduce_hours}h — reduce 50%",
+                )
                 _send_telegram(f"⏰ <b>TIME REDUCE</b>\n{tv_symbol} open {age_hours:.1f}h with no 1R\nClosed 50% to reduce risk")
 
 

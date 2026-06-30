@@ -1150,6 +1150,11 @@ class BinanceSafetyTests(unittest.TestCase):
             # Verify trade_db actions
             mock_log_ms.assert_called_once_with(999, "milestone_0", 105.0, 2.5) # Directional pnl: BUY 100 -> 105 with qty 0.5 = 2.5
             mock_log_exit.assert_called_once()
+            self.assertAlmostEqual(mock_log_exit.call_args.kwargs["qty_pct"], 0.5, delta=1e-12)
+            self.assertIn(
+                "qty_source=filled_order.executedQty",
+                mock_log_exit.call_args.kwargs["notes"],
+            )
             
             # Verify remaining qty updated to 0.5 in DB
             self.assertEqual(mock_upsert.call_args.kwargs["remaining_qty"], 0.5)

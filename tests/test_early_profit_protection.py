@@ -63,15 +63,30 @@ class TestEarlyProfitProtection(unittest.TestCase):
     def test_second_scale_waits_for_a_fresh_position_snapshot(
         self, mock_log_exit, mock_tg, mock_refresh, mock_be, mock_close
     ):
-        position = self._make_position(current_price=110.0, profit=100.0)
+        first_position = self._make_position(current_price=110.0, profit=100.0, volume=10.0)
+        second_position = self._make_position(current_price=110.0, profit=75.0, volume=7.5)
         state = bm._get_state("ETHUSDT")
         cc_state = bm._get_position_state("ETHUSDT")
         state["trade_id"] = 1
         state["lane"] = "1H_TREND"
+        state["original_qty"] = 10.0
         cc_state["original_sl_distance"] = 4.0  # 1R = $40; profit $100 = 2.5R
 
-        mock_close.return_value = {"status": "ok"}
-        bm._check_early_profit_protection(position)
+        mock_close.side_effect = [
+            {
+                "status": "partial_closed",
+                "quantity": 2.5,
+                "quantity_source": "create_response.executedQty",
+                "accounting_confirmed": True,
+            },
+            {
+                "status": "partial_closed",
+                "quantity": 1.875,
+                "quantity_source": "create_response.executedQty",
+                "accounting_confirmed": True,
+            },
+        ]
+        bm._check_early_profit_protection(first_position)
 
         # One position snapshot may produce only one broker mutation.
         self.assertEqual(mock_close.call_count, 1)
@@ -80,9 +95,16 @@ class TestEarlyProfitProtection(unittest.TestCase):
 
         # The next fresh exchange snapshot may apply the second scale.
         state["_exit_action_claimed"] = False
-        bm._check_early_profit_protection(position)
+        bm._check_early_profit_protection(second_position)
         self.assertEqual(mock_close.call_count, 2)
         self.assertTrue(state.get("early_profit_second_scale"))
+        self.assertAlmostEqual(mock_log_exit.call_args_list[0].kwargs["qty_pct"], 0.25, delta=1e-12)
+        self.assertAlmostEqual(mock_log_exit.call_args_list[1].kwargs["qty_pct"], 0.1875, delta=1e-12)
+        self.assertAlmostEqual(
+            sum(call.kwargs["qty_pct"] for call in mock_log_exit.call_args_list),
+            0.4375,
+            delta=1e-12,
+        )
 
     @patch("binance_monitor.close_position_qty")
     @patch("binance_monitor.move_sl_to_breakeven")

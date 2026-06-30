@@ -277,6 +277,97 @@ class BinanceMonitorProtectiveExitTests(unittest.TestCase):
 
         self.assertAlmostEqual(binance_monitor._remaining_original_fraction(state, 0.09), 0.375)
 
+    def test_original_position_fraction_uses_float_epsilon_only(self):
+        self.assertAlmostEqual(
+            binance_monitor._original_position_fraction(100.0, 25.0),
+            0.25,
+            delta=1e-12,
+        )
+        self.assertEqual(
+            binance_monitor._original_position_fraction(100.0, 100.0 + 5e-8),
+            1.0,
+        )
+        self.assertIsNone(binance_monitor._original_position_fraction(100.0, 100.001))
+        self.assertIsNone(binance_monitor._original_position_fraction(0.0, 1.0))
+
+    def test_record_partial_exit_uses_confirmed_quantity_and_audit_fields(self):
+        state = {"trade_id": 700, "original_qty": 100.0}
+        result = {
+            "quantity": 18.75,
+            "requested_quantity": 18.75,
+            "quantity_source": "create_response.executedQty",
+            "accounting_confirmed": True,
+            "order_id": 1234,
+            "fill_ids": ["81", "82"],
+        }
+        with (
+            patch.object(binance_monitor.trade_db, "log_exit") as log_exit,
+            patch.object(binance_monitor.trade_db, "update_trade_accounting_status") as update_status,
+        ):
+            binance_monitor._record_partial_exit(
+                trade_id=700,
+                exit_type="milestone_0",
+                price=105.0,
+                pnl_contribution=12.0,
+                state=state,
+                close_result=result,
+                requested_qty=18.75,
+                configured_close_pct=0.25,
+                base_notes="milestone",
+            )
+
+        self.assertAlmostEqual(log_exit.call_args.kwargs["qty_pct"], 0.1875, delta=1e-12)
+        notes = log_exit.call_args.kwargs["notes"]
+        self.assertIn("closed_qty=18.75", notes)
+        self.assertIn("original_qty=100", notes)
+        self.assertIn("qty_source=create_response.executedQty", notes)
+        self.assertIn("order_id=1234", notes)
+        self.assertIn("fill_ids=81,82", notes)
+        update_status.assert_not_called()
+
+    def test_unconfirmed_partial_is_recorded_unknown_and_marks_accounting_unchecked(self):
+        state = {"trade_id": 701, "original_qty": 0.0}
+        result = {
+            "quantity": 2.5,
+            "quantity_source": "requested_rounded_unconfirmed",
+            "accounting_confirmed": False,
+            "order_id": 55,
+            "fill_ids": [],
+        }
+        with (
+            patch.object(binance_monitor.trade_db, "log_exit") as log_exit,
+            patch.object(binance_monitor.trade_db, "update_trade_accounting_status") as update_status,
+            patch.object(binance_monitor, "plain_log") as plain_log,
+        ):
+            binance_monitor._record_partial_exit(
+                trade_id=701,
+                exit_type="partial",
+                price=100.0,
+                pnl_contribution=None,
+                state=state,
+                close_result=result,
+                requested_qty=2.5,
+                configured_close_pct=0.25,
+                base_notes="fallback",
+            )
+
+        self.assertIsNone(log_exit.call_args.kwargs["qty_pct"])
+        update_status.assert_called_once()
+        self.assertEqual(update_status.call_args.args[:2], (701, "unchecked"))
+        self.assertIn(
+            "PARTIAL_EXIT_ACCOUNTING_WARNING",
+            [call.args[0] for call in plain_log.call_args_list],
+        )
+
+    def test_quantity_reconciliation_uses_one_exchange_step(self):
+        with patch.object(binance_monitor, "get_quantity_step_size", return_value=0.01):
+            self.assertTrue(binance_monitor._quantities_reconcile("BNBUSDT", 10.00, 10.01))
+            self.assertFalse(binance_monitor._quantities_reconcile("BNBUSDT", 10.00, 10.0101))
+
+    def test_known_exit_fraction_sum_ignores_unknown_rows(self):
+        exits = [{"qty_pct": 0.25}, {"qty_pct": None}, {"qty_pct": 0.1875}]
+        self.assertAlmostEqual(binance_monitor._known_exit_fraction_sum(exits), 0.4375, delta=1e-12)
+
     def test_prune_cleans_exchange_orders_before_deleting_closed_trade_state(self):
         state = binance_monitor._get_state("ETHUSDT")
         state.update({"trade_id": 220, "entry_price": 100.0, "first_seen": binance_monitor.time.time()})

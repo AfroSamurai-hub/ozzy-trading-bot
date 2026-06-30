@@ -22,7 +22,7 @@ import time
 from datetime import UTC, datetime, timezone
 from decimal import Decimal, InvalidOperation
 
-sys.path.insert(0, '/home/rick/ozzy-bot')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 _MONITOR_START_TIME = time.time()
 
 import telegram_client
@@ -35,6 +35,7 @@ from binance_connector import (
     get_balance,
     get_open_positions,
     get_post_fill_protection_mode,
+    get_quantity_step_size,
     has_exchange_protection,
     inspect_exchange_protection,
     move_sl_to_breakeven,
@@ -2540,13 +2541,87 @@ def _close_position_once(symbol: str, quantity: float, reason: str, **kwargs) ->
     return result
 
 
-def _remaining_original_fraction(state: dict, remaining_qty: float) -> float:
+def _original_position_fraction(original_qty: float, closed_qty: float) -> float | None:
+    """Return a closed slice divided by immutable original quantity."""
+    try:
+        original = abs(float(original_qty))
+        closed = abs(float(closed_qty))
+    except (TypeError, ValueError):
+        return None
+    if original <= 0 or closed <= 0:
+        return None
+    epsilon = max(1e-12, original * 1e-9)
+    if closed > original + epsilon:
+        return None
+    return min(1.0, closed / original)
+
+
+def _remaining_original_fraction(state: dict, remaining_qty: float) -> float | None:
     """Return a terminal slice as a fraction of immutable original quantity."""
+    return _original_position_fraction(state.get("original_qty"), remaining_qty)
+
+
+def _record_partial_exit(
+    *,
+    trade_id: int,
+    exit_type: str,
+    price: float | None,
+    pnl_contribution: float | None,
+    state: dict,
+    close_result: dict,
+    requested_qty: float,
+    configured_close_pct: float,
+    base_notes: str,
+) -> float | None:
+    """Persist one partial exit under the original-position fraction contract."""
     original_qty = abs(float(state.get("original_qty") or 0.0))
-    qty = abs(float(remaining_qty or 0.0))
-    if original_qty <= 0:
-        return 1.0
-    return min(1.0, qty / original_qty)
+    closed_qty = abs(float(close_result.get("quantity") or requested_qty or 0.0))
+    qty_source = str(close_result.get("quantity_source") or "requested_rounded_unconfirmed")
+    qty_pct = _original_position_fraction(original_qty, closed_qty)
+    order_id = close_result.get("order_id")
+    fill_ids = ",".join(str(value) for value in close_result.get("fill_ids") or [])
+    notes = (
+        f"{base_notes}; closed_qty={closed_qty:.12g}; original_qty={original_qty:.12g}; "
+        f"qty_pct={qty_pct if qty_pct is not None else 'unknown'}; "
+        f"configured_current_pct={configured_close_pct:.12g}; qty_source={qty_source}; "
+        f"order_id={order_id if order_id is not None else 'unknown'}; "
+        f"fill_ids={fill_ids or 'none'}"
+    )
+    trade_db.log_exit(
+        trade_id=trade_id,
+        exit_type=exit_type,
+        price=price,
+        pnl_contribution=pnl_contribution,
+        qty_pct=qty_pct,
+        notes=notes,
+    )
+    confirmed = bool(close_result.get("accounting_confirmed"))
+    if qty_pct is None or not confirmed:
+        reason = "partial exit quantity is unconfirmed or has invalid original quantity"
+        trade_db.update_trade_accounting_status(trade_id, "unchecked", f"{reason}; {notes}")
+        plain_log("PARTIAL_EXIT_ACCOUNTING_WARNING", {
+            "trade_id": trade_id,
+            "exit_type": exit_type,
+            "closed_qty": closed_qty,
+            "original_qty": original_qty,
+            "quantity_source": qty_source,
+        })
+    return qty_pct
+
+
+def _quantity_reconciliation_tolerance(symbol: str) -> float:
+    step = abs(float(get_quantity_step_size(symbol) or 0.0))
+    return max(step, 1e-12)
+
+
+def _quantities_reconcile(symbol: str, exchange_qty: float, expected_qty: float) -> bool:
+    tolerance = _quantity_reconciliation_tolerance(symbol)
+    epsilon = max(1e-12, abs(float(expected_qty)) * 1e-9)
+    return abs(float(exchange_qty) - float(expected_qty)) <= tolerance + epsilon
+
+
+def _known_exit_fraction_sum(exits: list) -> float:
+    return sum(float(_row_get(row, "qty_pct", 0.0) or 0.0) for row in exits or [])
 
 
 def _check_time_based_exit(position: dict):
@@ -2972,10 +3047,10 @@ def _roundtrip_guard_safe_context(position: dict, state: dict) -> tuple[bool, di
         exits = trade_db.get_exits_for_trade(trade_id)
     except Exception:
         exits = []
-    realized_qty_pct = sum(float(_row_get(e, "qty_pct", 0) or 0) for e in exits)
+    realized_qty_pct = _known_exit_fraction_sum(exits)
     expected_qty = max(0.0, original_qty * (1.0 - realized_qty_pct))
-    qty_tolerance = max(0.001, original_qty * 0.001)
-    if abs(exchange_qty - expected_qty) > qty_tolerance:
+    qty_tolerance = _quantity_reconciliation_tolerance(symbol)
+    if not _quantities_reconcile(symbol, exchange_qty, expected_qty):
         detail.update({
             "reason": "qty_mismatch",
             "exchange_qty": exchange_qty,
@@ -3235,11 +3310,11 @@ def _check_sluggish_invalidation(position: dict):
         existing_exits = trade_db.get_exits_for_trade(tid)
     except Exception:
         existing_exits = []
-    sum_qty_pct = sum([float(e["qty_pct"]) for e in existing_exits])
+    sum_qty_pct = _known_exit_fraction_sum(existing_exits)
     db_expected_remaining_qty = original_qty * (1.0 - sum_qty_pct)
     exch_qty = abs(float(position.get("volume", 0) or 0))
 
-    if abs(exch_qty - db_expected_remaining_qty) > 0.001:
+    if not _quantities_reconcile(symbol, exch_qty, db_expected_remaining_qty):
         # Qty mismatch exists, safety abort!
         return
 
@@ -3596,7 +3671,7 @@ def reconcile_missing_partial_exits(instance: str, trade_id: int, symbol: str) -
     if original_qty <= 0:
         return
 
-    sum_qty_pct = sum([float(e["qty_pct"]) for e in existing_exits])
+    sum_qty_pct = _known_exit_fraction_sum(existing_exits)
     db_expected_remaining_qty = original_qty * (1.0 - sum_qty_pct)
 
     # 2. Get current exchange position quantity
@@ -3625,8 +3700,9 @@ def reconcile_missing_partial_exits(instance: str, trade_id: int, symbol: str) -
         return
 
     # Check if exchange qty is lower than DB expected qty
-    if exch_qty >= db_expected_remaining_qty - 0.001:
-        if exch_qty > db_expected_remaining_qty + 0.001:
+    qty_tolerance = _quantity_reconciliation_tolerance(symbol)
+    if exch_qty >= db_expected_remaining_qty - qty_tolerance:
+        if exch_qty > db_expected_remaining_qty + qty_tolerance:
             plain_log("POSITION_QTY_MISMATCH", {
                 "symbol": symbol,
                 "trade_id": trade_id,
@@ -3804,12 +3880,12 @@ def reconcile_missing_partial_exits(instance: str, trade_id: int, symbol: str) -
                 "error": f"DB insert error: {e!s}"
             })
 
-    if not recorded_any and unexplained_missing_qty > 0.001:
+    if not recorded_any and unexplained_missing_qty > qty_tolerance:
         # Re-evaluate unexplained quantity now that we've processed all fills
-        sum_qty_pct = sum([float(e["qty_pct"]) for e in existing_exits])
+        sum_qty_pct = _known_exit_fraction_sum(existing_exits)
         db_expected_remaining_qty = original_qty * (1.0 - sum_qty_pct)
         new_unexplained = db_expected_remaining_qty - exch_qty
-        if new_unexplained > 0.001:
+        if new_unexplained > qty_tolerance:
             plain_log("PARTIAL_EXIT_RECONCILIATION_UNRESOLVED", {
                 "trade_id": trade_id,
                 "symbol": symbol,
@@ -3891,7 +3967,7 @@ def _reconcile_orphan_positions(positions):
                 except Exception:
                     expected_remaining_qty = float(matched_trade["qty"] or 0.0)
 
-            if abs(exch_qty - expected_remaining_qty) <= 0.001:
+            if _quantities_reconcile(symbol, exch_qty, expected_remaining_qty):
                 plain_log("POSITION_QTY_RECONCILED", {
                     "symbol": symbol,
                     "trade_id": matched_trade["id"],

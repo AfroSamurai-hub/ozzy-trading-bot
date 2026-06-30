@@ -69,7 +69,6 @@ SIDE_MISMATCH_ALERT_INTERVAL_SECONDS = 60 * 60
 # Per-position in-memory state
 _position_state = {}
 PROTECTIVE_EXIT_TYPES = {
-    "time_reduce",
     "time_exit",
     "momentum_exit",
     "profit_protect",
@@ -648,12 +647,27 @@ def _prune_state(open_symbols: set):
                     accounting_notes=accounting_notes,
                 )
                 if not logged_protective_exit:
+                    partial_fraction = trade_db.get_realized_exit_qty_pct(tid)
+                    original_qty = abs(float(
+                        state.get("original_qty") or _row_get(existing_trade, "qty", 0.0) or 0.0
+                    ))
+                    final_slice_qty = original_qty * max(0.0, 1.0 - partial_fraction)
+                    terminal_fraction = _original_position_fraction(original_qty, final_slice_qty)
+                    if terminal_fraction is None:
+                        trade_db.update_trade_accounting_status(
+                            tid,
+                            "unchecked",
+                            "externally detected close has no valid original/final slice quantity",
+                        )
                     trade_db.log_exit(
                         trade_id=tid,
                         exit_type=exit_reason,
                         price=last_price,
-                        qty_pct=_remaining_original_fraction(state, state.get("original_qty", 0)),
-                        notes=f"Position closed via {exit_reason}",
+                        qty_pct=terminal_fraction,
+                        notes=(
+                            f"Position closed via {exit_reason}; final_slice_qty={final_slice_qty:.12g}; "
+                            f"original_qty={original_qty:.12g}"
+                        ),
                     )
 
                 # Log TP milestone if applicable
@@ -2646,6 +2660,49 @@ def _record_partial_exit(
     return qty_pct
 
 
+def _record_terminal_exit(
+    *,
+    trade_id: int,
+    exit_type: str,
+    price: float | None,
+    pnl_contribution: float | None,
+    state: dict,
+    close_result: dict,
+    requested_qty: float,
+    base_notes: str,
+) -> float | None:
+    """Persist one final slice without inventing quantity confirmation."""
+    terminal_qty = abs(float(close_result.get("quantity") or requested_qty or 0.0))
+    terminal_fraction = _remaining_original_fraction(state, terminal_qty)
+    qty_source = str(close_result.get("quantity_source") or "requested_rounded_unconfirmed")
+    notes = (
+        f"{base_notes}; closed_qty={terminal_qty:.12g}; "
+        f"original_qty={abs(float(state.get('original_qty') or 0.0)):.12g}; "
+        f"qty_pct={terminal_fraction if terminal_fraction is not None else 'unknown'}; "
+        f"qty_source={qty_source}; order_id={close_result.get('order_id', 'unknown')}"
+    )
+    trade_db.log_exit(
+        trade_id=trade_id,
+        exit_type=exit_type,
+        price=price,
+        pnl_contribution=pnl_contribution,
+        qty_pct=terminal_fraction,
+        notes=notes,
+    )
+    if terminal_fraction is None or not close_result.get("accounting_confirmed"):
+        trade_db.update_trade_accounting_status(
+            trade_id,
+            "unchecked",
+            f"terminal quantity unconfirmed; {notes}",
+        )
+        plain_log("TERMINAL_EXIT_ACCOUNTING_WARNING", {
+            "trade_id": trade_id,
+            "exit_type": exit_type,
+            "quantity_source": qty_source,
+        })
+    return terminal_fraction
+
+
 def _paper_close_result(quantity: float) -> dict:
     return {
         "status": "partial_closed",
@@ -2708,13 +2765,15 @@ def _check_time_based_exit(position: dict):
         result = _protective_close(tv_symbol, qty, "time_exit")
         if result.get("status") in {"closed", "partial_closed"}:
             state["time_exited"] = True
-            trade_db.log_exit(
-                tid,
-                "time_exit",
-                float(position.get("currentPrice", 0)),
-                None,
-                qty_pct=_remaining_original_fraction(state, qty),
-                notes=f"No 1R in {time_exit_hours}h — close remaining",
+            _record_terminal_exit(
+                trade_id=tid,
+                exit_type="time_exit",
+                price=float(position.get("currentPrice", 0)),
+                pnl_contribution=None,
+                state=state,
+                close_result=result,
+                requested_qty=qty,
+                base_notes=f"No 1R in {time_exit_hours}h — close remaining",
             )
             _send_telegram(f"🚪 <b>TIME EXIT</b>\n{tv_symbol} open {age_hours:.1f}h with no 1R\nClosing remaining position")
         return
@@ -2812,13 +2871,15 @@ def _check_momentum_reversal(position: dict):
         result = _protective_close(tv_symbol, qty, "momentum_exit")
         if result.get("status") in {"closed", "partial_closed"}:
             state["momentum_exited"] = True
-            trade_db.log_exit(
-                tid,
-                "momentum_exit",
-                float(position.get("currentPrice", 0)),
-                None,
-                qty_pct=_remaining_original_fraction(state, qty),
-                notes=f"Peak {round(peak_r, 2)}R -> current {round(current_r, 2)}R (drop {round(peak_r - current_r, 2)}R)",
+            _record_terminal_exit(
+                trade_id=tid,
+                exit_type="momentum_exit",
+                price=float(position.get("currentPrice", 0)),
+                pnl_contribution=None,
+                state=state,
+                close_result=result,
+                requested_qty=qty,
+                base_notes=f"Peak {round(peak_r, 2)}R -> current {round(current_r, 2)}R (drop {round(peak_r - current_r, 2)}R)",
             )
             _send_telegram(
                 f"⚡ <b>MOMENTUM EXIT</b>\n"
@@ -2891,13 +2952,15 @@ def _check_early_giveback_guard(position: dict):
     result = _protective_close(tv_symbol, qty, reason)
     if result.get("status") in {"closed", "partial_closed"}:
         state["early_giveback_exited"] = True
-        trade_db.log_exit(
-            tid,
-            reason,
-            float(position.get("currentPrice", 0)),
-            None,
-            qty_pct=_remaining_original_fraction(state, qty),
-            notes=f"Peak {round(peak_r, 2)}R gave back {giveback_pct:.1f}% to {round(current_r, 2)}R",
+        _record_terminal_exit(
+            trade_id=tid,
+            exit_type=reason,
+            price=float(position.get("currentPrice", 0)),
+            pnl_contribution=None,
+            state=state,
+            close_result=result,
+            requested_qty=qty,
+            base_notes=f"Peak {round(peak_r, 2)}R gave back {giveback_pct:.1f}% to {round(current_r, 2)}R",
         )
         _send_telegram(
             f"🪙 <b>EARLY GIVEBACK EXIT</b>\n"
@@ -2960,13 +3023,15 @@ def _check_profit_protection(position: dict):
         result = _protective_close(tv_symbol, qty, "profit_protect")
         if result.get("status") in {"closed", "partial_closed"}:
             state["profit_protected"] = True
-            trade_db.log_exit(
-                tid,
-                "profit_protect",
-                float(position.get("currentPrice", 0)),
-                None,
-                qty_pct=_remaining_original_fraction(state, qty),
-                notes=f"Hit {round(peak_r, 2)}R then pulled back to {round(current_r, 2)}R (floor {round(floor_r, 2)}R)",
+            _record_terminal_exit(
+                trade_id=tid,
+                exit_type="profit_protect",
+                price=float(position.get("currentPrice", 0)),
+                pnl_contribution=None,
+                state=state,
+                close_result=result,
+                requested_qty=qty,
+                base_notes=f"Hit {round(peak_r, 2)}R then pulled back to {round(current_r, 2)}R (floor {round(floor_r, 2)}R)",
             )
             _send_telegram(
                 f"🛡️ <b>PROFIT PROTECT</b>\n"
@@ -3245,13 +3310,15 @@ def _check_roundtrip_guard_r1(position: dict):
     result = _protective_close(tv_symbol, detail["exchange_qty"], "roundtrip_guard_r1")
     if result.get("status") in {"closed", "partial_closed"}:
         state["_roundtrip_guard_r1_done"] = True
-        trade_db.log_exit(
-            trade_id,
-            "roundtrip_guard_r1",
-            float(position.get("currentPrice", 0) or 0.0),
-            current_pnl,
-            qty_pct=_remaining_original_fraction(state, detail["exchange_qty"]),
-            notes=(
+        _record_terminal_exit(
+            trade_id=trade_id,
+            exit_type="roundtrip_guard_r1",
+            price=float(position.get("currentPrice", 0) or 0.0),
+            pnl_contribution=current_pnl,
+            state=state,
+            close_result=result,
+            requested_qty=detail["exchange_qty"],
+            base_notes=(
                 f"R1 roundtrip guard: peak_r={peak_r:.2f}, current_r={current_r:.2f}, "
                 f"giveback={giveback_pct:.1f}%"
             ),
@@ -3448,13 +3515,15 @@ def _check_sluggish_invalidation(position: dict):
         exit_price = float(position.get("currentPrice", 0) or 0.0)
 
         try:
-            trade_db.log_exit(
+            _record_terminal_exit(
                 trade_id=tid,
                 exit_type="live_micro_sluggish_invalidation",
                 price=exit_price,
                 pnl_contribution=current_pnl,
-                qty_pct=_remaining_original_fraction(state, exch_qty),
-                notes=f"Sluggish invalidation triggered at {round(age_minutes, 1)}m (peak_r={round(peak_r, 2)}R, current_r={round(current_r, 2)}R)"
+                state=state,
+                close_result=result,
+                requested_qty=exch_qty,
+                base_notes=f"Sluggish invalidation triggered at {round(age_minutes, 1)}m (peak_r={round(peak_r, 2)}R, current_r={round(current_r, 2)}R)"
             )
         except Exception as e:
             plain_log("LIVE_MICRO_SLUGGISH_INVALIDATION_LOG_EXIT_ERROR", {"symbol": tv_symbol, "error": str(e)})

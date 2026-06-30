@@ -104,19 +104,27 @@ class BinanceMonitorProtectiveExitTests(unittest.TestCase):
 
     def test_time_exit_closes_remaining_and_uses_db_time_not_position_update_time(self):
         state = binance_monitor._get_state("SOLUSDT")
-        state["trade_id"] = 102
+        state.update({"trade_id": 102, "original_qty": 10.0})
+        close_result = {
+            "status": "closed",
+            "quantity": 5.625,
+            "quantity_source": "create_response.executedQty",
+            "accounting_confirmed": True,
+        }
 
         with (
             patch.object(binance_monitor.trade_db, "get_trade_by_id", return_value=trade_row(25)),
             patch.object(binance_monitor.trade_db, "milestone_exists", return_value=False),
             patch.object(binance_monitor.trade_db, "log_exit") as log_exit,
-            patch.object(binance_monitor, "close_position_qty", return_value={"status": "closed"}) as close_mock,
+            patch.object(binance_monitor, "close_position_qty", return_value=close_result) as close_mock,
             patch.object(binance_monitor, "_send_telegram"),
         ):
-            binance_monitor._check_time_based_exit(self._position(volume=7.0))
+            binance_monitor._check_time_based_exit(self._position(volume=5.625))
 
-        close_mock.assert_called_once_with("SOLUSDT", 7.0, reason="time_exit")
+        close_mock.assert_called_once_with("SOLUSDT", 5.625, reason="time_exit")
         log_exit.assert_called_once()
+        self.assertAlmostEqual(log_exit.call_args.kwargs["qty_pct"], 0.5625, delta=1e-12)
+        self.assertIn("qty_source=create_response.executedQty", log_exit.call_args.kwargs["notes"])
         self.assertTrue(state["time_exited"])
         self.assertFalse(state.get("time_reduced", False))
 
@@ -316,6 +324,59 @@ class BinanceMonitorProtectiveExitTests(unittest.TestCase):
         state = {"original_qty": 0.24}
 
         self.assertAlmostEqual(binance_monitor._remaining_original_fraction(state, 0.09), 0.375)
+        self.assertIsNone(binance_monitor._remaining_original_fraction({}, 7.0))
+        self.assertIsNone(binance_monitor._remaining_original_fraction({"original_qty": 10.0}, 0.0))
+
+    def test_time_reduce_is_not_misclassified_as_a_terminal_protective_exit(self):
+        with patch.object(binance_monitor.trade_db, "get_exits_for_trade", return_value=[
+            {"exit_type": "time_reduce", "qty_pct": 0.5, "price": 99.0},
+        ]):
+            self.assertIsNone(binance_monitor._latest_protective_exit(703))
+
+    def test_external_close_records_only_unlogged_final_slice(self):
+        state = binance_monitor._get_state("BNBUSDT")
+        state.update({
+            "trade_id": 703,
+            "original_qty": 100.0,
+            "entry_price": 100.0,
+            "last_price": 95.0,
+            "first_seen": 1.0,
+            "direction": "SELL",
+        })
+        trade = {
+            "id": 703,
+            "symbol": "BNBUSDT",
+            "direction": "SELL",
+            "qty": 100.0,
+            "exit_price": None,
+        }
+        ledger = {
+            "complete": True,
+            "entry_price": 100.0,
+            "entry_qty": 100.0,
+            "exit_price": 95.0,
+            "net_pnl": 500.0,
+            "gross_pnl": 500.0,
+            "fees": 0.0,
+            "funding": 0.0,
+        }
+        with (
+            patch.object(binance_monitor.trade_db, "get_open_trades", return_value=[]),
+            patch.object(binance_monitor.trade_db, "get_trade_by_id", return_value=trade),
+            patch.object(binance_monitor.trade_db, "get_realized_exit_qty_pct", return_value=0.4375),
+            patch.object(binance_monitor.trade_db, "update_trade_fill"),
+            patch.object(binance_monitor.trade_db, "log_exit") as log_exit,
+            patch.object(binance_monitor.trade_db, "close_trade"),
+            patch.object(binance_monitor.trade_db, "delete_binance_order_state"),
+            patch.object(binance_monitor, "_trade_open_age_hours", return_value=2.0),
+            patch.object(binance_monitor, "_latest_protective_exit", return_value=None),
+            patch.object(binance_monitor, "_cancel_stale_reduce_only_orders", return_value=True),
+            patch.object(binance_monitor, "_fetch_exchange_trade_ledger", return_value=ledger),
+            patch.object(binance_monitor, "_send_telegram"),
+        ):
+            binance_monitor._prune_state(set())
+
+        self.assertAlmostEqual(log_exit.call_args.kwargs["qty_pct"], 0.5625, delta=1e-12)
 
     def test_original_position_fraction_uses_float_epsilon_only(self):
         self.assertAlmostEqual(

@@ -1,0 +1,13 @@
+[Unit]
+Description=OzzyBot Obsidian Journal Export
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/rick/ozzy-bot
+ExecStart=/home/rick/ozzy-bot/venv/bin/python /home/rick/ozzy-bot/scripts/export_obsidian_journal.py
+StandardOutput=journal
+StandardError=journal
+Environment="PATH=/usr/bin:/usr/local/bin"
+Environment="PYTHONUNBUFFERED=1"

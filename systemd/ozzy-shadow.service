@@ -1,0 +1,22 @@
+[Unit]
+Description=OzzyBot Virtual Shadow Trade Exit Tracker Daemon
+After=network-online.target ozzybot-webhook.service
+Wants=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+[Service]
+Type=simple
+User=rick
+WorkingDirectory=/home/rick/ozzy-bot
+ExecStart=/home/rick/ozzy-bot/venv/bin/python /home/rick/ozzy-bot/scripts/shadow_monitor.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+Environment="PATH=/usr/bin:/usr/local/bin"
+Environment="PYTHONUNBUFFERED=1"
+Environment="PYTHONPATH=/home/rick/ozzy-bot"
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,16 @@
+[Unit]
+Description=OzzyBot Hermes 15m mean reversion scanner
+After=network-online.target ozzybot-webhook.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/rick/ozzy-bot
+EnvironmentFile=/home/rick/ozzy-bot/.env
+Environment="HERMES_SIGNAL_SYMBOLS=LINKUSDT,BNBUSDT"
+Environment="HERMES_WEBHOOK_URL=http://127.0.0.1:5001/webhook"
+ExecStart=/home/rick/ozzy-bot/venv/bin/python /home/rick/ozzy-bot/scripts/15m_reversion_scanner.py
+StandardOutput=journal
+StandardError=journal
+Environment="PATH=/usr/bin:/usr/local/bin"
+Environment="PYTHONUNBUFFERED=1"

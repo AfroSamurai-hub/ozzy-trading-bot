@@ -1,0 +1,19 @@
+{
+  "BTC":  {"tier": "deep",  "szDecimals": 5, "maxLeverage": 40, "marginTableId": 56, "allowed_setups": ["BREAKOUT", "CONTINUATION", "MOMENTUM_BURST"]},
+  "ETH":  {"tier": "deep",  "szDecimals": 4, "maxLeverage": 25, "marginTableId": 55, "allowed_setups": ["BREAKOUT", "CONTINUATION", "PULLBACK"]},
+  "HYPE": {"tier": "deep",  "szDecimals": 2, "maxLeverage": 10, "marginTableId": 52, "allowed_setups": ["BREAKOUT", "MOMENTUM_BURST", "CONTINUATION"]},
+  "SOL":  {"tier": "deep",  "szDecimals": 2, "maxLeverage": 20, "marginTableId": 54, "allowed_setups": ["BREAKOUT", "CONTINUATION", "RETEST"]},
+  "ZEC":  {"tier": "deep",  "szDecimals": 2, "maxLeverage": 10, "marginTableId": 52, "allowed_setups": ["BREAKOUT", "PULLBACK"]},
+  "WLD":  {"tier": "mid",   "szDecimals": 1, "maxLeverage": 10, "marginTableId": 52, "allowed_setups": ["CONTINUATION", "PULLBACK", "MOMENTUM_BURST"]},
+  "NEAR": {"tier": "mid",   "szDecimals": 1, "maxLeverage": 10, "marginTableId": 52, "allowed_setups": ["CONTINUATION", "RETEST"]},
+  "XRP":  {"tier": "mid",   "szDecimals": 0, "maxLeverage": 20, "marginTableId": 53, "allowed_setups": ["BREAKOUT", "CONTINUATION"]},
+  "FARTCOIN": {"tier": "mid", "szDecimals": 1, "maxLeverage": 10, "marginTableId": 52, "allowed_setups": ["MOMENTUM_BURST", "BREAKOUT"]},
+  "DOGE": {"tier": "mid",   "szDecimals": 0, "maxLeverage": 10, "marginTableId": 52, "allowed_setups": ["MOMENTUM_BURST", "CONTINUATION"]},
+  "TAO":  {"tier": "mid",   "szDecimals": 5, "maxLeverage": 5,  "marginTableId": 5,  "allowed_setups": ["BREAKOUT", "PULLBACK"]},
+  "ENA":  {"tier": "thin",  "szDecimals": 0, "maxLeverage": 10, "marginTableId": 52, "allowed_setups": ["PULLBACK", "RETEST"]},
+  "LTC":  {"tier": "thin",  "szDecimals": 2, "maxLeverage": 10, "marginTableId": 52, "allowed_setups": ["BREAKOUT", "CONTINUATION"]},
+  "BNB":  {"tier": "thin",  "szDecimals": 3, "maxLeverage": 10, "marginTableId": 51, "allowed_setups": ["CONTINUATION", "PULLBACK"]},
+  "TRUMP": {"tier": "thin", "szDecimals": 1, "maxLeverage": 10, "marginTableId": 52, "allowed_setups": ["MOMENTUM_BURST", "BREAKOUT"]},
+  "LINK": {"tier": "thin",  "szDecimals": 1, "maxLeverage": 10, "marginTableId": 52, "allowed_setups": ["RETEST", "PULLBACK"]},
+  "SUI":  {"tier": "thin",  "szDecimals": 1, "maxLeverage": 10, "marginTableId": 52, "allowed_setups": ["CONTINUATION", "PULLBACK"]}
+}

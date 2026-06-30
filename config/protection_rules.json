@@ -1,0 +1,11 @@
+{
+    "milestone_settings": {
+        "milestone_0_activation_r": 0.25,
+        "breakeven_trigger_r": 0.25,
+        "partial_close_pct": 50.0
+    },
+    "emergency_overrides": {
+        "max_adverse_duration_hours": 2,
+        "momentum_exit_threshold_r": -0.35
+    }
+}

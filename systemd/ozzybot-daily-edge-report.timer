@@ -1,0 +1,12 @@
+[Unit]
+Description=Run OzzyBot Daily Edge Report every 4 hours
+
+[Timer]
+OnBootSec=10min
+OnUnitActiveSec=4h
+AccuracySec=5min
+Persistent=true
+Unit=ozzybot-daily-edge-report.service
+
+[Install]
+WantedBy=timers.target

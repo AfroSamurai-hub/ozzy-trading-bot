@@ -1,0 +1,17 @@
+{
+  "active": "binance",
+  "binance": {
+    "webhook_url": "http://127.0.0.1:5000/webhook",
+    "api_key_env": "BINANCE_API_KEY",
+    "api_secret_env": "BINANCE_API_SECRET",
+    "testnet_api_key_env": "BINANCE_DEMO_API_KEY",
+    "testnet_api_secret_env": "BINANCE_DEMO_API_SECRET",
+    "use_testnet": true
+  },
+  "hyperliquid": {
+    "private_key_env": "HYPERLIQUID_PRIVATE_KEY",
+    "base_url": "https://api.hyperliquid.xyz",
+    "testnet_url": "https://api.hyperliquid-testnet.xyz",
+    "use_testnet": true
+  }
+}

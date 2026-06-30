@@ -1,0 +1,10 @@
+[Unit]
+Description=Run OzzyBot Context Observer every 5 minutes
+
+[Timer]
+OnCalendar=*:0/5
+Persistent=false
+Unit=ozzybot-context-observer.service
+
+[Install]
+WantedBy=timers.target

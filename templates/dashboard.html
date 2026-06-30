@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OzzyBot Institutional HUD</title>
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #f1f5f9;
+            font-family: ui-sans-serif, system-ui, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .hud-title {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            color: #64748b;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .quadrant {
+            background-color: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 250px;
+        }
+        h2 {
+            margin-top: 0;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #1f2937;
+            padding-bottom: 8px;
+        }
+        .giant-value {
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 20px 0;
+        }
+        .log-stream {
+            font-family: monospace;
+            font-size: 0.85rem;
+            max-height: 220px;
+            overflow-y: auto;
+            color: #cbd5e1;
+        }
+        .log-line {
+            padding: 4px 0;
+            border-bottom: 1px solid #1f2937;
+        }
+        .green { color: #10b981; font-weight: bold; }
+        .red { color: #ef4444; font-weight: bold; }
+        .blue { color: #3b82f6; }
+    </style>
+</head>
+<body>
+
+    <div class="hud-title">OZZYBOT ELITE COMMAND CENTER — TESTNET ENGINE</div>
+
+    <div class="grid">
+        <div class="quadrant">
+            <h2>💰 Available Capital</h2>
+            <div class="giant-value" id="wallet-balance">$9,285.40</div>
+            <div style="font-size: 1rem; color: #10b981;">🚀 Session Status: All profits successfully cashed out and secured.</div>
+        </div>
+
+        <div class="quadrant">
+            <h2>🎯 Active Commitments & Progress</h2>
+            <div id="active-positions" style="margin-top: 15px;">
+                <p style="color: #64748b; font-style: italic;">No active risk in the market. Standing by for setups...</p>
+            </div>
+        </div>
+
+        <div class="quadrant">
+            <h2>⚙️ Scanning Matrix</h2>
+            <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #1f2937;">
+                <span>BNBUSDT</span><span class="blue">STANDBY FOR LANE ENTRY</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #1f2937;">
+                <span>LINKUSDT</span><span class="blue">STANDBY FOR LANE ENTRY</span>
+            </div>
+            <div style="margin-top: 25px; font-size: 0.85rem; color: #64748b;">
+                🛡️ Profit Guard: <span class="green">NATIVE CASH RATCHET ARMED</span>
+            </div>
+        </div>
+
+        <div class="quadrant">
+            <h2>🪵 Key Milestones (Clear Text)</h2>
+            <div class="log-stream" id="clean-logs">
+                <div class="log-line"><span class="green">[10:40:17]</span> ✅ <b>LINKUSDT Closed out for Profit!</b> Profit Guard caught the reversal and locked in +$27.75.</div>
+                <div class="log-line"><span class="green">[10:36:31]</span> 💰 <b>BNBUSDT Milestone Hit!</b> Market reached target level at 592.60. Scaled out 50% for +$25.70.</div>
+                <div class="log-line"><span class="blue">[08:26:17]</span> 🟢 <b>System Core Initialized:</b> Connected to Testnet. Account balances verified.</div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

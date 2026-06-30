@@ -1,0 +1,10 @@
+[Unit]
+Description=Run OzzyBot Obsidian Journal Export every 15 minutes
+
+[Timer]
+OnCalendar=*:0/15
+Persistent=true
+Unit=ozzybot-obsidian-export.service
+
+[Install]
+WantedBy=timers.target

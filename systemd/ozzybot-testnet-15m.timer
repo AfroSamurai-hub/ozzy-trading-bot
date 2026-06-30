@@ -1,0 +1,10 @@
+[Unit]
+Description=Run OzzyBot Testnet 15m Mean Reversion Scanner every 15 minutes
+
+[Timer]
+OnCalendar=*:00/15
+Persistent=true
+Unit=ozzybot-testnet-15m.service
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,14 @@
+[Unit]
+Description=OzzyBot Hermes orphan reconciliation report
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/rick/ozzy-bot
+EnvironmentFile=/home/rick/ozzy-bot/.env
+ExecStart=/home/rick/ozzy-bot/venv/bin/python /home/rick/ozzy-bot/scripts/report_orphan_reconciliation.py
+StandardOutput=journal
+StandardError=journal
+Environment="PATH=/usr/bin:/usr/local/bin"
+Environment="PYTHONUNBUFFERED=1"

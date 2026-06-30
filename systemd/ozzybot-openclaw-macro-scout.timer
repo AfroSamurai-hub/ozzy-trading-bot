@@ -1,0 +1,10 @@
+[Unit]
+Description=Run OzzyBot OpenClaw Macro Scout every 4 hours
+
+[Timer]
+OnCalendar=*-*-* 00/4:00:00
+Persistent=true
+Unit=ozzybot-openclaw-macro-scout.service
+
+[Install]
+WantedBy=timers.target

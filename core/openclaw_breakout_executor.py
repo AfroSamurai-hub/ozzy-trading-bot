@@ -42,8 +42,6 @@ from scripts.local_indicators import calculate_indicators, fetch_klines, get_liv
 
 ACTIVE_ORDERS_PATH = Path(os.getenv("HERMES_OPENCLAW_ACTIVE_ORDERS", str(ROOT / "shared" / "active_orders.json")))
 STATE_PATH = Path(os.getenv("HERMES_OPENCLAW_BREAKOUT_STATE", str(ROOT / "shared" / "openclaw_breakout_state.json")))
-SCAN_LOCK_PATH = Path(os.getenv("HERMES_OPENCLAW_SCAN_LOCK", str(ROOT / "shared" / "openclaw_executor.lock")))
-SCAN_LOCK_TIMEOUT_SECONDS = float(os.getenv("HERMES_OPENCLAW_SCAN_LOCK_TIMEOUT_SECONDS", "30"))
 WEBHOOK_URL = os.getenv("HERMES_OPENCLAW_BREAKOUT_WEBHOOK_URL", "http://127.0.0.1:5001/webhook")
 WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET") or CONFIG_WEBHOOK_SECRET
 TIMEFRAME = os.getenv("HERMES_OPENCLAW_BREAKOUT_TIMEFRAME", "15m")
@@ -387,9 +385,10 @@ def log_shadow_opportunity(
         "status": verdict.get("status"),
         "would_fire": verdict.get("would_fire"),
     }
-    rows = load_shadow_opportunities(path)
-    rows.append(record)
-    save_shadow_opportunities(rows, path)
+    with exclusive_file_lock(path.with_suffix(path.suffix + ".lock")):
+        rows = load_shadow_opportunities(path)
+        rows.append(record)
+        _atomic_write_json(path, rows[-SHADOW_OPPORTUNITIES_MAX_ENTRIES:], indent=2, default=str)
     return record
 
 
@@ -937,7 +936,7 @@ def _recent_closed_15m_candles(symbol: str, count: int = CONTINUATION_LOOKBACK_C
     ]
 
 
-def _scan_once_impl() -> dict[str, Any]:
+def scan_once() -> dict[str, Any]:
     """Evaluate all armed blueprints once and either fire, shadow-log, or wait."""
     try:
         state = load_state()
@@ -1016,26 +1015,6 @@ def _scan_once_impl() -> dict[str, Any]:
         {"checked": len(results), "fired": fired_count, "execute": EXECUTE, "shadow_mode": SHADOW_MODE},
     )
     return summary
-
-
-def scan_once() -> dict[str, Any]:
-    """Run one scan without overlapping another OpenClaw executor process."""
-    try:
-        with exclusive_file_lock(SCAN_LOCK_PATH, timeout=SCAN_LOCK_TIMEOUT_SECONDS):
-            return _scan_once_impl()
-    except TimeoutError as exc:
-        plain_log(
-            "OPENCLAW_SCAN_LOCK_TIMEOUT",
-            {"lock": str(SCAN_LOCK_PATH), "error": str(exc), "execute": EXECUTE, "shadow_mode": SHADOW_MODE},
-        )
-        return {
-            "status": "LOCK_TIMEOUT",
-            "checked": 0,
-            "fired": 0,
-            "execute": EXECUTE,
-            "shadow_mode": SHADOW_MODE,
-            "results": [],
-        }
 
 
 def main() -> None:

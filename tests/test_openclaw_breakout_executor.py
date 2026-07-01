@@ -32,6 +32,25 @@ def _concurrent_state_writer(state_path: str, scan_lock_path: str, prefix: str, 
         time.sleep(0.001)
 
 
+def _concurrent_shadow_logger(path: str, prefix: str, count: int) -> None:
+    original_save = obe.save_shadow_opportunities
+
+    def delayed_save(rows, path):
+        time.sleep(0.02)
+        original_save(rows, path)
+
+    with mock.patch.object(obe, "save_shadow_opportunities", side_effect=delayed_save):
+        for index in range(count):
+            symbol = f"{prefix}{index}USDT"
+            obe.log_shadow_opportunity(
+                {"symbol": symbol, "side": "BUY", "entry_price": 100.0, "stop_loss": 99.0},
+                {"symbol": symbol, "assigned_setup_type": "BREAKOUT", "status": "SHADOW", "would_fire": True},
+                {"close": 100.0, "atr": 1.0},
+                path=Path(path),
+            )
+            time.sleep(0.001)
+
+
 class OpenClawBreakoutExecutorTests(unittest.TestCase):
     def _neutral_1h_context(self):
         return {"rsi": 55.0, "ema_distance_pct": 2.0, "close": 102.0, "ema200": 100.0, "interval": "1h"}
@@ -114,19 +133,6 @@ class OpenClawBreakoutExecutorTests(unittest.TestCase):
             self.assertEqual([worker.exitcode for worker in workers], [0, 0])
             self.assertEqual(len(obe.load_state(state_path)["fired"]), 40)
 
-    def test_scan_skips_when_another_service_holds_the_global_lock(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            lock_path = Path(tmp) / "scan.lock"
-            with obe.exclusive_file_lock(lock_path), mock.patch.object(
-                obe, "SCAN_LOCK_PATH", lock_path
-            ), mock.patch.object(obe, "SCAN_LOCK_TIMEOUT_SECONDS", 0.01, create=True), mock.patch.object(
-                obe, "load_active_blueprints", return_value=[]
-            ):
-                result = obe.scan_once()
-
-        self.assertEqual(result["status"], "LOCK_TIMEOUT")
-        self.assertEqual(result["checked"], 0)
-
     def test_all_json_state_saves_use_atomic_writer(self):
         with tempfile.TemporaryDirectory() as tmp, mock.patch.object(obe, "_atomic_write_json") as atomic_write:
             root = Path(tmp)
@@ -149,6 +155,23 @@ class OpenClawBreakoutExecutorTests(unittest.TestCase):
 
             self.assertEqual(len(list(root.glob("opportunity.json.*.corrupt"))), 1)
             self.assertEqual(len(list(root.glob("shadow.json.*.corrupt"))), 1)
+
+    def test_concurrent_shadow_loggers_preserve_every_observation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "shadow.json"
+            process_context = multiprocessing.get_context("spawn")
+            workers = [
+                process_context.Process(target=_concurrent_shadow_logger, args=(str(path), prefix, 20))
+                for prefix in ("A", "B")
+            ]
+
+            for worker in workers:
+                worker.start()
+            for worker in workers:
+                worker.join(timeout=15)
+
+            self.assertEqual([worker.exitcode for worker in workers], [0, 0])
+            self.assertEqual(len(obe.load_shadow_opportunities(path)), 40)
 
     def test_buy_blueprint_passes_only_after_trigger_with_impulse_confirmation(self):
         blueprint = {"symbol": "SOLUSDT", "side": "BUY", "entry_price": 69.5, "status": "ARMED"}

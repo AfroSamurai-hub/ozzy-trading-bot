@@ -17,9 +17,14 @@ Execution policy (closed by design):
 
 from __future__ import annotations
 
+import fcntl
 import json
 import os
+import shutil
 import sys
+import tempfile
+import time
+from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -29,14 +34,16 @@ import requests
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from config import WEBHOOK_SECRET as CONFIG_WEBHOOK_SECRET
+from derivatives_context import fetch_derivatives_positioning_context
 from lane_labels import BREAKOUT_RETEST, webhook_port_from_url
 from logger import plain_log
 from scripts.local_indicators import calculate_indicators, fetch_klines, get_live_indicators_dict
-from config import WEBHOOK_SECRET as CONFIG_WEBHOOK_SECRET
-from derivatives_context import fetch_derivatives_positioning_context
 
 ACTIVE_ORDERS_PATH = Path(os.getenv("HERMES_OPENCLAW_ACTIVE_ORDERS", str(ROOT / "shared" / "active_orders.json")))
 STATE_PATH = Path(os.getenv("HERMES_OPENCLAW_BREAKOUT_STATE", str(ROOT / "shared" / "openclaw_breakout_state.json")))
+SCAN_LOCK_PATH = Path(os.getenv("HERMES_OPENCLAW_SCAN_LOCK", str(ROOT / "shared" / "openclaw_executor.lock")))
+SCAN_LOCK_TIMEOUT_SECONDS = float(os.getenv("HERMES_OPENCLAW_SCAN_LOCK_TIMEOUT_SECONDS", "30"))
 WEBHOOK_URL = os.getenv("HERMES_OPENCLAW_BREAKOUT_WEBHOOK_URL", "http://127.0.0.1:5001/webhook")
 WEBHOOK_SECRET = os.getenv("WEBHOOK_SECRET") or CONFIG_WEBHOOK_SECRET
 TIMEFRAME = os.getenv("HERMES_OPENCLAW_BREAKOUT_TIMEFRAME", "15m")
@@ -97,6 +104,72 @@ def utc_now() -> datetime:
     return datetime.now(timezone.utc)
 
 
+class StateCorruptionError(RuntimeError):
+    """Raised when execution state cannot be decoded safely."""
+
+
+@contextmanager
+def exclusive_file_lock(path: Path, timeout: float = 30.0):
+    """Acquire an inter-process exclusive lock with a bounded wait."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    deadline = time.monotonic() + timeout
+    with path.open("a+", encoding="utf-8") as handle:
+        while True:
+            try:
+                fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+                break
+            except BlockingIOError:
+                if time.monotonic() >= deadline:
+                    raise TimeoutError(f"timed out acquiring lock: {path}") from None
+                time.sleep(0.05)
+        try:
+            yield
+        finally:
+            fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
+
+
+def _atomic_write_json(path: Path, data: Any, **json_kwargs: Any) -> None:
+    """Write complete JSON to a sibling temp file before atomic replacement."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    mode = path.stat().st_mode & 0o777 if path.exists() else 0o600
+    temp_path: Path | None = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=path.parent,
+            prefix=f".{path.name}.",
+            suffix=".tmp",
+            delete=False,
+        ) as handle:
+            temp_path = Path(handle.name)
+            json.dump(data, handle, **json_kwargs)
+            handle.flush()
+            os.fsync(handle.fileno())
+        temp_path.chmod(mode)
+        temp_path.replace(path)
+    finally:
+        if temp_path is not None:
+            temp_path.unlink(missing_ok=True)
+
+
+def _backup_corrupt_state(path: Path, exc: Exception) -> None:
+    """Preserve corrupt state for diagnosis before failing closed."""
+    existing = sorted(path.parent.glob(f"{path.name}.*.corrupt"))
+    backup = existing[-1] if existing else path.with_suffix(
+        path.suffix + f".{utc_now().strftime('%Y%m%dT%H%M%S%f')}.corrupt"
+    )
+    if not existing:
+        try:
+            shutil.copy2(path, backup)
+        except OSError:
+            backup = None
+    plain_log(
+        "OPENCLAW_STATE_CORRUPT",
+        {"path": str(path), "error": str(exc), "backup": str(backup) if backup else None},
+    )
+
+
 def _as_float(value: Any, default: float | None = None) -> float | None:
     try:
         if value is None:
@@ -130,14 +203,23 @@ def load_state(path: Path = STATE_PATH) -> dict[str, Any]:
     if not path.exists():
         return {"fired": {}, "last_scan": None, "last_results": []}
     try:
-        return json.loads(path.read_text(encoding="utf-8") or "{}")
-    except json.JSONDecodeError:
-        return {"fired": {}, "last_scan": None, "last_results": []}
+        data = json.loads(path.read_text(encoding="utf-8") or "{}")
+    except json.JSONDecodeError as exc:
+        _backup_corrupt_state(path, exc)
+        raise StateCorruptionError(f"unreadable OpenClaw execution state: {path}") from exc
+    if not isinstance(data, dict) or not isinstance(data.get("fired", {}), dict):
+        exc = ValueError("execution state must be an object with a fired object")
+        _backup_corrupt_state(path, exc)
+        raise StateCorruptionError(f"invalid OpenClaw execution state: {path}") from exc
+    data.setdefault("fired", {})
+    data.setdefault("last_scan", None)
+    data.setdefault("last_results", [])
+    return data
 
 
 def save_state(state: dict[str, Any], path: Path = STATE_PATH) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(state, indent=2, sort_keys=True), encoding="utf-8")
+    with exclusive_file_lock(path.with_suffix(path.suffix + ".lock")):
+        _atomic_write_json(path, state, indent=2, sort_keys=True)
 
 
 def _breakout_key(blueprint: dict[str, Any]) -> str:
@@ -155,7 +237,7 @@ def _cooldown_active(blueprint: dict[str, Any], state: dict[str, Any], now: date
         if fired_at.tzinfo is None:
             fired_at = fired_at.replace(tzinfo=timezone.utc)
     except Exception:
-        return False
+        return True
     return (now - fired_at).total_seconds() < COOLDOWN_SECONDS
 
 
@@ -198,14 +280,15 @@ def load_opportunity_state(path: Path = OPPORTUNITY_STATE_PATH) -> dict[str, Any
         data.setdefault("updated_at", None)
         data.setdefault("breakouts", {})
         return data
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as exc:
+        _backup_corrupt_state(path, exc)
         return {"version": 1, "updated_at": None, "breakouts": {}}
 
 
 def save_opportunity_state(state: dict[str, Any], path: Path = OPPORTUNITY_STATE_PATH) -> None:
     """Persist the retest-breakout memory state file."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(state, indent=2, sort_keys=True), encoding="utf-8")
+    with exclusive_file_lock(path.with_suffix(path.suffix + ".lock")):
+        _atomic_write_json(path, state, indent=2, sort_keys=True)
 
 
 def record_breakout_memory(
@@ -270,15 +353,16 @@ def load_shadow_opportunities(path: Path = SHADOW_OPPORTUNITIES_PATH) -> list[di
     try:
         data = json.loads(path.read_text(encoding="utf-8") or "[]")
         return data if isinstance(data, list) else []
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as exc:
+        _backup_corrupt_state(path, exc)
         return []
 
 
 def save_shadow_opportunities(rows: list[dict[str, Any]], path: Path = SHADOW_OPPORTUNITIES_PATH) -> None:
     """Persist the shadow opportunity log, keeping the most recent entries."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    trimmed = rows[-SHADOW_OPPORTUNITIES_MAX_ENTRIES:]
-    path.write_text(json.dumps(trimmed, indent=2, default=str), encoding="utf-8")
+    with exclusive_file_lock(path.with_suffix(path.suffix + ".lock")):
+        trimmed = rows[-SHADOW_OPPORTUNITIES_MAX_ENTRIES:]
+        _atomic_write_json(path, trimmed, indent=2, default=str)
 
 
 def log_shadow_opportunity(
@@ -853,9 +937,20 @@ def _recent_closed_15m_candles(symbol: str, count: int = CONTINUATION_LOOKBACK_C
     ]
 
 
-def scan_once() -> dict[str, Any]:
+def _scan_once_impl() -> dict[str, Any]:
     """Evaluate all armed blueprints once and either fire, shadow-log, or wait."""
-    state = load_state()
+    try:
+        state = load_state()
+    except StateCorruptionError as exc:
+        plain_log("OPENCLAW_SCAN_BLOCKED_STATE_CORRUPT", {"error": str(exc), "state_path": str(STATE_PATH)})
+        return {
+            "status": "STATE_CORRUPT",
+            "checked": 0,
+            "fired": 0,
+            "execute": EXECUTE,
+            "shadow_mode": SHADOW_MODE,
+            "results": [],
+        }
     opportunity_state = load_opportunity_state()
     results: list[dict[str, Any]] = []
     fired_count = 0
@@ -921,6 +1016,26 @@ def scan_once() -> dict[str, Any]:
         {"checked": len(results), "fired": fired_count, "execute": EXECUTE, "shadow_mode": SHADOW_MODE},
     )
     return summary
+
+
+def scan_once() -> dict[str, Any]:
+    """Run one scan without overlapping another OpenClaw executor process."""
+    try:
+        with exclusive_file_lock(SCAN_LOCK_PATH, timeout=SCAN_LOCK_TIMEOUT_SECONDS):
+            return _scan_once_impl()
+    except TimeoutError as exc:
+        plain_log(
+            "OPENCLAW_SCAN_LOCK_TIMEOUT",
+            {"lock": str(SCAN_LOCK_PATH), "error": str(exc), "execute": EXECUTE, "shadow_mode": SHADOW_MODE},
+        )
+        return {
+            "status": "LOCK_TIMEOUT",
+            "checked": 0,
+            "fired": 0,
+            "execute": EXECUTE,
+            "shadow_mode": SHADOW_MODE,
+            "results": [],
+        }
 
 
 def main() -> None:
